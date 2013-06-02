@@ -14,7 +14,7 @@ class wp_SendGrid_Settings
 
   public function show_settings_page()
   { 
-    if($_SERVER['REQUEST_METHOD'] == 'POST')
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
       if ($_POST['email_test'])
       {
@@ -23,16 +23,16 @@ class wp_SendGrid_Settings
         $body = $_POST['sendgrid_body'];
         $headers = $_POST['sendgrid_headers'];
         $attachments = null;
-        $success = json_decode(wp_mail($to, $subject, $message, $headers, $attachments));
+        $success = json_decode(wp_mail($to, $subject, $body, $headers, $attachments));
 
-        if($success->message == "success" or $success == true)
+        if ($success->message == "success" or $success === true)
         {
           $message = 'Email sent.';
           $status = 'send_success';
         }
         else 
         {
-          $message = 'Email not sent. ' . $success->errors;
+          $message = 'Email not sent. ' . $success->errors[0];
           $status = 'send_failed';
         }
       }
