@@ -37,6 +37,6 @@ class wp_SendGrid_Settings
       $secure = get_option('sendgrid_secure');
     }
 
-    require_once '../wp-content/plugins/SendGrid/view/sendgrid_settings.php';
+    require_once dirname(__FILE__) . '/../view/sendgrid_settings.php';
   }
 }
