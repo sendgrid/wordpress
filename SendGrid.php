@@ -14,22 +14,22 @@ require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.ph
 
 $sendgridSettings = new wp_SendGrid_Settings();
 
-function wp_mail($to, $subject, $message, $headers = '', $attachments = array() )
-{
-  $user = get_option('sendgrid_user');
-  $password = get_option('sendgrid_pwd');
-  $sendgrid = new SendGrid($user, $password);
-
-  $sendgrid = new SendGrid($user, $password);
-    $mail = new SendGrid\Mail();
-    $mail->
-    addTo($to)->
-    setFrom('me@gmail.com')->
-    setSubject($subject)->
-    setText($message);
-    //setHtml('<strong>Hello World!</strong>');
-  return $sendgrid->web->send($mail);
-}
-
-$mail = wp_mail('slcraciun@gmail.com', 'test plugin', 'testing wordpress plugin');
-var_dump($mail);
+//function wp_mail($to, $subject, $message, $headers = '', $attachments = array() )
+//{
+//  $user = get_option('sendgrid_user');
+//  $password = get_option('sendgrid_pwd');
+//  $sendgrid = new SendGrid($user, $password);
+//
+//  $sendgrid = new SendGrid($user, $password);
+//    $mail = new SendGrid\Mail();
+//    $mail->
+//    addTo($to)->
+//    setFrom('me@gmail.com')->
+//    setSubject($subject)->
+//    setText($message);
+//    //setHtml('<strong>Hello World!</strong>');
+//  return $sendgrid->web->send($mail);
+//}
+//
+//$mail = wp_mail('slcraciun@gmail.com', 'test plugin', 'testing wordpress plugin');
+//var_dump($mail);
