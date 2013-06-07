@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: SendGrid
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
-Description: A brief description of the Plugin.
+Plugin URI: http://sendgrid.com
+Description: Email Delivery. Simplified. SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
 Version: 1.0
 Author: SendGrid
-Author URI: http://URI_Of_The_Plugin_Author
+Author URI: http://sendgrid.com
 License: A "Slug" license name e.g. GPL2
 */
 //namespace sendgridPlugin;
@@ -329,11 +329,21 @@ var_dump($mail);
 
     return true;
   }
+  // add settings link
+  function sendgrid_settings_link($links)
+  {
+    $settings_link = '<a href="options-general.php?page=sendgrid-settings.php">Settings</a>';
+    array_unshift($links, $settings_link);
 
+    return $links;
+  }
+
+  $plugin = plugin_basename(__FILE__);
+  add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
 }
 else
 {
-  // Mandrill: wp_mail has been declared by another process or plugin, so you won't be able to use Mandrill until the problem is solved.
+  //wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
   return false;
 }
 //$mail = wp_mail('laurentiu.craciun@sendgrid.com', 'test plugin', 'testing wordpress plugin');

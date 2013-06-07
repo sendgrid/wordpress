@@ -79,7 +79,7 @@
       </p>
       <input type="hidden" name="email_test" value="true"/>
       <p class="submit">  
-        <input class="button button-secondary" type="submit" name="Submit" value="<?php _e('Send', 'sendgrid_trdom') ?>" />  
+        <input class="button button-primary" type="submit" name="Submit" value="<?php _e('Send', 'sendgrid_trdom') ?>" />
       </p> 
     </form>  
   </div>
