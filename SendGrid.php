@@ -8,6 +8,7 @@ Author: SendGrid
 Author URI: http://sendgrid.com
 License: A "Slug" license name e.g. GPL2
 */
+
 //namespace sendgridPlugin;
 require_once plugin_dir_path( __FILE__ ) . '/lib/SendGridSettings.php';
 require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.php';
@@ -42,24 +43,15 @@ if (!function_exists('wp_mail'))
    * @uses apply_filters() Calls 'wp_mail_content_type' hook to get the email content type.
    * @uses apply_filters() Calls 'wp_mail_charset' hook to get the email charset
    *
-   * @param string|array $to Array or comma-separated list of email addresses to send message.
-   * @param string $subject Email subject
-   * @param string $message Message contents
-   * @param string|array $headers Optional. Additional headers.
-   * @param string|array $attachments Optional. Files to attach.
-   * @return bool Whether the email contents were sent successfully.
+   * @param   string|array  $to           Array or comma-separated list of email addresses to send message.
+   * @param   string        $subject      Email subject
+   * @param   string        $message      Message contents
+   * @param   string|array  $headers      Optional. Additional headers.
+   * @param   string|array  $attachments  Optional. Files to attach.
+   * @return  bool                        Whether the email contents were sent successfully.
    */
   function wp_mail($to, $subject, $message, $headers = '', $attachments = array())
   {
-    echo "<pre>";
-    echo "<br>to: ";      print_r($to);
-    echo "<br>subject: "; print_r($subject);
-    echo "<br>message: "; print_r($message);
-    echo "<br>headers: "; print_r($headers);
-    echo "<br>attachments: "; print_r($attachments);
-    echo "<br>================================";
-
-
     $sendgrid = new SendGrid(get_option('sendgrid_user'), get_option('sendgrid_pwd'));
     $mail = new SendGrid\Mail();
 
@@ -70,7 +62,8 @@ if (!function_exists('wp_mail'))
     $attached_files = array();
     if (!empty($attachments))
     {
-      if (!is_array($attachments)) {
+      if (!is_array($attachments))
+      {
         $pos = strpos(',', $attachments);
         if ($pos !== false)
         {
@@ -224,23 +217,17 @@ if (!function_exists('wp_mail'))
 //      }
 //    }
 
-//    if ( !empty( $bcc ) ) {
-//      foreach ( (array) $bcc as $recipient) {
-//        try {
-//          // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
-//          $recipient_name = '';
-//          if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
-//            if ( count( $matches ) == 3 ) {
-//              $recipient_name = $matches[1];
-//              $recipient = $matches[2];
-//            }
-//          }
-//          $phpmailer->AddBcc( $recipient, $recipient_name );
-//        } catch ( phpmailerException $e ) {
-//          continue;
-//        }
-//      }
-//    }
+    if ( !empty( $bcc ) ) {
+      foreach ( (array) $bcc as $key => $recipient) {
+        // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
+        $recipient_name = '';
+        if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
+          if ( count( $matches ) == 3 ) {
+            $bcc[$key] = $matches[2];
+          }
+        }
+      }
+    }
 
     // Set Content-Type and charset
     // If we don't have a content-type from the input headers
@@ -248,41 +235,6 @@ if (!function_exists('wp_mail'))
       $content_type = 'text/plain';
 
     $content_type = apply_filters( 'wp_mail_content_type', $content_type );
-
-//    // Set whether it's plaintext, depending on $content_type
-//    if ( 'text/html' == $content_type )
-//      $phpmailer->IsHTML( true );
-
-//    // If we don't have a charset from the input headers
-//    if ( !isset( $charset ) )
-//      $charset = get_bloginfo( 'charset' );
-//
-//    // Set the content-type and charset
-//    $phpmailer->CharSet = apply_filters( 'wp_mail_charset', $charset );
-
-//    // Set custom headers
-//    if ( !empty( $headers ) ) {
-//      foreach( (array) $headers as $name => $content ) {
-//        $phpmailer->AddCustomHeader( sprintf( '%1$s: %2$s', $name, $content ) );
-//      }
-//
-//      if ( false !== stripos( $content_type, 'multipart' ) && ! empty($boundary) )
-//        $phpmailer->AddCustomHeader( sprintf( "Content-Type: %s;\n\t boundary=\"%s\"", $content_type, $boundary ) );
-//    }
-
-//    do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
-
-
-
-//    echo "<br>to: ";      print_r($to);
-//    echo "<br>subject: "; print_r($subject);
-//    echo "<br>message: "; print_r($message);
-//    echo "<br>message: "; print_r($from_email);
-//
-//    echo "<br>headers: "; print_r($headers);
-//    echo "<br>attachments: "; print_r($attachments);
-//    echo "<br>================================";
-
 
     $mail->setTos($to)
          ->setSubject($subject)
@@ -309,13 +261,16 @@ if (!function_exists('wp_mail'))
     {
       $mail->setBccs($bcc);
     }
+    $reply_to = trim(get_option('sendgrid_reply_to'));
+    if ($reply_to)
+    {
+      $mail->setReplyTo($reply_to);
+    }
     // add attachemnts
     if (count($attached_files))
     {
       $mail->setAttachments($attached_files);
     }
-var_dump($mail);
-
 
     // Send!
     try
@@ -346,5 +301,8 @@ else
   //wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
   return false;
 }
-//$mail = wp_mail('laurentiu.craciun@sendgrid.com', 'test plugin', 'testing wordpress plugin');
-//var_dump($mail);
+
+function set_html_content_type()
+{
+	return 'text/html';
+}
