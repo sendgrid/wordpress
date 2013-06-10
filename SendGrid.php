@@ -281,12 +281,18 @@ if (!function_exists('wp_mail'))
       }
       elseif ($method == 'smtp')
       {
-        return $sendgrid->smtp->send($mail);
+        if (class_exists('Swift')) {
+          return $sendgrid->smtp->send($mail);
+        }
+        else 
+        {
+          return 'Error: Swift Class not loaded. Please activate Swift plugin or use API.';
+        }
       }
     }
     catch (Exception $e)
     {
-      return $e->getMessage();
+      return false;
     }
 
     return false;
