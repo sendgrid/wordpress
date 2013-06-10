@@ -150,13 +150,15 @@ if (!function_exists('wp_mail'))
               break;
             case 'cc':
               $cc = array_merge( (array) $cc, explode( ',', $content ) );
-              foreach ($cc as $key => $recipient){
+              foreach ($cc as $key => $recipient)
+              {
                 $cc[$key] = trim($recipient);
               }
               break;
             case 'bcc':
               $bcc = array_merge( (array) $bcc, explode( ',', $content ) );
-              foreach ($bcc as $key => $recipient){
+              foreach ($bcc as $key => $recipient)
+              {
                 $bcc[$key] = trim($recipient);
               }
               break;
@@ -205,12 +207,16 @@ if (!function_exists('wp_mail'))
 
 
     // Add any CC and BCC recipients
-    if ( !empty( $cc ) ) {
-      foreach ( (array) $cc as $key => $recipient ) {
+    if (!empty( $cc )) 
+    {
+      foreach ((array) $cc as $key => $recipient) 
+      {
         // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
         $recipient_name = '';
-        if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
-          if ( count( $matches ) == 3 ) {
+        if (preg_match('/(.*)<(.+)>/', $recipient, $matches)) 
+        {
+          if ( count( $matches ) == 3 ) 
+          {
             $cc[$key] = trim($matches[2]);
           }
         }
@@ -222,7 +228,8 @@ if (!function_exists('wp_mail'))
         // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
         $recipient_name = '';
         if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
-          if ( count( $matches ) == 3 ) {
+          if ( count( $matches ) == 3 )
+          {
             $bcc[$key] = trim($matches[2]);
           }
         }
@@ -281,7 +288,8 @@ if (!function_exists('wp_mail'))
       }
       elseif ($method == 'smtp')
       {
-        if (class_exists('Swift')) {
+        if (class_exists('Swift')) 
+        {
           return $sendgrid->smtp->send($mail);
         }
         else 
@@ -292,7 +300,7 @@ if (!function_exists('wp_mail'))
     }
     catch (Exception $e)
     {
-      return false;
+      return $e->getMessage();
     }
 
     return false;

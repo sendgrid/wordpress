@@ -97,7 +97,7 @@ class wp_SendGrid_Settings
         $method = $_POST['sendgrid_api'];
         if ($method == 'smtp' && !class_exists('Swift'))
         {
-          $message = 'You must have Swift-mailer plugin installed and activated <br /> http://wordpress.org/plugins/swift-mailer/';
+          $message = 'You must have <a href="http://wordpress.org/plugins/swift-mailer/" target="_blank">Swift-mailer plugin</a> installed and activated';
           $status = 'save_error';
           update_option('sendgrid_api', 'api');
         }
