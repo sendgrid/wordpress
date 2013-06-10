@@ -6,6 +6,9 @@ class wp_SendGrid_Settings
     add_action('admin_menu', array(__CLASS__, 'sendgridPluginMenu'));
   }
 
+  /**
+   * Add settings page
+   */
   public function sendgridPluginMenu()
   {
     add_options_page(__('SendGrid'), __('SendGrid'), 'manage_options', 'sendgrid-settings.php',
@@ -41,6 +44,9 @@ class wp_SendGrid_Settings
     return true;
   }
 
+  /**
+   * Display settings page
+   */
   public function show_settings_page()
   { 
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -51,21 +57,20 @@ class wp_SendGrid_Settings
         $subject = $_POST['sendgrid_subj'];
         $body = $_POST['sendgrid_body'];
         $headers = $_POST['sendgrid_headers'];
-        $attachments = null;
-        $sent = wp_mail($to, $subject, $body, $headers, $attachments);
+        $sent = wp_mail($to, $subject, $body, $headers);
         if (get_option('sendgrid_api') == 'api')
         {
           $sent = json_decode($sent);
           if ($sent->message == "success")
           {
             $message = 'Email sent.';
-            $status = 'send_success';
+            $status = 'send-success';
           }
           else 
           {
             $errors = ($sent->errors[0]) ? $sent->errors[0] : $sent;
             $message = 'Email not sent. ' . $errors;
-            $status = 'send_failed';
+            $status = 'send-failed';
           }
 
         }
@@ -74,19 +79,19 @@ class wp_SendGrid_Settings
           if ($sent === true)
           {
             $message = 'Email sent.';
-            $status = 'send_success';
+            $status = 'send-success';
           }
           else 
           {
             $message = 'Email not sent. ' . $sent;
-            $status = 'send_failed';
+            $status = 'send-failed';
           }
         }
       }
       else
       {
         $message = 'Options saved.';
-        $status = 'save_success';
+        $status = 'save-success';
         
         $user = $_POST['sendgrid_user'];
         update_option('sendgrid_user', $user);
@@ -95,10 +100,11 @@ class wp_SendGrid_Settings
         update_option('sendgrid_pwd', $password);
 
         $method = $_POST['sendgrid_api'];
-        if ($method == 'smtp' && !class_exists('Swift'))
+        if ($method == 'smtp' and !class_exists('Swift'))
         {
-          $message = 'You must have <a href="http://wordpress.org/plugins/swift-mailer/" target="_blank">Swift-mailer plugin</a> installed and activated';
-          $status = 'save_error';
+          $message = 'You must have <a href="http://wordpress.org/plugins/swift-mailer/" target="_blank">' .
+                      'Swift-mailer plugin</a> installed and activated';
+          $status = 'save-error';
           update_option('sendgrid_api', 'api');
         }
         else
@@ -113,9 +119,7 @@ class wp_SendGrid_Settings
         update_option('sendgrid_from_email', $email);
 
         $reply_to = $_POST['sendgrid_reply_to'];
-        update_option('sendgrid_reply_to', $reply_to);
-
-        
+        update_option('sendgrid_reply_to', $reply_to);        
       }
     }
     
@@ -133,7 +137,7 @@ class wp_SendGrid_Settings
       if (!$valid_credentials)
       {
         $message = 'Invalid username/password';
-        $status = 'error';
+        $status = 'save-error';
       }
     }
         

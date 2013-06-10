@@ -60,7 +60,7 @@ h2.title {
   zoom: 1; /* IE < 8 */
 }
 
-.send_failed, .save_error {
+.send-failed, .save-error {
   text-align: center;
   padding: 7px 0 7px 0;
   background-color: #ffebe8;
@@ -72,7 +72,7 @@ h2.title {
   border-style: solid;
 }
 
-.send_success, .save_success {
+.send-success, .save-success {
   text-align: center;
   padding: 7px 0 7px 0;
   background-color: #ffffe0;

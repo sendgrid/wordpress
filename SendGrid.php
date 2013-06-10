@@ -6,10 +6,9 @@ Description: Email Delivery. Simplified. SendGrid's cloud-based email infrastruc
 Version: 1.0
 Author: SendGrid
 Author URI: http://sendgrid.com
-License: A "Slug" license name e.g. GPL2
+License: GPLv2
 */
 
-//namespace sendgridPlugin;
 require_once plugin_dir_path( __FILE__ ) . '/lib/SendGridSettings.php';
 require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.php';
 
@@ -55,7 +54,6 @@ if (!function_exists('wp_mail'))
     $sendgrid = new SendGrid(get_option('sendgrid_user'), get_option('sendgrid_pwd'));
     $mail = new SendGrid\Mail();
     $method = get_option('sendgrid_api');
-    $secure = get_option('sendgrid_secure');
     // Compact the input, apply the filters, and extract them back out
     extract(apply_filters('wp_mail', compact('to', 'subject', 'message', 'headers', 'attachments')));
 
@@ -315,7 +313,12 @@ if (!function_exists('wp_mail'))
 
     return false;
   }
-  // add settings link
+
+  /**
+   * Add settings link on the plugin page
+   * @param  mixed   $links   links
+   * @return mixed            links
+   */
   function sendgrid_settings_link($links)
   {
     $settings_link = '<a href="options-general.php?page=sendgrid-settings.php">Settings</a>';
@@ -325,15 +328,23 @@ if (!function_exists('wp_mail'))
   }
 
   /**
-	 * Generates source of contextual help panel.
-	 */
-	function showContextualHelp($contextual_help, $screen_id, $screen) {
-      $text = '<p>' . __('Email Delivery. Simplified.') . '</p>';
-      $text .= '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
-                "of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time " .
-                "analytics along with flexible APIs that make custom integration a breeze.") . '</p>';
-      $text .= '<p>' . __('Once you have properly configured the settings, the plugin will take care of all the emails sent through your WordPress installation.') . '</p>';
-      return $text;
+   * Generates source of contextual help panel.
+   * 
+   * @param   mixed   $contextual_help    contextual help
+   * @param   integer $screen_id          screen id
+   * @param   integer $screen             screen
+   * @return  string
+   */
+	function showContextualHelp($contextual_help, $screen_id, $screen)
+  {
+    $text = '<p>' . __('Email Delivery. Simplified.') . '</p>' .
+            '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
+              "of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time " .
+              "analytics along with flexible APIs that make custom integration a breeze.") . '</p>' .
+            '<p>' . __('Once you have properly configured the settings, the plugin will take care of all the emails ' .
+              'sent through your WordPress installation.') . '</p>';
+      
+    return $text;
   }
 
   $plugin = plugin_basename(__FILE__);
