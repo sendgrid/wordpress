@@ -52,23 +52,42 @@ class wp_SendGrid_Settings
         $body = $_POST['sendgrid_body'];
         $headers = $_POST['sendgrid_headers'];
         $attachments = null;
-        $success = json_decode(wp_mail($to, $subject, $body, $headers, $attachments));
+        $sent = wp_mail($to, $subject, $body, $headers, $attachments);
+        if (get_option('sendgrid_api') == 'api')
+        {
+          $sent = json_decode($sent);
+          if ($sent->message == "success")
+          {
+            $message = 'Email sent.';
+            $status = 'send_success';
+          }
+          else 
+          {
+            $errors = ($sent->errors[0]) ? $sent->errors[0] : $sent;
+            $message = 'Email not sent. ' . $errors;
+            $status = 'send_failed';
+          }
 
-        if ($success->message == "success" or $success === true)
-        {
-          $message = 'Email sent.';
-          $status = 'send_success';
-          $success = true;
         }
-        else 
+        elseif (get_option('sendgrid_api') == 'smtp')
         {
-          $message = 'Email not sent. ' . $success->errors[0];
-          $status = 'send_failed';
-          $success = false;
+          if ($sent === true)
+          {
+            $message = 'Email sent.';
+            $status = 'send_success';
+          }
+          else 
+          {
+            $message = 'Email not sent. ' . $sent;
+            $status = 'send_failed';
+          }
         }
       }
       else
       {
+        $message = 'Options saved.';
+        $status = 'save_success';
+        
         $user = $_POST['sendgrid_user'];
         update_option('sendgrid_user', $user);
 
@@ -76,7 +95,15 @@ class wp_SendGrid_Settings
         update_option('sendgrid_pwd', $password);
 
         $method = $_POST['sendgrid_api'];
-        update_option('sendgrid_api', $method);
+        if ($method == 'smtp' && !class_exists('Swift'))
+        {
+          $message = 'You must have Swift mailer plugin installed <br /> http://wordpress.org/plugins/swift-mailer/';
+          $status = 'save_error';
+        }
+        else
+        {
+          update_option('sendgrid_api', $method);
+        }
 
         $name = $_POST['sendgrid_name'];
         update_option('sendgrid_from_name', $name);
@@ -87,8 +114,7 @@ class wp_SendGrid_Settings
         $reply_to = $_POST['sendgrid_reply_to'];
         update_option('sendgrid_reply_to', $reply_to);
 
-        $message = 'Options saved.';
-        $status = 'updated';
+        
       }
     }
     

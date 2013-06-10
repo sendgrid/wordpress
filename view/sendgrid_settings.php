@@ -7,10 +7,11 @@
     echo '<a href="http://sendgrid.com"><img src="' . plugins_url('/images/logo.png', __FILE__) . '"' .
     'width="100" alt="" /></a><h2 class="title">' . __('SendGrid Options', 'sendgrid_trdom') . '</h2>';
     ?> 
+    
     <?php
-    if ($status == 'updated' or $status == 'error')
+    if ($status == 'save_error' or $status == 'save_success') 
     {
-      echo '<div id="message" class="' . $status . '"><p><strong>' . $message . '</strong></p></div>';
+      echo '<div id="message" class="' . $status . '"><strong>' . $message . '</strong></div>';
     }
     ?>
     <?php echo '<h3>' . __('SendGrid credentials', 'sendgrid_trdom') . "</h3>"; ?>

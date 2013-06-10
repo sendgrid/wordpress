@@ -54,7 +54,8 @@ if (!function_exists('wp_mail'))
   {
     $sendgrid = new SendGrid(get_option('sendgrid_user'), get_option('sendgrid_pwd'));
     $mail = new SendGrid\Mail();
-
+    $method = get_option('sendgrid_api');
+    $secure = get_option('sendgrid_secure');
     // Compact the input, apply the filters, and extract them back out
     extract(apply_filters('wp_mail', compact('to', 'subject', 'message', 'headers', 'attachments')));
 
@@ -149,9 +150,15 @@ if (!function_exists('wp_mail'))
               break;
             case 'cc':
               $cc = array_merge( (array) $cc, explode( ',', $content ) );
+              foreach ($cc as $key => $recipient){
+                $cc[$key] = trim($recipient);
+              }
               break;
             case 'bcc':
               $bcc = array_merge( (array) $bcc, explode( ',', $content ) );
+              foreach ($bcc as $key => $recipient){
+                $bcc[$key] = trim($recipient);
+              }
               break;
             default:
               // Add it to our grand headers array
@@ -197,25 +204,18 @@ if (!function_exists('wp_mail'))
       $to = explode( ',', $to );
 
 
-//    // Add any CC and BCC recipients
-//    if ( !empty( $cc ) ) {
-//      foreach ( (array) $cc as $recipient ) {
-//        try {
-//          // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
-//          $recipient_name = '';
-//          if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
-//            if ( count( $matches ) == 3 ) {
-//              $recipient_name = $matches[1];
-//              $recipient = $matches[2];
-//            }
-//          }
-//
-//          //$phpmailer->AddCc( $recipient, $recipient_name );
-//        } catch ( phpmailerException $e ) {
-//          continue;
-//        }
-//      }
-//    }
+    // Add any CC and BCC recipients
+    if ( !empty( $cc ) ) {
+      foreach ( (array) $cc as $key => $recipient ) {
+        // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
+        $recipient_name = '';
+        if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
+          if ( count( $matches ) == 3 ) {
+            $cc[$key] = trim($matches[2]);
+          }
+        }
+      }
+    }
 
     if ( !empty( $bcc ) ) {
       foreach ( (array) $bcc as $key => $recipient) {
@@ -223,7 +223,7 @@ if (!function_exists('wp_mail'))
         $recipient_name = '';
         if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
           if ( count( $matches ) == 3 ) {
-            $bcc[$key] = $matches[2];
+            $bcc[$key] = trim($matches[2]);
           }
         }
       }
@@ -271,18 +271,25 @@ if (!function_exists('wp_mail'))
     {
       $mail->setAttachments($attached_files);
     }
-
+    echo '<pre>'; print_r($mail); echo '</pre>';
     // Send!
     try
     {
-      return $sendgrid->web->send($mail);
+      if ($method == 'api')
+      {
+        return $sendgrid->web->send($mail);
+      }
+      elseif ($method == 'smtp')
+      {
+        return $sendgrid->smtp->send($mail);
+      }
     }
     catch (Exception $e)
     {
-      return false;
+      return $e->getMessage();
     }
 
-    return true;
+    return false;
   }
   // add settings link
   function sendgrid_settings_link($links)
