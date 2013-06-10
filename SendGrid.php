@@ -293,8 +293,21 @@ if (!function_exists('wp_mail'))
     return $links;
   }
 
+  /**
+	 * Generates source of contextual help panel.
+	 */
+	function showContextualHelp($contextual_help, $screen_id, $screen) {
+      $text = '<p>' . __('Email Delivery. Simplified.') . '</p>';
+      $text .= '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
+                "of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time " .
+                "analytics along with flexible APIs that make custom integration a breeze.") . '</p>';
+      $text .= '<p>' . __('Once you have properly configured the settings, the plugin will take care of all the emails sent through your WordPress installation.') . '</p>';
+      return $text;
+  }
+
   $plugin = plugin_basename(__FILE__);
   add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
+  add_filter( 'contextual_help', 'showContextualHelp', 10, 2 );
 }
 else
 {

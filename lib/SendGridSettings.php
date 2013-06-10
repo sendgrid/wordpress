@@ -8,8 +8,37 @@ class wp_SendGrid_Settings
 
   public function sendgridPluginMenu()
   {
-    add_options_page(__('SendGrid Settings'), __('SendGrid Settings'), 'manage_options', 'sendgrid-settings.php',
+    add_options_page(__('SendGrid'), __('SendGrid'), 'manage_options', 'sendgrid-settings.php',
       array(__CLASS__, 'show_settings_page'));
+  }
+
+  /**
+   * Check username/password
+   *
+   * @param   string  $username   sendgrid username
+   * @param   string  $password   sendgrid password
+   * @return  bool  
+   */
+  public static function checkUsernamePassword($username, $password)
+  {
+    $url = "https://sendgrid.com/api/profile.get.json?";
+    $url .= "api_user=". $username . "&api_key=" . $password;
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+    $data = curl_exec($ch);
+    curl_close($ch);
+
+    $response = json_decode($data, true);
+
+    if (isset($response['error']))
+    {
+      return false;
+    }
+
+    return true;
   }
 
   public function show_settings_page()
@@ -29,11 +58,13 @@ class wp_SendGrid_Settings
         {
           $message = 'Email sent.';
           $status = 'send_success';
+          $success = true;
         }
         else 
         {
           $message = 'Email not sent. ' . $success->errors[0];
           $status = 'send_failed';
+          $success = false;
         }
       }
       else
@@ -41,14 +72,11 @@ class wp_SendGrid_Settings
         $user = $_POST['sendgrid_user'];
         update_option('sendgrid_user', $user);
 
-        $password = $_POST['sendgrid_pwd'];
+        $password = $_POST['sendgrid_pwd'];        
         update_option('sendgrid_pwd', $password);
 
         $method = $_POST['sendgrid_api'];
         update_option('sendgrid_api', $method);
-
-        $secure = ($_POST['sendgrid_secure'] == 'on') ? true : false;
-        update_option('sendgrid_secure', $secure);
 
         $name = $_POST['sendgrid_name'];
         update_option('sendgrid_from_name', $name);
@@ -63,14 +91,25 @@ class wp_SendGrid_Settings
         $status = 'updated';
       }
     }
+    
     $user = get_option('sendgrid_user');
     $password = get_option('sendgrid_pwd');
     $method = get_option('sendgrid_api');
-    $secure = get_option('sendgrid_secure');
     $name = get_option('sendgrid_from_name');
     $email = get_option('sendgrid_from_email');
     $reply_to = get_option('sendgrid_reply_to');
-    
+
+    if ($user and $password)
+    {
+      $valid_credentials = self::checkUsernamePassword($user, $password);
+
+      if (!$valid_credentials)
+      {
+        $message = 'Invalid username/password';
+        $status = 'error';
+      }
+    }
+        
     require_once dirname(__FILE__) . '/../view/sendgrid_settings.php';
   }
 }
