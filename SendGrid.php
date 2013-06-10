@@ -271,7 +271,7 @@ if (!function_exists('wp_mail'))
     {
       $mail->setAttachments($attached_files);
     }
-    echo '<pre>'; print_r($mail); echo '</pre>';
+
     // Send!
     try
     {
