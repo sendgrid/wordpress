@@ -205,14 +205,12 @@ if (!function_exists('wp_mail'))
     if ( !is_array( $to ) )
       $to = explode( ',', $to );
 
-
     // Add any CC and BCC recipients
     if (!empty( $cc )) 
     {
       foreach ((array) $cc as $key => $recipient) 
       {
         // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
-        $recipient_name = '';
         if (preg_match('/(.*)<(.+)>/', $recipient, $matches)) 
         {
           if ( count( $matches ) == 3 ) 
@@ -226,7 +224,6 @@ if (!function_exists('wp_mail'))
     if ( !empty( $bcc ) ) {
       foreach ( (array) $bcc as $key => $recipient) {
         // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
-        $recipient_name = '';
         if( preg_match( '/(.*)<(.+)>/', $recipient, $matches ) ) {
           if ( count( $matches ) == 3 )
           {
@@ -235,7 +232,20 @@ if (!function_exists('wp_mail'))
         }
       }
     }
-
+    
+    if (($method == 'api') and (count($cc) or count($bcc)))
+    {
+      foreach ((array) $to as $key => $recipient)
+      {
+        // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
+        if (preg_match( '/(.*)<(.+)>/', $recipient, $matches ) )
+        {
+          if ( count( $matches ) == 3 ) {
+            $to[$key] = trim($matches[2]);
+          }
+        }
+      }
+    }
     // Set Content-Type and charset
     // If we don't have a content-type from the input headers
     if ( !isset( $content_type ) )
