@@ -1,5 +1,5 @@
 <?php
-class wp_SendGrid_Settings
+class wpSendGridSettings
 {
   public function __construct()
   {

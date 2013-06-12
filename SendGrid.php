@@ -12,7 +12,7 @@ License: GPLv2
 require_once plugin_dir_path( __FILE__ ) . '/lib/SendGridSettings.php';
 require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.php';
 
-$sendgridSettings = new wp_SendGrid_Settings();
+$sendgridSettings = new wpSendGridSettings();
 
 if (!function_exists('wp_mail'))
 {
@@ -353,10 +353,12 @@ if (!function_exists('wp_mail'))
 }
 else
 {
-  //wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
-  return false;
+  // TODO: wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
 }
 
+/**
+ * Return the content type used to send html emails
+ */
 function set_html_content_type()
 {
 	return 'text/html';
