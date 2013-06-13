@@ -313,53 +313,67 @@ if (!function_exists('wp_mail'))
 
     return false;
   }
-
-  /**
-   * Add settings link on the plugin page
-   * @param  mixed   $links   links
-   * @return mixed            links
-   */
-  function sendgrid_settings_link($links)
-  {
-    $settings_link = '<a href="options-general.php?page=sendgrid-settings.php">Settings</a>';
-    array_unshift($links, $settings_link);
-
-    return $links;
-  }
-
-  /**
-   * Generates source of contextual help panel.
-   * 
-   * @param   mixed   $contextual_help    contextual help
-   * @param   integer $screen_id          screen id
-   * @param   integer $screen             screen
-   * @return  string
-   */
-	function showContextualHelp($contextual_help, $screen_id, $screen)
-  {
-    $text = '<p>' . __('Email Delivery. Simplified.') . '</p>' .
-            '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
-              "of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time " .
-              "analytics along with flexible APIs that make custom integration a breeze.") . '</p>' .
-            '<p>' . __('Once you have properly configured the settings, the plugin will take care of all the emails ' .
-              'sent through your WordPress installation.') . '</p>';
-      
-    return $text;
-  }
-
-  $plugin = plugin_basename(__FILE__);
-  add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
-  add_filter( 'contextual_help', 'showContextualHelp', 10, 2 );
 }
 else
 {
-  // TODO: wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
+  // wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
+  add_action('admin_notices', 'adminNotices');
+}
+
+$plugin = plugin_basename(__FILE__);
+add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
+add_filter( 'contextual_help', 'showContextualHelp', 10, 2 );
+
+/**
+ * Add settings link on the plugin page
+ * 
+ * @param  mixed   $links   links
+ * @return mixed            links
+ */
+function sendgrid_settings_link($links)
+{
+  $settings_link = '<a href="options-general.php?page=sendgrid-settings.php">Settings</a>';
+  array_unshift($links, $settings_link);
+
+  return $links;
+}
+
+/**
+ * Generates source of contextual help panel.
+ *
+ * @param   mixed   $contextual_help    contextual help
+ * @param   integer $screen_id          screen id
+ * @param   integer $screen             screen
+ * @return  string
+ */
+function showContextualHelp($contextual_help, $screen_id, $screen)
+{
+  $text = '<p>' . __('Email Delivery. Simplified.') . '</p>' .
+          '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
+            "of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time " .
+            "analytics along with flexible APIs that make custom integration a breeze.") . '</p>' .
+          '<p>' . __('Once you have properly configured the settings, the plugin will take care of all the emails ' .
+            'sent through your WordPress installation.') . '</p>';
+
+  return $text;
 }
 
 /**
  * Return the content type used to send html emails
+ *
+ * return string Conteny-type needed to send HTML emails
  */
 function set_html_content_type()
 {
 	return 'text/html';
+}
+
+/**
+ * Display the notice that wp_mail function was declared by another plugin
+ *
+ * return void
+ */
+function adminNotices()
+{
+  echo '<div class="error"><p>'.__('SendGrid: wp_mail has been declared by another process or plugin, so you won\'t be able to use SendGrid until the conflict is solved.') . '</p></div>';
 }
