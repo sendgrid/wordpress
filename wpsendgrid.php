@@ -322,7 +322,7 @@ else
 
 $plugin = plugin_basename(__FILE__);
 add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
-add_filter( 'contextual_help', 'showContextualHelp', 10, 2 );
+add_filter('contextual_help', 'showContextualHelp', 10, 2);
 
 /**
  * Add settings link on the plugin page
@@ -352,8 +352,46 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
           '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
             "of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time " .
             "analytics along with flexible APIs that make custom integration a breeze.") . '</p>' .
-          '<p>' . __('Once you have properly configured the settings, the plugin will take care of all the emails ' .
-            'sent through your WordPress installation.') . '</p>';
+          '<p><br />' . __('To have the SendGrid plugin running after you activated it, please go to plugin\'s ' .
+          'settings page and set the SendGrid credentials, and the way your email will be sent through SMTP or API.') .
+          '<br />' . __('You can also set default values for the \'From name\', \'From email\' and the \'Reply-to email\' ' .
+          ' in this page, so that you don\'t need to set these headers every time you want to send an email from your ' .
+          'application.') . '</p>' .
+          '<p>' . __('After you have done these configurations, all your emails sent from your WordPress installation will ' .
+          'go through SendGrid.') . '</p><p>' . __('Now let see how simple is to send a text email:') . '<br />' .
+          '<div class="code">' . __('&lt;?php wp_mail(\'to@address.com\', \'Email Subject\', \'Email Body\'); ?&gt;') . '</div><br />' .
+
+          __('If you want to use additional headers, here you have a more complex example:') . '<br />' .
+
+          '<div class="code">$subject = \'test plugin\'<br />' .
+          '$message = \'testing wordpress plugin\'<br />' .
+          '$to = array(\'address1@sendgrid.com\', \'Address2 <address2@sendgrid.com>\', \'address3@sendgrid.com\');<br /><br />' .
+ 
+          '$headers = array();<br />' .
+          '$headers[] = \'From: Me Myself <me@example.net>\';<br />' .
+          '$headers[] = \'Cc: address4@sendgrid.com\';<br />' .
+          '$headers[] = \'Bcc: address5@sendgrid.com\';<br /><br />' .
+ 
+          '$attachments = array(\'/tmp/img1.jpg\', \'/tmp/img2.jpg\');<br /><br />' .
+ 
+          'add_filter(\'wp_mail_content_type\', \'set_html_content_type\');<br />' .
+          '$mail = wp_mail($to, $subject, $message, $headers, $attachments);<br />' .
+ 
+          'remove_filter(\'wp_mail_content_type\', \'set_html_content_type\');</div><br /><br />' .
+
+          'Where:<br />' .
+          '<ul>'.
+          '<li>$to           -  Array or comma-separated list of email addresses to send message.</li>' .
+          '<li>$subject      -  Email subject</li>' .
+          '<li>$message      -  Message contents</li>' .
+          '<li>$headers      -  Array or "\n" separated  list of additional headers. Optional.</li>' .
+          '<li>$attachments  -  Array or "\n"/"," separated list of files to attach. Optional.</li><br />' .
+
+          'The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have' .
+          'to set the content type to \'text/html\' running add_filter(\'wp_mail_content_type\', \'set_html_content_type\');' .
+          'function before to wp_mail() one.<br />' .
+          'After wp_mail function you need to run the remove_filter(\'wp_mail_content_type\', \'set_html_content_type\'); ' .
+          'to remove the \'text/html\' filter to avoid conflicts -- http://core.trac.wordpress.org/ticket/23578';
 
   return $text;
 }
