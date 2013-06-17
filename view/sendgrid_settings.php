@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'css/sendgrid.css'; ?>" type="text/css">
 
 <div class="wrap"> 
@@ -47,37 +46,37 @@
       <h3><?php _e('Mail settings') ?></h3>
       <table class="form-table">
         <tr class="top">
-          <th scope="row"><?php _e("From name: "); ?></th>
+          <th scope="row"><?php _e("Name: "); ?></th>
           <td>
             <div class="inside">
-              <?php _e('Name the recipients will see in their email clients:') ?>
+              <?php _e('Name as it will appear in recipient clients.') ?>
               <br />
               <input type="text" name="sendgrid_name" value="<?php echo $name; ?>" size="20">
             </div>
           </td>
         </tr>
         <tr class="top">
-          <th scope="row"><?php _e("From email: "); ?></th>
+          <th scope="row"><?php _e("Sending Address: "); ?></th>
           <td>
             <div class="inside">
-              <?php _e('This address will be used as the sender of the outgoing emails:') ?>
+              <?php _e('Email address from which message will be sent,') ?>
               <br />
               <input type="email" name="sendgrid_email" value="<?php echo $email; ?>" size="20">
             </div>
           </td>
         </tr>
         <tr class="top">
-          <th scope="row"><?php _e("Reply-to email: "); ?></th>
+          <th scope="row"><?php _e("Reply Address: "); ?></th>
           <td>
             <div class="inside">
-              <?php _e('This address will be used as the recipient where replies from the users will be sent to:') ?>
+              <?php _e('Email address where replies will be returned.') ?>
               <br />
               <input type="email" name="sendgrid_reply_to" value="<?php echo $reply_to; ?>" size="20">
               <br />
               <span>
                 <small>
                   <em>
-                    <?php _e('Leave blank to use the FROM Email.') ?>
+                    <?php _e('Leave blank to use Sending Address.') ?>
                   </em>
                 </small>
               </span>
