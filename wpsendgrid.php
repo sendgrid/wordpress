@@ -354,7 +354,7 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
             "analytics along with flexible APIs that make custom integration a breeze.") . '</p>' .
           '<p><br />' . __('To have the SendGrid plugin running after you activated it, please go to plugin\'s ' .
           'settings page and set the SendGrid credentials, and the way your email will be sent through SMTP or API.') .
-          '<br />' . __('You can also set default values for the \'From name\', \'From email\' and the \'Reply-to email\' ' .
+          '<br />' . __('You can also set default values for the \'Name\', \'Sending Address\' and the \'Reply Address\' ' .
           ' in this page, so that you don\'t need to set these headers every time you want to send an email from your ' .
           'application.') . '</p>' .
           '<p>' . __('After you have done these configurations, all your emails sent from your WordPress installation will ' .
