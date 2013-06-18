@@ -380,18 +380,19 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
           'remove_filter(\'wp_mail_content_type\', \'set_html_content_type\');</div><br /><br />' .
 
           'Where:<br />' .
-          '<ul>'.
-          '<li>$to           -  Array or comma-separated list of email addresses to send message.</li>' .
-          '<li>$subject      -  Email subject</li>' .
-          '<li>$message      -  Message contents</li>' .
-          '<li>$headers      -  Array or "\n" separated  list of additional headers. Optional.</li>' .
-          '<li>$attachments  -  Array or "\n"/"," separated list of files to attach. Optional.</li><br />' .
-
-          'The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have' .
-          'to set the content type to \'text/html\' running <span class="code">add_filter(\'wp_mail_content_type\', \'set_html_content_type\');</span>' .
-          'function before to wp_mail() one.<br />' .
-          'After wp_mail function you need to run the <span class="code">remove_filter(\'wp_mail_content_type\', \'set_html_content_type\');</span> ' .
-          'to remove the \'text/html\' filter to avoid conflicts -- http://core.trac.wordpress.org/ticket/23578';
+          '<ul>' .
+          '<li>$to           -  ' . __('Array or comma-separated list of email addresses to send message.') . '</li>' .
+          '<li>$subject      -  ' . __('Email subject') . '</li>' .
+          '<li>$message      -  ' . __('Message contents') . '</li>' .
+          '<li>$headers      -  ' . __('Array or "\n" separated  list of additional headers. Optional.') . '</li>' .
+          '<li>$attachments  -  ' . __('Array or "\n"/"," separated list of files to attach. Optional.') . '</li>' .
+          '</ul>' .
+          __('The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have ' .
+          'to set the content type to \'text/html\' running') . ' <span class="code">add_filter(\'wp_mail_content_type\', ' .
+          '\'set_html_content_type\');</span> ' . __('function before to wp_mail() one') . '.<br /><br />' .
+          __('After wp_mail function you need to run the ') . '<span class="code">remove_filter(\'wp_mail_content_type\', ' .
+          '\'set_html_content_type\');</span>' . __(' to remove the \'text/html\' filter to avoid conflicts') .
+          ' -- http://core.trac.wordpress.org/ticket/23578';
 
   return $text;
 }
