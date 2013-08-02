@@ -65,8 +65,6 @@ $mail = wp_mail($to, $subject, $message, $headers, $attachments);
  
 remove_filter('wp_mail_content_type', 'set_html_content_type');`
 
-
-
 == Installation ==
 
 To upload the SendGrid Plugin .ZIP file:
