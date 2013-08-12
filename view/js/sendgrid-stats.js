@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
   /* Datepicker */
   var date = new Date();
   jQuery( "#sendgrid-start-date" ).datepicker({
-    dateFormat: "yy/mm/dd",
+    dateFormat: "yy-mm-dd",
     changeMonth: true,
     maxDate: _dateToYMD(new Date()),
     onClose: function( selectedDate ) {
@@ -14,7 +14,7 @@ jQuery(document).ready(function($){
   var startDate = new Date(date.getFullYear(),date.getMonth(),date.getDate() - defaultDaysBefore);
   $('#sendgrid-start-date').datepicker("setDate", startDate);
   jQuery( "#sendgrid-end-date" ).datepicker({
-    dateFormat: "yy/mm/dd",
+    dateFormat: "yy-mm-dd",
     changeMonth: true,
     maxDate: _dateToYMD(new Date()),
     onClose: function( selectedDate ) {
@@ -27,11 +27,7 @@ jQuery(document).ready(function($){
   /* Apply filter */
   jQuery("#sendgrid-apply-filter").click(function(event) {
     event.preventDefault();
-
-    var startDate = new Date(jQuery("#sendgrid-start-date").val());
-    var endDate = new Date(jQuery("#sendgrid-end-date").val());
-
-    getStats(_dateToYMD(startDate), _dateToYMD(endDate), 'sendgrid_get_stats');
+    getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
   });
   
   /* Get Statistics and show chart */
@@ -44,8 +40,8 @@ jQuery(document).ready(function($){
     
     data = {
       action: action,
-      start_date: _convertDateForRequest(startDate),
-      end_date:   _convertDateForRequest(endDate),
+      start_date: startDate,
+      end_date:   endDate,
       sendgrid_nonce: sendgrid_vars.sendgrid_nonce
     };
 
@@ -70,7 +66,8 @@ jQuery(document).ready(function($){
 
       response = jQuery.parseJSON(response);
       jQuery.each(response, function(key, value) {
-        var date                 = new Date(_convertDateFromRequest(value.date)).getTime();
+        var dateString           = _splitDate(value.date);
+        var date                 = Date.UTC(dateString[0], dateString[1], dateString[2]);
         var requestsThisDay      = value.requests ? value.requests : 0;
         var opensThisDay         = value.opens ? value.opens : 0;
         var clicksThisDay        = value.clicks ? value.clicks : 0;
@@ -150,14 +147,19 @@ jQuery(document).ready(function($){
       ];
 
       // Show chart
+      var startDateArray = _splitDate(startDate);
+      var endDateArray = _splitDate(endDate);
+      
       $.plot("#sendgrid-stats", data, {
           xaxis: {
             mode: "time",
             minTickSize: [1, "day"],
             tickLength: 0,
-            min: (new Date(startDate)).getTime(),
-            max: (new Date(endDate)).getTime(),
-            timeformat: "%b %d"
+            min: Date.UTC(startDateArray[0], startDateArray[1], startDateArray[2]),
+            max: Date.UTC(endDateArray[0], endDateArray[1], endDateArray[2]),
+            timeformat: "%b %d",
+            reserveSpace: true,
+            labelWidth: 50
           },
           series: {
               lines: { show: true },
@@ -260,7 +262,7 @@ jQuery(document).ready(function($){
       var d = date.getDate();
       var m = date.getMonth() + 1;
       var y = date.getFullYear();
-      return '' + y + '/' + (m<=9 ? '0' + m : m) + '/' + (d <= 9 ? '0' + d : d);
+      return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
   }
   
   function _convertMonthToString(timestamp) 
@@ -272,11 +274,8 @@ jQuery(document).ready(function($){
     return dateString;
   }
   
-  function _convertDateForRequest(str) {
-    return str.replace(new RegExp("/", 'g'), "-");
-  }
-  
-  function _convertDateFromRequest(str) {
-    return str.replace(new RegExp("-", 'g'), "/");
+  function _splitDate(date) 
+  {
+    return date.split("-");
   }
 });
