@@ -93,3 +93,90 @@ h2.title {
   overflow: auto;
   padding: 6px 10px;
 }
+
+/* SendGrid stats */
+.sendgrid-filters-container {
+  float:right; 
+  margin-right:13px;
+}
+
+#sendgrid-container {
+  width: 100%; 
+  position: relative;
+}
+
+#sendgrid-container .loading {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  left: 386px;
+  top: 146px;
+}
+
+#sendgrid-container #sendgrid-stats {
+  width: 100%;
+  height: 300px;
+}
+
+#sendgrid-container .widget {
+  float:left;
+  width: 189px; 
+  margin-top: 15px;
+  margin-left: 15px;
+  cursor: default;
+}
+
+#sendgrid-container .widget .widget-top {
+  cursor: default;
+}
+
+#sendgrid-container .widget .widget-inside {
+  display:block; 
+  text-align: center;
+}
+
+#sendgrid-container .widget .widget-inside h2 {
+  font-weight: bold;
+}
+
+#sendgrid-container .widget:first-of-type {
+  margin-left: 0px;
+}
+
+#sendgrid-container .widget#others {
+  font-weight: bold;
+}
+
+#sendgrid-container .widget#others .row {
+  margin-bottom: 2px;
+}
+
+#sendgrid-container .widget#others .row:last-of-type {
+  margin-bottom: 0px;
+}
+
+#sendgrid-container .widget#others .row .square {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  -webkit-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  -moz-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  -webkit-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  -moz-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+}
+
+#sendgrid-stats-legend {
+  width: 100%; 
+  height: 22px; 
+  margin-top: 15px;
+}
+
+#sendgrid-stats-legend .legendLabel {
+  padding-right: 10px;
+}
+#sendgrid-stats-legend .legendLabel:last-of-type {
+  padding-right: 0px;
+}

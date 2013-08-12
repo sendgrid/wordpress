@@ -10,6 +10,7 @@ License: GPLv2
 */
 
 require_once plugin_dir_path( __FILE__ ) . '/lib/SendGridSettings.php';
+require_once plugin_dir_path( __FILE__ ) . '/lib/SendGridStats.php';
 require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.php';
 
 $sendgridSettings = new wpSendGridSettings();
