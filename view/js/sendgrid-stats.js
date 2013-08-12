@@ -1,4 +1,6 @@
 jQuery(document).ready(function($){
+  var defaultDaysBefore = 7;
+  
   /* Datepicker */
   var date = new Date();
   jQuery( "#sendgrid-start-date" ).datepicker({
@@ -9,7 +11,7 @@ jQuery(document).ready(function($){
       $( "#sendgrid-end-date" ).datepicker( "option", "minDate", selectedDate );
     }
   });
-  var startDate = new Date(date.getFullYear(),date.getMonth(),date.getDate()-7);
+  var startDate = new Date(date.getFullYear(),date.getMonth(),date.getDate() - defaultDaysBefore);
   $('#sendgrid-start-date').datepicker("setDate", startDate);
   jQuery( "#sendgrid-end-date" ).datepicker({
     dateFormat: "yy/mm/dd",
@@ -68,7 +70,6 @@ jQuery(document).ready(function($){
 
       response = jQuery.parseJSON(response);
       jQuery.each(response, function(key, value) {
-        console.log(value);
         var date                 = new Date(_convertDateFromRequest(value.date)).getTime();
         var requestsThisDay      = value.requests ? value.requests : 0;
         var opensThisDay         = value.opens ? value.opens : 0;
