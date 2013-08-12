@@ -48,7 +48,6 @@ jQuery(document).ready(function($){
     };
 
     $.post(ajaxurl, data, function(response) {
-      console.log(response);
       var requestStats = [];
       var deliveredStats = [];
       var openStats = [];
@@ -79,7 +78,7 @@ jQuery(document).ready(function($){
         var unsubscribersThisDay = value.unsubscribes ? value.unsubscribes : 0;
         var bouncesThisDay       = value.bounces ? value.bounces : 0;
         var spamReportsThisDay   = value.spamreports ? value.spamreports : 0;
-        console.log(date);
+
         requests     += requestsThisDay;
         deliveres    += deliveresThisDay;
         opens        += opensThisDay;
