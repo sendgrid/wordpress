@@ -68,6 +68,7 @@ jQuery(document).ready(function($){
 
       response = jQuery.parseJSON(response);
       jQuery.each(response, function(key, value) {
+        console.log(value);
         var date                 = new Date(_convertDateFromRequest(value.date)).getTime();
         var requestsThisDay      = value.requests ? value.requests : 0;
         var opensThisDay         = value.opens ? value.opens : 0;
@@ -182,17 +183,16 @@ jQuery(document).ready(function($){
       var bouncesRate      = _round(((bounces * 100) / deliveres), 2) + "%";
       var unsubscribesRate = _round(((unsubscribes * 100) / deliveres), 2) + "%";
       var spamReportsRate  = _round(((spamReports * 100) / deliveres), 2) + "%";
-      
       // Big containers
       $("#sendgrid-container #requests .widget-inside h2").html(requests);
-      $("#sendgrid-container #opened .widget-inside h2").html(opensRate);
-      $("#sendgrid-container #clicked .widget-inside h2").html(clicksRate);
+      $("#sendgrid-container #opened .widget-inside h2").html((opensRate == "NaN%") ? "0%" : opensRate);
+      $("#sendgrid-container #clicked .widget-inside h2").html((clicksRate == "NaN%") ? "0%" : clicksRate);
       
       // Small container
-      $("#sendgrid-container #others #delivered").html(deliveresRate);
-      $("#sendgrid-container #others #bounces").html(bouncesRate);
-      $("#sendgrid-container #others #unsubscribes").html(unsubscribesRate);
-      $("#sendgrid-container #others #spam-reports").html(spamReportsRate);
+      $("#sendgrid-container #others #delivered").html((deliveresRate == "NaN%") ? "0%" : deliveresRate);
+      $("#sendgrid-container #others #bounces").html((bouncesRate == "NaN%") ? "0%" : bouncesRate);
+      $("#sendgrid-container #others #unsubscribes").html((unsubscribesRate == "NaN%") ? "0%" : unsubscribesRate);
+      $("#sendgrid-container #others #spam-reports").html((spamReportsRate == "NaN%") ? "0%" : spamReportsRate);
       
       showInfo();
       $("#sendgrid-container .loading").hide();

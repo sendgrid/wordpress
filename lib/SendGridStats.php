@@ -31,7 +31,7 @@ function sendgrid_load_script($hook)
   wp_enqueue_script('jquery-flot-tofflelegend', plugin_dir_url(__FILE__) . '../view/js/jquery.flot.togglelegend.js', array('jquery'));
   wp_enqueue_script('jquery-flot-symbol', plugin_dir_url(__FILE__) . '../view/js/jquery.flot.symbol.js', array('jquery'));
   wp_enqueue_script('jquery-ui-datepicker', plugin_dir_url(__FILE__) . '../view/js/jquery.ui.datepicker.js', array('jquery', 'jquery-ui-core'));
-  wp_enqueue_style('jquery-ui-datepicker', plugin_dir_url(__FILE__) . '../view/css/ui-lightness/jquery-ui-1.10.3.custom.css');
+  wp_enqueue_style('jquery-ui-datepicker', plugin_dir_url(__FILE__) . '../view/css/smoothness/jquery-ui-1.10.3.custom.css');
   wp_enqueue_style('sendgrid', plugin_dir_url(__FILE__) . '../view/css/sendgrid.css');
   wp_localize_script('sendgrid-stats', 'sendgrid_vars', array(
       'sendgrid_nonce' => wp_create_nonce('sendgrid-nonce')
