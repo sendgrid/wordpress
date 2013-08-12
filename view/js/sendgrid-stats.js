@@ -32,7 +32,6 @@ jQuery(document).ready(function($){
   
   /* Get Statistics and show chart */
   getStats(_dateToYMD(startDate), _dateToYMD(endDate), 'sendgrid_get_stats');
-  
   function getStats(startDate, endDate, action)
   {
     $("#sendgrid-container #sendgrid-stats").html("");
@@ -210,16 +209,16 @@ jQuery(document).ready(function($){
 
     $("#sendgrid-stats").bind("plothover", function (event, pos, item) {
       if (item) {
-          if ((previousPoint != item.dataIndex) || (previousLabel != item.series.label)) {
-              previousPoint = item.dataIndex;
-              previousLabel = item.series.label;
+        if ((previousPoint !== item.dataIndex) || (previousLabel !== item.series.label)) {
+          previousPoint = item.dataIndex;
+          previousLabel = item.series.label;
 
-              $("#flot-tooltip").remove();
-              var date = _convertMonthToString(item.datapoint[0]);
-              var value = item.datapoint[1];
-              var color = item.series.color;
+          $("#flot-tooltip").remove();
+          var date = _convertMonthToString(item.datapoint[0]);
+          var value = item.datapoint[1];
+          var color = item.series.color;
 
-              showTooltip(item.pageX, item.pageY, 
+          showTooltip(item.pageX, item.pageY, 
                       "<b>" + date + "</b><br />" + item.series.label + ": " + value ,
                       color);
           }
@@ -232,37 +231,37 @@ jQuery(document).ready(function($){
 
   function showTooltip(x, y, contents, z) 
   {
-      $('<div id="flot-tooltip">' + contents + '</div>').css({
-          position: 'absolute',
-          display: 'none',
-          top: y - 30,
-          left: x + 30,
-          border: '2px solid',
-          padding: '2px',
-          'background-color': '#FFF',
-          opacity: 0.80,
-          'border-color': z,
-          '-moz-border-radius': '5px',
-          '-webkit-border-radius': '5px',
-          '-khtml-border-radius': '5px',
-          'border-radius': '5px'
+    $('<div id="flot-tooltip">' + contents + '</div>').css({
+        position: 'absolute',
+        display: 'none',
+        top: y - 30,
+        left: x + 30,
+        border: '2px solid',
+        padding: '2px',
+        'background-color': '#FFF',
+        opacity: 0.80,
+        'border-color': z,
+        '-moz-border-radius': '5px',
+        '-webkit-border-radius': '5px',
+        '-khtml-border-radius': '5px',
+        'border-radius': '5px'
       }).appendTo("body").fadeIn(200);
   }
   
   /**** Helpers ****/
   function _round(value, places) 
   {
-      var multiplier = Math.pow(10, places);
+    var multiplier = Math.pow(10, places);
 
-      return (Math.round(value * multiplier) / multiplier);
+    return (Math.round(value * multiplier) / multiplier);
   }
   
   function _dateToYMD(date) 
   {
-      var d = date.getDate();
-      var m = date.getMonth() + 1;
-      var y = date.getFullYear();
-      return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+    var d = date.getDate();
+    var m = date.getMonth() + 1;
+    var y = date.getFullYear();
+    return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
   }
   
   function _convertMonthToString(timestamp) 
