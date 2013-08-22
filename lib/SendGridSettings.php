@@ -132,11 +132,19 @@ class wpSendGridSettings
 
     if ($user and $password)
     {
-      $valid_credentials = self::checkUsernamePassword($user, $password);
-
-      if (!$valid_credentials)
+      if (in_array('curl', get_loaded_extensions()))
       {
-        $message = 'Invalid username/password';
+        $valid_credentials = self::checkUsernamePassword($user, $password);
+
+        if (!$valid_credentials)
+        {
+          $message = 'Invalid username/password';
+          $status = 'save-error';
+        }
+      }
+      else
+      {
+        $message = 'You must have curl extension enabled';
         $status = 'save-error';
       }
     }
