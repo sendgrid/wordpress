@@ -144,7 +144,7 @@ class wpSendGridSettings
       }
       else
       {
-        $message = 'You must have curl extension enabled';
+        $message = 'You must have PHP-curl extension enabled';
         $status = 'save-error';
       }
     }
