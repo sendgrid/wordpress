@@ -32,9 +32,9 @@ jQuery(document).ready(function($){
     getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
   });
   
+  /* Charts responsive only in statistics page*/
   if (filterType === "sendgrid-statistics")
   {
-    /* Chart responsive */
     jQuery("#collapse-menu, input[name='screen_columns']").click(function(event) {
       getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
     });
@@ -59,6 +59,7 @@ jQuery(document).ready(function($){
       sendgrid_nonce: sendgrid_vars.sendgrid_nonce
     };
 
+    /* Make request and prepare data */
     $.post(ajaxurl, data, function(response) {
       var requestStats     = [];
       var deliveredStats   = [];
@@ -87,6 +88,7 @@ jQuery(document).ready(function($){
       var blocks             = 0;
       var uniqueOpens        = 0;
 
+      /* Get stats from request */
       response = jQuery.parseJSON(response);
       jQuery.each(response, function(key, value) {
         var dateString                = _splitDate(value.date);
@@ -134,7 +136,7 @@ jQuery(document).ready(function($){
         blockStats.push([date, blocksThisDay]);
       });
       
-      // Config chart
+      /* Prepare data for charts */
       var dataDeliveries = [
         {
           label : 'Requests',
@@ -193,6 +195,7 @@ jQuery(document).ready(function($){
         }
       ];
 
+      /* Show charts only on SendGrid Statistics page */
       if (filterType === "sendgrid-statistics")
       {
         showChart("#deliveries-container", "#deliveries-container-legend", startDate, 
