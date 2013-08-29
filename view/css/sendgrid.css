@@ -166,17 +166,17 @@ h2.title {
   font-weight: bold;
   width: 30%;
   margin-left: 2.3%;
-  margin-bottom: 20px;
-}
-
-.sendgrid-container .widget.others .widget-title h4 {
-  line-height: 15px;
+  margin-bottom: 15px;
 }
 
 .sendgrid-container .widget.others:last-of-type {
   margin-left: 0px;
   margin-right: 2.3%;
   float: right;
+}
+
+.sendgrid-container .widget.others .widget-title h4 {
+  line-height: 15px;
 }
 
 .sendgrid-container .widget.others .row {
@@ -200,6 +200,12 @@ h2.title {
   box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
 }
 
+.sendgrid-container .more-statistics {
+  float: right;
+  margin-bottom: 15px;
+  margin-right: 2.3%;
+}
+
 .sendgrid-stats-legend {
   width: 100%; 
   height: 22px; 
@@ -220,4 +226,8 @@ h2.title {
 
 #icon-sendgrid {
   background: url("../images/logo32.png") no-repeat;
+}
+
+#ui-datepicker-div {
+  display: none;
 }

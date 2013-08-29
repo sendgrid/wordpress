@@ -32,13 +32,16 @@ jQuery(document).ready(function($){
     getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
   });
   
-  /* Chart responsive */
-  jQuery("#collapse-menu, input[name='screen_columns']").click(function(event) {
-    getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
-  });
-  window.onresize = function(event) {
-    getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
-  };
+  if (filterType === "sendgrid-statistics")
+  {
+    /* Chart responsive */
+    jQuery("#collapse-menu, input[name='screen_columns']").click(function(event) {
+      getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
+    });
+    window.onresize = function(event) {
+      getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
+    };
+  }
   
   /* Get Statistics and show chart */
   getStats(_dateToYMD(startDate), _dateToYMD(endDate), 'sendgrid_get_stats');
