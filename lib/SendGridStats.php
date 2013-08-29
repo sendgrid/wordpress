@@ -7,13 +7,31 @@ function sendgrid_dashboard_statistics()
   require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats.php';
 }
 
+function sendgrid_dashboard_statistics_deliveries() 
+{
+  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats_deliveries.php';
+}
+
+function sendgrid_dashboard_statistics_compliance() 
+{
+  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats_compliance.php';
+}
+
+function sendgrid_dashboard_statistics_engagement() 
+{
+  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats_engagement.php';
+}
+
 function my_custom_dashboard_widgets() 
 { 
   $sendgridSettings = new wpSendGridSettings();
   if (!$sendgridSettings->checkUsernamePassword(get_option('sendgrid_user'),get_option('sendgrid_pwd')))
     return;
   
-  wp_add_dashboard_widget('custom_help_widget', 'SendGrid Statistics', 'sendgrid_dashboard_statistics');
+  add_meta_box('sendgrid_statistics_widget', 'SendGrid Statistics', 'sendgrid_dashboard_statistics', 'dashboard', 'side', 'high');
+  add_meta_box('sendgrid_statistics_deliveries_widget', 'SendGrid Deliveries', 'sendgrid_dashboard_statistics_deliveries', 'dashboard', 'side', 'high');
+  add_meta_box('sendgrid_statistics_compliance_widget', 'SendGrid Compliance', 'sendgrid_dashboard_statistics_compliance', 'dashboard', 'side', 'high');
+  add_meta_box('sendgrid_statistics_engagement_widget', 'SendGrid Engagement', 'sendgrid_dashboard_statistics_engagement', 'dashboard', 'side', 'high');
 }
 add_action('wp_dashboard_setup', 'my_custom_dashboard_widgets');
 

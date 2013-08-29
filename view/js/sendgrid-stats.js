@@ -30,12 +30,20 @@ jQuery(document).ready(function($){
     getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
   });
   
+  /* Chart responsive */
+  jQuery("#collapse-menu, input[name='screen_columns']").click(function(event) {
+    getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
+  });
+  window.onresize = function(event) {
+    getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
+  };
+  
   /* Get Statistics and show chart */
   getStats(_dateToYMD(startDate), _dateToYMD(endDate), 'sendgrid_get_stats');
   function getStats(startDate, endDate, action)
   {
-    $("#sendgrid-container #sendgrid-stats").html("");
-    $("#sendgrid-container .loading").show();
+    $(".sendgrid-container .sendgrid-stats").html("");
+    $(".sendgrid-container .loading").show();
     
     data = {
       action: action,
@@ -45,45 +53,66 @@ jQuery(document).ready(function($){
     };
 
     $.post(ajaxurl, data, function(response) {
-      var requestStats = [];
-      var deliveredStats = [];
-      var openStats = [];
-      var uniqueOpenStats = [];
-      var clickStats = [];
+      var requestStats     = [];
+      var deliveredStats   = [];
+      var openStats        = [];
+      var uniqueOpenStats  = [];
+      var clickStats       = [];
       var uniqueClickStats = [];
       var unsubscribeStats = [];
-      var bounceStats = [];
-      var spamreportStats = [];
+      var bounceStats      = [];
+      var spamreportStats  = [];
+      var dropStats        = [];
+      var blockStats     = [];
 
-      var requests      = 0;
-      var opens         = 0;
-      var clicks        = 0;
-      var deliveres     = 0;
-      var bounces       = 0;
-      var unsubscribes = 0;
-      var spamReports   = 0;
+      var requests           = 0;
+      var opens              = 0;
+      var clicks             = 0;
+      var deliveres          = 0;
+      var bounces            = 0;
+      var unsubscribes       = 0;
+      var spamReports        = 0;
+      var spamDrop           = 0;
+      var repeatBounces      = 0;
+      var repeatSpamreports  = 0;
+      var repeatUnsubscribes = 0;
+      var drops              = 0;
+      var blocks             = 0;
+      var uniqueOpens        = 0;
 
       response = jQuery.parseJSON(response);
       jQuery.each(response, function(key, value) {
-        var dateString           = _splitDate(value.date);
-        var date                 = Date.UTC(dateString[0], dateString[1], dateString[2]);
-        var requestsThisDay      = value.requests ? value.requests : 0;
-        var opensThisDay         = value.opens ? value.opens : 0;
-        var clicksThisDay        = value.clicks ? value.clicks : 0;
-        var deliveresThisDay     = value.delivered ? value.delivered : 0;
-        var uniqueOpensThisDay   = value.unique_opens ? value.unique_opens : 0;
-        var uniqueClicksThisDay  = value.unique_clicks ? value.unique_clicks : 0;
-        var unsubscribersThisDay = value.unsubscribes ? value.unsubscribes : 0;
-        var bouncesThisDay       = value.bounces ? value.bounces : 0;
-        var spamReportsThisDay   = value.spamreports ? value.spamreports : 0;
+        var dateString                = _splitDate(value.date);
+        var date                      = Date.UTC(dateString[0], dateString[1], dateString[2]);
+        var requestsThisDay           = value.requests ? value.requests : 0;
+        var opensThisDay              = value.opens ? value.opens : 0;
+        var clicksThisDay             = value.clicks ? value.clicks : 0;
+        var deliveresThisDay          = value.delivered ? value.delivered : 0;
+        var uniqueOpensThisDay        = value.unique_opens ? value.unique_opens : 0;
+        var uniqueClicksThisDay       = value.unique_clicks ? value.unique_clicks : 0;
+        var unsubscribersThisDay      = value.unsubscribes ? value.unsubscribes : 0;
+        var bouncesThisDay            = value.bounces ? value.bounces : 0;
+        var spamReportsThisDay        = value.spamreports ? value.spamreports : 0;
+        var spamDropThisDay           = value.spam_drop ? value.spam_drop : 0;
+        var repeatBouncesThisDay      = value.repeat_bounces ? value.repeat_bounces : 0;
+        var repeatSpamreportsThisDay  = value.repeat_spamreports ? value.repeat_spamreports : 0;
+        var repeatUnsubscribesThisDay = value.repeat_unsubscribes ? value.repeat_unsubscribes : 0;
+        var blocksThisDay = value.blocked ? value.blocked : 0;
 
-        requests     += requestsThisDay;
-        deliveres    += deliveresThisDay;
-        opens        += opensThisDay;
-        clicks       += clicksThisDay;
-        bounces      += bouncesThisDay;
-        unsubscribes += unsubscribersThisDay;
-        spamReports  += spamReportsThisDay;
+        requests           += requestsThisDay;
+        deliveres          += deliveresThisDay;
+        opens              += opensThisDay;
+        clicks             += clicksThisDay;
+        bounces            += bouncesThisDay;
+        unsubscribes       += unsubscribersThisDay;
+        spamReports        += spamReportsThisDay;
+        spamDrop           += spamDropThisDay;
+        repeatBounces      += repeatBouncesThisDay;
+        repeatSpamreports  += repeatSpamreportsThisDay;
+        repeatUnsubscribes += repeatUnsubscribesThisDay;
+        drops              += spamDrop + repeatBounces + repeatSpamreports + repeatUnsubscribes;
+        blocks             += blocksThisDay;
+        uniqueOpens        += uniqueOpensThisDay;
        
         requestStats.push([date, requestsThisDay]);
         deliveredStats.push([date, deliveresThisDay]);
@@ -94,44 +123,33 @@ jQuery(document).ready(function($){
         unsubscribeStats.push([date, unsubscribersThisDay]);
         bounceStats.push([date, bouncesThisDay]);
         spamreportStats.push([date, spamReportsThisDay]);
+        dropStats.push([date, repeatUnsubscribesThisDay]);
+        blockStats.push([date, blocksThisDay]);
       });
       
       // Config chart
-      var data = [
+      var dataDeliveries = [
         {
           label : 'Requests',
           data  : requestStats,
           points: { symbol: "circle" }
         },
         {
-          label : 'Delivered',
-          data  : deliveredStats,
-          points: { symbol: "diamond" }
-        },
-        {
-          label : 'Opens',
-          data  : openStats,
+          label : 'Drops',
+          data  : dropStats,
           points: { symbol: "square" }
         },
         {
-          label : 'Unique Opens',
-          data  : uniqueOpenStats,
-          points: { symbol: "triangle" }
-        },
-        {
-          label : 'Clicks',
-          data  : clickStats,
-          points: { symbol: "cross" }
-        },
-        {
-          label : 'Unique Clicks',
-          data  : uniqueClickStats,
-          points: { symbol: "circle" }
-        },
-        {
-          label : 'Unsubscribes',
-          data  : unsubscribeStats,
+          label : 'Delivered',
+          data  : deliveredStats,
           points: { symbol: "diamond" }
+        }];
+      
+      var dataCompliance = [
+        {
+          label : 'Spam reports',
+          data  : spamreportStats,
+          points: { symbol: "circle" }
         },
         {
           label : 'Bounces',
@@ -139,66 +157,108 @@ jQuery(document).ready(function($){
           points: { symbol: "square" }
         },
         {
-          label : 'Spam reports',
-          data  : spamreportStats,
+          label : 'Blocked',
+          data  : blockStats,
+          points: { symbol: "diamond" }
+        }
+      ];
+      
+      var dataEngagement = [
+        {
+          label : 'Unsubscribes',
+          data  : unsubscribeStats,
+          points: { symbol: "diamond" }
+        },
+        {
+          label : 'Unique Opens',
+          data  : uniqueOpenStats,
           points: { symbol: "triangle" }
-        }       
+        },
+        {
+          label : 'Opens',
+          data  : openStats,
+          points: { symbol: "square" }
+        },
+        {
+          label : 'Clicks',
+          data  : clickStats,
+          points: { symbol: "cross" }
+        }
       ];
 
-      // Show chart
-      var startDateArray = _splitDate(startDate);
-      var endDateArray = _splitDate(endDate);
+      showChart("#deliveries-container", "#deliveries-container-legend", startDate, 
+                endDate, dataDeliveries, ["#328701", "#bcd516", "#fba617"]);
+      showChart("#compliance-container", "#compliance-container-legend", startDate, 
+                endDate, dataCompliance, ["#fbe500", "#1185c1", "#bcd0d1"]);
+      showChart("#engagement-container", "#engagement-container-legend", startDate, 
+                endDate, dataEngagement, ["#3e44c0", "#ff00e0", "#e04428", "#328701"]);          
       
-      $.plot("#sendgrid-stats", data, {
-          xaxis: {
-            mode: "time",
-            minTickSize: [1, "day"],
-            tickLength: 0,
-            min: Date.UTC(startDateArray[0], startDateArray[1], startDateArray[2]),
-            max: Date.UTC(endDateArray[0], endDateArray[1], endDateArray[2]),
-            timeformat: "%b %d",
-            reserveSpace: true,
-            labelWidth: 50
-          },
-          series: {
-              lines: { show: true },
-              points: { 
-                radius: 4,
-                show: true
-              }
-          },
-          grid: {
-            hoverable: true,
-            borderWidth: 0
-          },
-          legend: {
-            noColumns: 0,
-            container: $("#sendgrid-stats-legend")
-          },
-          colors: ["#328701", "#bcd516", "#fba617", "#fbe500", "#1185c1", "#bcd0d1", "#3e44c0", "#ff00e0", "#e04428"]
-      });
+      /* Show info in widgets */
+      /* Deliveries */
+      var dropsRate        = _round(((drops * 100) / requests), 2) + "%";
+      var deliveresRate    = _round(((deliveres * 100) / requests), 2) + "%";
+      $(".sendgrid-container #deliveries #requests").html(requests);
+      $(".sendgrid-container #deliveries #drop").html((dropsRate === "NaN%") ? "0%" : dropsRate);
+      $(".sendgrid-container #deliveries #delivered").html((deliveresRate === "NaN%") ? "0%" : deliveresRate);
       
-      // Show info in widgets
+      /* Compliance */
+      var spamReportsRate  = _round(((spamReports * 100) / deliveres), 2) + "%";
+      var bouncesRate      = _round(((bounces * 100) / deliveres), 2) + "%";
+      var blocksRate      = _round(((blocks * 100) / requests), 2) + "%";
+      $(".sendgrid-container #compliance #spam-reports").html((spamReportsRate === "NaN%") ? "0%" : spamReportsRate);
+      $(".sendgrid-container #compliance #bounces").html((bouncesRate === "NaN%") ? "0%" : bouncesRate);
+      $(".sendgrid-container #compliance #blocks").html((blocksRate === "NaN%") ? "0%" : blocksRate);
+      
+      /* Engagement */
+      var unsubscribesRate = _round(((unsubscribes * 100) / deliveres), 2) + "%";
+      var uniqueOpensRate  = _round(((uniqueOpens * 100) / deliveres), 2) + "%";
       var opensRate        = _round(((opens * 100) / deliveres), 2) + "%";
       var clicksRate       = _round(((clicks * 100) / deliveres), 2) + "%";
-      var deliveresRate    = _round(((deliveres * 100) / requests), 2) + "%";
-      var bouncesRate      = _round(((bounces * 100) / deliveres), 2) + "%";
-      var unsubscribesRate = _round(((unsubscribes * 100) / deliveres), 2) + "%";
-      var spamReportsRate  = _round(((spamReports * 100) / deliveres), 2) + "%";
-      // Big containers
-      $("#sendgrid-container #requests .widget-inside h2").html(requests);
-      $("#sendgrid-container #opened .widget-inside h2").html((opensRate == "NaN%") ? "0%" : opensRate);
-      $("#sendgrid-container #clicked .widget-inside h2").html((clicksRate == "NaN%") ? "0%" : clicksRate);
+      $(".sendgrid-container #engagement #unsubscribes").html((unsubscribesRate === "NaN%") ? "0%" : unsubscribesRate);
+      $(".sendgrid-container #engagement #unique-opens").html((uniqueOpensRate === "NaN%") ? "0%" : uniqueOpensRate);
+      $(".sendgrid-container #engagement #opens").html((opensRate === "NaN%") ? "0%" : opensRate);
+      $(".sendgrid-container #engagement #clicks").html((clicksRate === "NaN%") ? "0%" : clicksRate);
       
-      // Small container
-      $("#sendgrid-container #others #delivered").html((deliveresRate == "NaN%") ? "0%" : deliveresRate);
-      $("#sendgrid-container #others #bounces").html((bouncesRate == "NaN%") ? "0%" : bouncesRate);
-      $("#sendgrid-container #others #unsubscribes").html((unsubscribesRate == "NaN%") ? "0%" : unsubscribesRate);
-      $("#sendgrid-container #others #spam-reports").html((spamReportsRate == "NaN%") ? "0%" : spamReportsRate);
-      
-      showInfo();
-      $("#sendgrid-container .loading").hide();
+      $(".sendgrid-container .loading").hide();
     });
+  }
+  
+  /* Display chart function */
+  function showChart(cssSelector, legendSelector, startDate, endDate, data, colors)
+  {
+    var startDateArray = _splitDate(startDate);
+    var endDateArray = _splitDate(endDate);
+
+    $.plot(cssSelector, data, {
+        xaxis: {
+          mode: "time",
+          minTickSize: [1, "day"],
+          tickLength: 0,
+          min: Date.UTC(startDateArray[0], startDateArray[1], startDateArray[2]),
+          max: Date.UTC(endDateArray[0], endDateArray[1], endDateArray[2]),
+          timeformat: "%b %d",
+          reserveSpace: true,
+          labelWidth: 50
+        },
+        series: {
+            lines: { show: true },
+            points: { 
+              radius: 4,
+              show: true
+            }
+        },
+        grid: {
+          hoverable: true,
+          borderWidth: 0
+        },
+        legend: {
+          noColumns: 0,
+          container: $(legendSelector)
+        },
+        //colors: ["#328701", "#bcd516", "#fba617", "#fbe500", "#1185c1", "#bcd0d1", "#3e44c0", "#ff00e0", "#e04428"]
+        colors: colors
+    });
+    showInfo();
   }
   
   /* Flop chart tooltop */
