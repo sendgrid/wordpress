@@ -1,5 +1,5 @@
 <div id="sendgrid_statistics_engagement_widget" class="postbox ">
-  <h3 class="hndle"><span>SendGrid Statistics</span></h3>
+  <h3 class="hndle"><span>SendGrid Engagement</span></h3>
   <div class="inside">
 
     <div class="sendgrid-container" style="position:relative;">
