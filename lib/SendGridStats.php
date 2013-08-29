@@ -4,22 +4,7 @@
  */
 function sendgrid_dashboard_statistics() 
 {
-  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats.php';
-}
-
-function sendgrid_dashboard_statistics_deliveries() 
-{
-  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats_deliveries.php';
-}
-
-function sendgrid_dashboard_statistics_compliance() 
-{
-  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats_compliance.php';
-}
-
-function sendgrid_dashboard_statistics_engagement() 
-{
-  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats_engagement.php';
+  require plugin_dir_path( __FILE__ ) . '../view/partials/sendgrid_stats_widget.php';
 }
 
 function my_custom_dashboard_widgets() 
@@ -28,19 +13,30 @@ function my_custom_dashboard_widgets()
   if (!$sendgridSettings->checkUsernamePassword(get_option('sendgrid_user'),get_option('sendgrid_pwd')))
     return;
   
-  add_meta_box('sendgrid_statistics_widget', 'SendGrid Statistics', 'sendgrid_dashboard_statistics', 'dashboard', 'side', 'high');
-  add_meta_box('sendgrid_statistics_deliveries_widget', 'SendGrid Deliveries', 'sendgrid_dashboard_statistics_deliveries', 'dashboard', 'side', 'high');
-  add_meta_box('sendgrid_statistics_compliance_widget', 'SendGrid Compliance', 'sendgrid_dashboard_statistics_compliance', 'dashboard', 'side', 'high');
-  add_meta_box('sendgrid_statistics_engagement_widget', 'SendGrid Engagement', 'sendgrid_dashboard_statistics_engagement', 'dashboard', 'side', 'high');
+  add_meta_box('sendgrid_statistics_widget', 'SendGrid Statistics', 'sendgrid_dashboard_statistics', 'dashboard', 'normal', 'high');
 }
 add_action('wp_dashboard_setup', 'my_custom_dashboard_widgets');
+
+/*
+ * Add new statistics page
+ */
+function sendgrid_statistics_page()
+{
+  require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats.php';
+}
+
+function add_dashboard_menu()
+{
+  add_dashboard_page( "SendGrid Statistics", "SendGrid Statistics", "manage_options", "sendgrid-statistics", "sendgrid_statistics_page"); 
+}
+add_action('admin_menu', 'add_dashboard_menu');
 
 /*
  * Add javascripts we need
  */
 function sendgrid_load_script($hook) 
 {
-  if ($hook != "index.php")
+  if ($hook != "index.php" && $hook != "dashboard_page_sendgrid-statistics")
     return;
   
   wp_enqueue_script('sendgrid-stats', plugin_dir_url(__FILE__) . '../view/js/sendgrid-stats.js', array('jquery'));

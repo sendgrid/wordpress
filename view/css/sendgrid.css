@@ -119,6 +119,11 @@ h2.title {
   margin-top: -24px;
 }
 
+.sendgrid-filters-container .loading {
+  display: inline-block;
+  padding-top: 2px;
+}
+
 .sendgrid-container .sendgrid-stats {
   width: 100%;
   height: 300px;
@@ -160,13 +165,17 @@ h2.title {
 .sendgrid-container .widget.others {
   font-weight: bold;
   width: 30%;
-  margin-left: 2.4%;
-  margin-bottom: 2.4%;
+  margin-left: 2.3%;
+  margin-bottom: 20px;
+}
+
+.sendgrid-container .widget.others .widget-title h4 {
+  line-height: 15px;
 }
 
 .sendgrid-container .widget.others:last-of-type {
   margin-left: 0px;
-  margin-right: 2.4%;
+  margin-right: 2.3%;
   float: right;
 }
 
@@ -203,4 +212,12 @@ h2.title {
 
 .sendgrid-stats-legend .legendLabel:last-of-type {
   padding-right: 0px;
+}
+
+#sendgrid-statistics-page .postbox .hndle {
+  cursor: default;
+}
+
+#icon-sendgrid {
+  background: url("../images/logo32.png") no-repeat;
 }

@@ -25,8 +25,10 @@ jQuery(document).ready(function($){
   $('#sendgrid-end-date').datepicker("setDate", endDate);
   
   /* Apply filter */
+  var filterType = $("#sendgrid-apply-filter").attr("data-filter");
   jQuery("#sendgrid-apply-filter").click(function(event) {
     event.preventDefault();
+
     getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
   });
   
@@ -43,7 +45,9 @@ jQuery(document).ready(function($){
   function getStats(startDate, endDate, action)
   {
     $(".sendgrid-container .sendgrid-stats").html("");
-    $(".sendgrid-container .loading").show();
+    
+    /* Show laoders */
+    $(".sendgrid-container .loading, .sendgrid-filters-container .loading").show();
     
     data = {
       action: action,
@@ -186,12 +190,15 @@ jQuery(document).ready(function($){
         }
       ];
 
-      showChart("#deliveries-container", "#deliveries-container-legend", startDate, 
-                endDate, dataDeliveries, ["#328701", "#bcd516", "#fba617"]);
-      showChart("#compliance-container", "#compliance-container-legend", startDate, 
-                endDate, dataCompliance, ["#fbe500", "#1185c1", "#bcd0d1"]);
-      showChart("#engagement-container", "#engagement-container-legend", startDate, 
-                endDate, dataEngagement, ["#3e44c0", "#ff00e0", "#e04428", "#328701"]);          
+      if (filterType === "sendgrid-statistics")
+      {
+        showChart("#deliveries-container", "#deliveries-container-legend", startDate, 
+                  endDate, dataDeliveries, ["#328701", "#bcd516", "#fba617"]);
+        showChart("#compliance-container", "#compliance-container-legend", startDate, 
+                  endDate, dataCompliance, ["#fbe500", "#1185c1", "#bcd0d1"]);
+        showChart("#engagement-container", "#engagement-container-legend", startDate, 
+                  endDate, dataEngagement, ["#3e44c0", "#ff00e0", "#e04428", "#328701"]);   
+      }
       
       /* Show info in widgets */
       /* Deliveries */
@@ -219,7 +226,8 @@ jQuery(document).ready(function($){
       $(".sendgrid-container #engagement #opens").html((opensRate === "NaN%") ? "0%" : opensRate);
       $(".sendgrid-container #engagement #clicks").html((clicksRate === "NaN%") ? "0%" : clicksRate);
       
-      $(".sendgrid-container .loading").hide();
+      /* Hide loaders */
+      $(".sendgrid-container .loading, .sendgrid-filters-container .loading").hide();
     });
   }
   
