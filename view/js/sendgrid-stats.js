@@ -92,7 +92,7 @@ jQuery(document).ready(function($){
       response = jQuery.parseJSON(response);
       jQuery.each(response, function(key, value) {
         var dateString                = _splitDate(value.date);
-        var date                      = Date.UTC(dateString[0], dateString[1], dateString[2]);
+        var date                      = Date.UTC(dateString[0], convertMonthToUTC(dateString[1]), dateString[2]);
         var requestsThisDay           = value.requests ? value.requests : 0;
         var opensThisDay              = value.opens ? value.opens : 0;
         var clicksThisDay             = value.clicks ? value.clicks : 0;
@@ -106,7 +106,8 @@ jQuery(document).ready(function($){
         var repeatBouncesThisDay      = value.repeat_bounces ? value.repeat_bounces : 0;
         var repeatSpamreportsThisDay  = value.repeat_spamreports ? value.repeat_spamreports : 0;
         var repeatUnsubscribesThisDay = value.repeat_unsubscribes ? value.repeat_unsubscribes : 0;
-        var blocksThisDay = value.blocked ? value.blocked : 0;
+        var dropsThisDay              = spamDropThisDay + repeatBouncesThisDay + repeatSpamreportsThisDay + repeatUnsubscribesThisDay;
+        var blocksThisDay             = value.blocked ? value.blocked : 0;
 
         requests           += requestsThisDay;
         deliveres          += deliveresThisDay;
@@ -119,7 +120,7 @@ jQuery(document).ready(function($){
         repeatBounces      += repeatBouncesThisDay;
         repeatSpamreports  += repeatSpamreportsThisDay;
         repeatUnsubscribes += repeatUnsubscribesThisDay;
-        drops              += spamDrop + repeatBounces + repeatSpamreports + repeatUnsubscribes;
+        drops              += dropsThisDay;
         blocks             += blocksThisDay;
         uniqueOpens        += uniqueOpensThisDay;
        
@@ -132,7 +133,7 @@ jQuery(document).ready(function($){
         unsubscribeStats.push([date, unsubscribersThisDay]);
         bounceStats.push([date, bouncesThisDay]);
         spamreportStats.push([date, spamReportsThisDay]);
-        dropStats.push([date, repeatUnsubscribesThisDay]);
+        dropStats.push([date, dropsThisDay]);
         blockStats.push([date, blocksThisDay]);
       });
       
@@ -248,8 +249,8 @@ jQuery(document).ready(function($){
           mode: "time",
           minTickSize: [1, "day"],
           tickLength: 0,
-          min: Date.UTC(startDateArray[0], startDateArray[1], startDateArray[2]),
-          max: Date.UTC(endDateArray[0], endDateArray[1], endDateArray[2]),
+          min: Date.UTC(startDateArray[0], convertMonthToUTC(startDateArray[1]), startDateArray[2]),
+          max: Date.UTC(endDateArray[0], convertMonthToUTC(endDateArray[1]), endDateArray[2]),
           timeformat: "%b %d",
           reserveSpace: true,
           labelWidth: 50
@@ -272,16 +273,16 @@ jQuery(document).ready(function($){
         //colors: ["#328701", "#bcd516", "#fba617", "#fbe500", "#1185c1", "#bcd0d1", "#3e44c0", "#ff00e0", "#e04428"]
         colors: colors
     });
-    showInfo();
+    showInfo(cssSelector);
   }
   
   /* Flop chart tooltop */
-  function showInfo()
+  function showInfo(cssSelector)
   {
     var previousPoint = null;
     var previousLabel = null;
 
-    $("#sendgrid-stats").bind("plothover", function (event, pos, item) {
+    $(cssSelector).bind("plothover", function (event, pos, item) {
       if (item) {
         if ((previousPoint !== item.dataIndex) || (previousLabel !== item.series.label)) {
           previousPoint = item.dataIndex;
@@ -342,6 +343,7 @@ jQuery(document).ready(function($){
   {
     var month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var newDate = new Date(timestamp);
+    
     var dateString = month_names[newDate.getMonth()] + " " + newDate.getDate();
 
     return dateString;
@@ -350,5 +352,11 @@ jQuery(document).ready(function($){
   function _splitDate(date) 
   {
     return date.split("-");
+  }
+  
+  function convertMonthToUTC(month) 
+  {
+    month = parseInt(month.replace("0","")) - 1;
+    return (month<=9 ? '0' + month : month);
   }
 });
