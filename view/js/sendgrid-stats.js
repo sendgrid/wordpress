@@ -1,7 +1,7 @@
 jQuery(document).ready(function($){
   var defaultDaysBefore = 7;
   
-  /* Datepicker */
+  /* Initialize datepicker */
   var date = new Date();
   jQuery( "#sendgrid-start-date" ).datepicker({
     dateFormat: "yy-mm-dd",
@@ -11,7 +11,7 @@ jQuery(document).ready(function($){
       $( "#sendgrid-end-date" ).datepicker( "option", "minDate", selectedDate );
     }
   });
-  var startDate = new Date(date.getFullYear(),date.getMonth(),date.getDate() - defaultDaysBefore);
+  var startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - defaultDaysBefore);
   $('#sendgrid-start-date').datepicker("setDate", startDate);
   jQuery( "#sendgrid-end-date" ).datepicker({
     dateFormat: "yy-mm-dd",
@@ -32,7 +32,7 @@ jQuery(document).ready(function($){
     getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
   });
   
-  /* Charts responsive only in statistics page*/
+  /* Make charts responsive in statistics page, reload charts when window is resized */
   if (filterType === "sendgrid-statistics")
   {
     jQuery("#collapse-menu, input[name='screen_columns']").click(function(event) {
@@ -44,6 +44,15 @@ jQuery(document).ready(function($){
   }
   
   /* Get Statistics and show chart */
+  
+  /**
+   * Show laoder, make ajax request and get statistics, prepare data for charts
+   * 
+   * @param {String} startDate
+   * @param {String} endDate
+   * @param {String} action
+   * @returns {Void}
+   */
   getStats(_dateToYMD(startDate), _dateToYMD(endDate), 'sendgrid_get_stats');
   function getStats(startDate, endDate, action)
   {
@@ -238,45 +247,61 @@ jQuery(document).ready(function($){
     });
   }
   
-  /* Display chart function */
+  /**
+   * Generate flot chart with submited parameters
+   * 
+   * @param {String} cssSelector
+   * @param {String} legendSelector
+   * @param {String} startDate
+   * @param {String} endDate
+   * @param {Array} data
+   * @param {Array} colors
+   * @returns {Void}
+   */
   function showChart(cssSelector, legendSelector, startDate, endDate, data, colors)
   {
     var startDateArray = _splitDate(startDate);
     var endDateArray = _splitDate(endDate);
 
     $.plot(cssSelector, data, {
-        xaxis: {
-          mode: "time",
-          minTickSize: [1, "day"],
-          tickLength: 0,
-          min: Date.UTC(startDateArray[0], convertMonthToUTC(startDateArray[1]), startDateArray[2]),
-          max: Date.UTC(endDateArray[0], convertMonthToUTC(endDateArray[1]), endDateArray[2]),
-          timeformat: "%b %d",
-          reserveSpace: true,
-          labelWidth: 50
-        },
-        series: {
-            lines: { show: true },
-            points: { 
-              radius: 4,
-              show: true
-            }
-        },
-        grid: {
-          hoverable: true,
-          borderWidth: 0
-        },
-        legend: {
-          noColumns: 0,
-          container: $(legendSelector)
-        },
-        //colors: ["#328701", "#bcd516", "#fba617", "#fbe500", "#1185c1", "#bcd0d1", "#3e44c0", "#ff00e0", "#e04428"]
-        colors: colors
+      xaxis: {
+        mode: "time",
+        minTickSize: [1, "day"],
+        tickLength: 0,
+        min: Date.UTC(startDateArray[0], convertMonthToUTC(startDateArray[1]), startDateArray[2]),
+        max: Date.UTC(endDateArray[0], convertMonthToUTC(endDateArray[1]), endDateArray[2]),
+        timeformat: "%b %d",
+        reserveSpace: true,
+        labelWidth: 50
+      },
+      series: {
+        lines: { show: true },
+        points: { 
+          radius: 4,
+          show: true
+        }
+      },
+      grid: {
+        hoverable: true,
+        borderWidth: 0
+      },
+      legend: {
+        noColumns: 0,
+        container: $(legendSelector)
+      },
+      colors: colors
     });
     showInfo(cssSelector);
   }
   
   /* Flop chart tooltop */
+  
+  /**
+   * Bind plothover and hide another tooltip if is already diplayed 
+   * 
+   * @param {String} cssSelector
+   * @returns {Void}
+   */
   function showInfo(cssSelector)
   {
     var previousPoint = null;
@@ -296,34 +321,51 @@ jQuery(document).ready(function($){
           showTooltip(item.pageX, item.pageY, 
                       "<b>" + date + "</b><br />" + item.series.label + ": " + value ,
                       color);
-          }
+        }
       } else {
-          $("#flot-tooltip").remove();
-          previousPoint = null;
+        $("#flot-tooltip").remove();
+        previousPoint = null;
       }
     });
   }
 
+  /**
+   * Generate content for flot tooltip and show this
+   * 
+   * @param {Number} x
+   * @param {Number} y
+   * @param {String} contents
+   * @param {Number} z
+   * @returns {Void}
+   */
   function showTooltip(x, y, contents, z) 
   {
     $('<div id="flot-tooltip">' + contents + '</div>').css({
-        position: 'absolute',
-        display: 'none',
-        top: y - 30,
-        left: x + 30,
-        border: '2px solid',
-        padding: '2px',
-        'background-color': '#FFF',
-        opacity: 0.80,
-        'border-color': z,
-        '-moz-border-radius': '5px',
-        '-webkit-border-radius': '5px',
-        '-khtml-border-radius': '5px',
-        'border-radius': '5px'
-      }).appendTo("body").fadeIn(200);
+      position: 'absolute',
+      display: 'none',
+      top: y - 30,
+      left: x + 30,
+      border: '2px solid',
+      padding: '2px',
+      'background-color': '#FFF',
+      opacity: 0.80,
+      'border-color': z,
+      '-moz-border-radius': '5px',
+      '-webkit-border-radius': '5px',
+      '-khtml-border-radius': '5px',
+      'border-radius': '5px'
+    }).appendTo("body").fadeIn(200);
   }
   
   /**** Helpers ****/
+  
+  /**
+   * Round number with specific number of decimals
+   * 
+   * @param {Number} value
+   * @param {Int} places
+   * @returns {Number}
+   */
   function _round(value, places) 
   {
     var multiplier = Math.pow(10, places);
@@ -331,14 +373,27 @@ jQuery(document).ready(function($){
     return (Math.round(value * multiplier) / multiplier);
   }
   
+  /**
+   * Return datestring yyyy-mm-dd
+   * 
+   * @param {Date} date
+   * @returns {String}
+   */
   function _dateToYMD(date) 
   {
     var d = date.getDate();
     var m = date.getMonth() + 1;
     var y = date.getFullYear();
+    
     return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
   }
   
+  /**
+   * Return month for specific timestamp
+   * 
+   * @param {Timestamp} timestamp
+   * @returns {String}
+   */
   function _convertMonthToString(timestamp) 
   {
     var month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -349,14 +404,28 @@ jQuery(document).ready(function($){
     return dateString;
   }
   
+  /**
+   * Split date by - and return array
+   * 
+   * @param {String} date
+   * @returns {Array}
+   */
   function _splitDate(date) 
   {
     return date.split("-");
   }
   
+  /**
+   * Convert month from GMT to UTC, in GMT month number start from 1 and in UTC start from 0,
+   * decrease month by 1
+   * 
+   * @param {String} month
+   * @returns {String}
+   */
   function convertMonthToUTC(month) 
   {
     month = parseInt(month.replace("0","")) - 1;
+    
     return (month<=9 ? '0' + month : month);
   }
 });
