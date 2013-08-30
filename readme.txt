@@ -101,7 +101,7 @@ SendGrid account credentials.
 
 == Changelog ==
 
-= 1.0 =
+= 1.1 =
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 = 1.2 =
 * Added SendGrid Statistics 
