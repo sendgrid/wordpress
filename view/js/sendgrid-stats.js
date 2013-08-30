@@ -274,6 +274,9 @@ jQuery(document).ready(function($){
         reserveSpace: true,
         labelWidth: 50
       },
+      yaxis: {
+        min: 0
+      },
       series: {
         lines: { show: true },
         points: { 
