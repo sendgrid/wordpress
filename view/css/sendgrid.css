@@ -100,6 +100,17 @@ h2.title {
   margin-right:2.4%;
 }
 
+.sendgrid-filters-container .loading {
+  float: right;
+  padding-top: 2px;
+  margin-top: 4px;
+  margin-right: 4px;
+}
+
+#sendgrid-filters {
+  float: right;
+}
+
 #sendgrid-start-date, #sendgrid-end-date {
   width: 120px;
 }
@@ -117,11 +128,6 @@ h2.title {
   top: 50%; 
   margin-left: -24px;
   margin-top: -24px;
-}
-
-.sendgrid-filters-container .loading {
-  display: inline-block;
-  padding-top: 2px;
 }
 
 .sendgrid-container .sendgrid-stats {
