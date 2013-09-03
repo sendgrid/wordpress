@@ -10,9 +10,11 @@ License: GPLv2
 */
 
 require_once plugin_dir_path( __FILE__ ) . '/lib/SendGridSettings.php';
+require_once plugin_dir_path( __FILE__ ) . '/lib/SendGridStats.php';
 require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.php';
 
 $sendgridSettings = new wpSendGridSettings();
+$plugin           = plugin_basename(__FILE__);
 
 if (!function_exists('wp_mail'))
 {
@@ -316,13 +318,21 @@ if (!function_exists('wp_mail'))
 }
 else
 {
-  // wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
+  /**
+   * wp_mail has been declared by another process or plugin, so you won't be able to use SENDGRID until the problem is solved.
+   */
   add_action('admin_notices', 'adminNotices');
+  
+  /**
+  * Display the notice that wp_mail function was declared by another plugin
+  *
+  * return void
+  */
+  function adminNotices()
+  {
+    echo '<div class="error"><p>'.__('SendGrid: wp_mail has been declared by another process or plugin, so you won\'t be able to use SendGrid until the conflict is solved.') . '</p></div>';
+  }
 }
-
-$plugin = plugin_basename(__FILE__);
-add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
-add_filter('contextual_help', 'showContextualHelp', 10, 2);
 
 /**
  * Add settings link on the plugin page
@@ -337,6 +347,7 @@ function sendgrid_settings_link($links)
 
   return $links;
 }
+add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
 
 /**
  * Generates source of contextual help panel.
@@ -396,6 +407,7 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
 
   return $text;
 }
+add_filter('contextual_help', 'showContextualHelp', 10, 2);
 
 /**
  * Return the content type used to send html emails
@@ -405,14 +417,4 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
 function set_html_content_type()
 {
 	return 'text/html';
-}
-
-/**
- * Display the notice that wp_mail function was declared by another plugin
- *
- * return void
- */
-function adminNotices()
-{
-  echo '<div class="error"><p>'.__('SendGrid: wp_mail has been declared by another process or plugin, so you won\'t be able to use SendGrid until the conflict is solved.') . '</p></div>';
 }
