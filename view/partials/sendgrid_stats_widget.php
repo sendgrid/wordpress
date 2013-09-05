@@ -95,7 +95,7 @@
   <br style="clear:both;"/>
   
   <?php if (mysql_real_escape_string($_GET['page']) != "sendgrid-statistics") { ?>
-    <a href="index.php?page=sendgrid-statistics" class="more-statistics">More Statistics</a>
+    <a href="index.php?page=sendgrid-statistics" class="more-statistics">See charts</a>
     <br style="clear:both;"/>
   <?php } ?>
 </div>
