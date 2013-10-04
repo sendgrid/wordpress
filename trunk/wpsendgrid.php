@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: SendGrid
-Plugin URI: http://sendgrid.com
+Plugin URI: http://wordpress.org/plugins/sendgrid-email-delivery-simplified/
 Description: Email Delivery. Simplified. SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
 Version: 1.1
 Author: SendGrid
@@ -15,6 +15,7 @@ require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.ph
 
 $sendgridSettings = new wpSendGridSettings();
 $plugin           = plugin_basename(__FILE__);
+define(SENDGRID_CATEGORY, 'wp_sendgrid_plugin');
 
 if (!function_exists('wp_mail'))
 {
@@ -256,6 +257,7 @@ if (!function_exists('wp_mail'))
     $mail->setTos($to)
          ->setSubject($subject)
          ->setText($message)
+         ->setCategory(SENDGRID_CATEGORY)
          ->setFrom($from_email);
 
     // send HTML content
