@@ -1,0 +1,239 @@
+root { 
+  display: block;
+}
+
+h2.title {
+  text-align: center;
+}
+
+.stuffbox {
+  margin: 10px;
+  width: 740px;
+  display: block;
+  clear: both;
+}
+
+.stuffbox .button {
+  margin-top: 10px;
+}
+
+.submit-button {
+  width: 100%;
+  text-align: center;
+}
+
+.stuffbox p {
+  padding: 7px 7px 7px 7px;
+}
+.stuffbox input, select, textarea {
+  width: 60%;
+  padding: 5px 0 5px 0;
+}
+
+.stuffbox h3 {
+  cursor: default !important;
+  padding: 3px 3px 3px 10px;
+}
+
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+
+.padding5 {
+  padding: 10px 10px 10px 10px;
+}
+.clearfix:before, .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1; /* IE < 8 */
+}
+
+.send-failed, .save-error {
+  text-align: center;
+  padding: 7px 0 7px 0;
+  background-color: #ffebe8;
+  border-color: #c00;
+  margin: 5px 0 15px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.send-success, .save-success {
+  text-align: center;
+  padding: 7px 0 7px 0;
+  background-color: #ffffe0;
+  border-color: #e6db55;
+  margin: 5px 0 15px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.code {
+  background-color: #F8F8F8;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px 3px 3px 3px;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+}
+
+/* SendGrid stats */
+.sendgrid-filters-container {
+  float:right; 
+  margin-right:2.4%;
+}
+
+.sendgrid-filters-container .loading {
+  float: right;
+  padding-top: 2px;
+  margin-top: 4px;
+  margin-right: 4px;
+}
+
+#sendgrid-filters {
+  float: right;
+}
+
+#sendgrid-start-date, #sendgrid-end-date {
+  width: 120px;
+}
+
+.sendgrid-container {
+  width: 100%; 
+  position: relative;
+}
+
+.sendgrid-container .loading {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  left: 50%;
+  top: 50%; 
+  margin-left: -24px;
+  margin-top: -24px;
+}
+
+.sendgrid-container .sendgrid-stats {
+  width: 100%;
+  height: 300px;
+}
+
+.sendgrid-container .widget {
+  float:left;
+  width: 189px; 
+  margin-top: 15px;
+  margin-left: 15px;
+  cursor: default;
+}
+
+.sendgrid-container .widget .widget-top {
+  cursor: default;
+}
+
+.sendgrid-container .widget .widget-inside {
+  display:block; 
+  text-align: center;
+  min-height: 70px;
+}
+
+.sendgrid-container .widget .widget-inside h2 {
+  font-weight: bold;
+}
+
+.sendgrid-container .widget:first-of-type {
+  margin-left: 0px;
+}
+
+#sendgrid_statistics_widget .inside {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.sendgrid-container .widget.others {
+  font-weight: bold;
+  width: 30%;
+  margin-left: 2.3%;
+  margin-bottom: 15px;
+}
+
+.sendgrid-container .widget.others:last-of-type {
+  margin-left: 0px;
+  margin-right: 2.3%;
+  float: right;
+}
+
+.sendgrid-container .widget.others .widget-title h4 {
+  line-height: 15px;
+}
+
+.sendgrid-container .widget.others .row {
+  margin-bottom: 2px;
+}
+
+.sendgrid-container .widget.others .row:last-of-type {
+  margin-bottom: 0px;
+}
+
+.sendgrid-container .widget.others .row .square {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+  -webkit-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  -moz-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  -webkit-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  -moz-box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+  box-shadow: 1px 1px 0 rgba(40, 40, 40, 0.3) inset;
+}
+
+.sendgrid-container .more-statistics {
+  float: right;
+  margin-bottom: 15px;
+  margin-right: 2.3%;
+}
+
+.sendgrid-stats-legend {
+  width: 100%; 
+  height: 22px; 
+  margin-top: 15px;
+}
+
+.sendgrid-stats-legend .legendLabel {
+  padding-right: 10px;
+}
+
+.sendgrid-stats-legend .legendLabel:last-of-type {
+  padding-right: 0px;
+}
+
+#sendgrid-statistics-page .postbox .hndle {
+  cursor: default;
+}
+
+#icon-sendgrid {
+  background: url("../images/logo32.png") no-repeat;
+}
+
+#ui-datepicker-div {
+  display: none;
+}
