@@ -105,7 +105,7 @@ SendGrid account credentials.
 = 1.1 =
 * Added SendGrid Statistics 
 = 1.1.1 =
-* Added a default category on sending
+* Added default category on sending
 
 == Upgrade notice ==
 
