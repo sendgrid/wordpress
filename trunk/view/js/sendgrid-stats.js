@@ -427,7 +427,14 @@ jQuery(document).ready(function($){
    */
   function convertMonthToUTC(month) 
   {
-    month = parseInt(month.replace("0","")) - 1;
+    if (month>=10)
+    {
+      month = (parseInt(month) - 1);
+    }
+    else
+    {
+      month = parseInt(month.replace("0","")) - 1;
+    }  
     
     return (month<=9 ? '0' + month : month);
   }
