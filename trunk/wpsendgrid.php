@@ -365,7 +365,9 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
           '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
             "of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time " .
             "analytics along with flexible APIs that make custom integration a breeze.") . '</p>' .
-          '<p><br />' . __('To have the SendGrid plugin running after you activated it, please go to plugin\'s ' .
+          '<p><br />' . __('Before to use this plugin, you\'ll need to create your very own SendGrid account. ' .
+            ' Go ahead and do so at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>') .
+          '</p><p>' . __('To have the SendGrid plugin running after you activated it, please go to plugin\'s ' .
           'settings page and set the SendGrid credentials, and the way your email will be sent through SMTP or API.') .
           '<br />' . __('You can also set default values for the \'Name\', \'Sending Address\' and the \'Reply Address\' ' .
           ' in this page, so that you don\'t need to set these headers every time you want to send an email from your ' .
