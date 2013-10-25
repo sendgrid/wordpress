@@ -3,7 +3,7 @@
 Plugin Name: SendGrid
 Plugin URI: http://wordpress.org/plugins/sendgrid-email-delivery-simplified/
 Description: Email Delivery. Simplified. SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
-Version: 1.1.2
+Version: 1.1.3
 Author: SendGrid
 Author URI: http://sendgrid.com
 License: GPLv2
@@ -359,7 +359,7 @@ add_filter("plugin_action_links_$plugin", 'sendgrid_settings_link' );
  * @param   integer $screen             screen
  * @return  string
  */
-function showContextualHelp($contextual_help, $screen_id, $screen)
+function showContextualHelp($contextual_help, $screen_id, $screen = null)
 {
   $text = '<p>' . __('Email Delivery. Simplified.') . '</p>' .
           '<p>' . __("SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity " .
