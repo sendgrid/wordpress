@@ -3,8 +3,8 @@ Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
-Tested up to: 3.5.1
-Stable tag: 1.1.2
+Tested up to: 3.7
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,20 +73,22 @@ To upload the SendGrid Plugin .ZIP file:
 
 1. Upload the WordPress SendGrid Plugin to the /wp-contents/plugins/ folder.
 2. Activate the plugin from the "Plugins" menu in WordPress.
-3. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
+3. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>  
+4. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
 
 To auto install the SendGrid Plugin from the WordPress admin:
 
 1. Navigate to "Plugins" -> "Add New"
 2. Search for "SendGrid Plugin" and click "Install Now" for the "SendGrid Plugin" listing
 3. Activate the plugin from the "Plugins" menu in WordPress, or from the plugin installation screen.
-4. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
+4. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
+5. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
 
 == Frequently asked questions ==
 
 = What credentials do I need to add on settings page =
 
-SendGrid account credentials.
+Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a> and use these credentials.
 
 == Screenshots ==
 
@@ -108,6 +110,8 @@ SendGrid account credentials.
 * Added default category on sending
 = 1.1.2 =
 * Fix display for october charts
+= 1.1.3 =
+* Fix missing argument warning message
 
 == Upgrade notice ==
 
