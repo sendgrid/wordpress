@@ -17,7 +17,7 @@ function my_custom_dashboard_widgets()
     return;
   }
   
-  add_meta_box('sendgrid_statistics_widget', 'SendGrid Statistics', 'sendgrid_dashboard_statistics', 'dashboard', 'normal', 'high');
+  add_meta_box('sendgrid_statistics_widget', 'SendGrid Wordpress Statistics', 'sendgrid_dashboard_statistics', 'dashboard', 'normal', 'high');
 }
 add_action('wp_dashboard_setup', 'my_custom_dashboard_widgets');
 
@@ -64,7 +64,7 @@ function sendgrid_load_script($hook)
     return;
   }
   
-  wp_enqueue_script('sendgrid-stats', plugin_dir_url(__FILE__) . '../view/js/sendgrid-stats.js', array('jquery'));
+  wp_enqueue_script('sendgrid-stats', plugin_dir_url(__FILE__) . '../view/js/sendgrid.stats.js', array('jquery'));
   wp_enqueue_script('jquery-flot', plugin_dir_url(__FILE__) . '../view/js/jquery.flot.js', array('jquery'));
   wp_enqueue_script('jquery-flot-time', plugin_dir_url(__FILE__) . '../view/js/jquery.flot.time.js', array('jquery'));
   wp_enqueue_script('jquery-flot-tofflelegend', plugin_dir_url(__FILE__) . '../view/js/jquery.flot.togglelegend.js', array('jquery'));
@@ -105,6 +105,11 @@ function sendgrid_process_stats()
   {
     $parameters['start_date'] = $_POST['start_date'];
     $parameters['end_date'] = $_POST['end_date'];
+  }
+  
+  if ($_POST['type'] and $_POST['type'] == 'wordpress')
+  {
+    $parameters['category'] = 'wp_sendgrid_plugin';
   }
 
   echo _processRequest('api/stats.get.json', $parameters);

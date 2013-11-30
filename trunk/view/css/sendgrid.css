@@ -95,6 +95,16 @@ h2.title {
 }
 
 /* SendGrid stats */
+.pull-left.sendgrid-statistics-header {
+  width: 50%;
+  margin-bottom: 10px;
+}
+
+.pull-right.sendgrid-statistics-change-type #sendgrid-statistics-change-type {
+  width: 150px;
+  margin-top: 12px;
+}
+
 .sendgrid-filters-container {
   float:right; 
   margin-right:2.4%;
@@ -130,7 +140,7 @@ h2.title {
   margin-top: -24px;
 }
 
-.sendgrid-container .sendgrid-stats {
+.sendgrid-container .sendgrid-statistics {
   width: 100%;
   height: 300px;
 }
@@ -212,17 +222,17 @@ h2.title {
   margin-right: 2.3%;
 }
 
-.sendgrid-stats-legend {
+.sendgrid-statistics-legend {
   width: 100%; 
   height: 22px; 
   margin-top: 15px;
 }
 
-.sendgrid-stats-legend .legendLabel {
+.sendgrid-statistics-legend .legendLabel {
   padding-right: 10px;
 }
 
-.sendgrid-stats-legend .legendLabel:last-of-type {
+.sendgrid-statistics-legend .legendLabel:last-of-type {
   padding-right: 0px;
 }
 
