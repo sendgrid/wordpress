@@ -1,8 +1,8 @@
-jQuery(document).ready(function($){
+jQuery(document).ready(function($) {
   var defaultDaysBefore = 7;
   
   /* Initialize statistic type changer */
-  $('#sendgrid-statistics-change-type').change(function(){
+  $('#sendgrid-statistics-change-type').change(function() {
     statisticsType = $(this).find("option:selected").val();
     $("#sendgrid-statistics-type").val(statisticsType);
     $(".sendgrid-statistics-header-toggle").hide();
