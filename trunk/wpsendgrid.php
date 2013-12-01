@@ -89,6 +89,8 @@ if (!function_exists('wp_mail'))
     }
 
     // Headers
+    $cc = array();
+    $bcc = array();
     if (empty($headers)) {
       $headers = array();
     } else {
@@ -100,8 +102,6 @@ if (!function_exists('wp_mail'))
         $tempheaders = $headers;
       }
       $headers = array();
-      $cc = array();
-      $bcc = array();
 
       // If it's actually got contents
       if ( !empty( $tempheaders ) ) {

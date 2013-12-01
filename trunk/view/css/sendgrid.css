@@ -2,39 +2,6 @@ root {
   display: block;
 }
 
-h2.title {
-  text-align: center;
-}
-
-.stuffbox {
-  margin: 10px;
-  width: 740px;
-  display: block;
-  clear: both;
-}
-
-.stuffbox .button {
-  margin-top: 10px;
-}
-
-.submit-button {
-  width: 100%;
-  text-align: center;
-}
-
-.stuffbox p {
-  padding: 7px 7px 7px 7px;
-}
-.stuffbox input, select, textarea {
-  width: 60%;
-  padding: 5px 0 5px 0;
-}
-
-.stuffbox h3 {
-  cursor: default !important;
-  padding: 3px 3px 3px 10px;
-}
-
 .pull-left {
   float: left;
 }
@@ -42,9 +9,6 @@ h2.title {
   float: right;
 }
 
-.padding5 {
-  padding: 10px 10px 10px 10px;
-}
 .clearfix:before, .clearfix:after {
   content: ".";
   display: block;
@@ -58,30 +22,6 @@ h2.title {
 
 .clearfix {
   zoom: 1; /* IE < 8 */
-}
-
-.send-failed, .save-error {
-  text-align: center;
-  padding: 7px 0 7px 0;
-  background-color: #ffebe8;
-  border-color: #c00;
-  margin: 5px 0 15px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.send-success, .save-success {
-  text-align: center;
-  padding: 7px 0 7px 0;
-  background-color: #ffffe0;
-  border-color: #e6db55;
-  margin: 5px 0 15px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  border-width: 1px;
-  border-style: solid;
 }
 
 .code {
