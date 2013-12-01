@@ -48,6 +48,7 @@ root {
 .sendgrid-filters-container {
   float:right; 
   margin-right:2.4%;
+  margin-left: 2.3%;
 }
 
 .sendgrid-filters-container .loading {
@@ -61,8 +62,14 @@ root {
   float: right;
 }
 
+#sendgrid-filters label {
+  display: inline-block;
+  height: 21px;
+}
+
 #sendgrid-start-date, #sendgrid-end-date {
-  width: 120px;
+  width: 95px;
+  margin-left: 5px;
 }
 
 .sendgrid-container {
@@ -95,12 +102,18 @@ root {
 
 .sendgrid-container .widget .widget-top {
   cursor: default;
+  height: auto;
+}
+
+.sendgrid-container .widget .widget-top .widget-title {
+  padding: 0px;
 }
 
 .sendgrid-container .widget .widget-inside {
   display:block; 
   text-align: center;
   min-height: 70px;
+  border-top: none!important;
 }
 
 .sendgrid-container .widget .widget-inside h2 {
@@ -121,6 +134,7 @@ root {
 .sendgrid-container .widget.others {
   font-weight: bold;
   width: 30%;
+  min-width: 193px;
   margin-left: 2.3%;
   margin-bottom: 15px;
 }
@@ -133,6 +147,8 @@ root {
 
 .sendgrid-container .widget.others .widget-title h4 {
   line-height: 15px;
+  margin: 0!important;
+  padding: 10px!important;
 }
 
 .sendgrid-container .widget.others .row {
