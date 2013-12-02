@@ -3,8 +3,8 @@ Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
-Tested up to: 3.7
-Stable tag: 1.2.1
+Tested up to: 3.8
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * Added statistics for emails sent through wordpress plugin
 = 1.2.1 =
 * Fix errors: set_html_content_type error, WP_DEBUG enabled notice, Reply-To header is overwritten by default option
+= 1.3 =
+* Added support for Wordpress 3.8
 
 == Upgrade notice ==
 
@@ -125,3 +127,5 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * SendGrid Statistics can be used by selecting the time interval for which you want to see your statistics.
 = 1.2 =
 * Now you can switch between Sendgrid general statistics and Sendgrid wordpress statistics.
+= 1.3 =
+* Added support for Wordpress 3.8

@@ -13,8 +13,8 @@
   
   <div id="dashboard-widgets-wrap">
     <div id="dashboard-widgets" class="metabox-holder columns-1">
-      <div id="postbox-container-1" class="postbox-container">
-        <div id="normal-sortables" class="meta-box-sortables">
+      <div class="postbox-container">
+        <div class="meta-box-sortables">
           
           <div id="sendgrid_statistics_widget" class="postbox ">
             <h3 class="hndle"><span>SendGrid Statistics</span></h3>

@@ -1,15 +1,22 @@
-<div class="sendgrid-filters-container">
-  <div id="sendgrid-filters">
+<div class="sendgrid-filters-container <?= (version_compare(get_bloginfo( "version" ), '3.7.10', '>') ? "wordpress-new" : ""); ?>">
+  <div class="sendgrid-filters">
     <input type="hidden" id="sendgrid-statistics-type" name="sendgrid-statistics-type" value="wordpress" />
-    <label for="sendgrid-start-date">Start date</label><input type="text" id="sendgrid-start-date" name="sendgrid-start-date" />
-    <label for="sendgrid-end-date">End date</label><input type="text" id="sendgrid-end-date" name="sendgrid-end-date" />
+    <div class="pull-left">
+      <label for="sendgrid-start-date">Start date</label>
+      <input type="text" id="sendgrid-start-date" name="sendgrid-start-date" />
+    </div>
+    <div class="pull-left">
+      <label for="sendgrid-end-date">End date</label>
+      <input type="text" id="sendgrid-end-date" name="sendgrid-end-date" />
+    </div>
     <a href="#" id="sendgrid-apply-filter" data-filter="<?php if (isset($_GET['page']) and mysql_real_escape_string($_GET['page']) == "sendgrid-statistics") { ?>sendgrid-statistics<?php } else { ?>dashboard<?php } ?>" class="button button-primary">Apply</a>
   </div>
   <div class="loading"><img src="<?= plugin_dir_url(__FILE__); ?>../images/loader.gif" style="width: 15px; height: 15px;" /></div>
 </div>
 <br style="clear:both;"/>
-<div class="sendgrid-container" style="position:relative;">
-  
+<div class="sendgrid-container 
+    <?= ((version_compare(get_bloginfo( "version" ), '3.7.10', '>') and !isset($_GET['page'])) ? "wordpress-dashboard-new" : ""); ?>
+     <?= (version_compare(get_bloginfo( "version" ), '3.7.10', '>') ? "wordpress-new" : ""); ?>" style="position:relative;">
   <div class="widget others" id="deliveries">	
     <div class="widget-top">
       <div class="widget-title"><h4>Deliveries</h4></div>
@@ -95,7 +102,7 @@
   </div>
   <br style="clear:both;"/>
   
-  <?php if (isset($_GET['page']) and mysql_real_escape_string($_GET['page']) != "sendgrid-statistics") { ?>
+  <?php if (!isset($_GET['page']) or mysql_real_escape_string($_GET['page']) != "sendgrid-statistics") { ?>
     <a href="index.php?page=sendgrid-statistics" class="more-statistics">See charts</a>
     <br style="clear:both;"/>
   <?php } ?>

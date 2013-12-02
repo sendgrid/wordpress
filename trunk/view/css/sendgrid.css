@@ -1,12 +1,23 @@
-root { 
-  display: block;
-}
+/* SendGrid stats */
 
+/*
+  Helpers
+*/
 .pull-left {
   float: left;
 }
 .pull-right {
   float: right;
+}
+
+.pull-left.sendgrid-statistics-header {
+  width: 50%;
+  margin-bottom: 10px;
+}
+
+.pull-right.sendgrid-statistics-change-type #sendgrid-statistics-change-type {
+  width: 150px;
+  margin-top: 12px;
 }
 
 .clearfix:before, .clearfix:after {
@@ -24,27 +35,9 @@ root {
   zoom: 1; /* IE < 8 */
 }
 
-.code {
-  background-color: #F8F8F8;
-  border: 1px solid #DDDDDD;
-  border-radius: 3px 3px 3px 3px;
-  font-size: 13px;
-  line-height: 19px;
-  overflow: auto;
-  padding: 6px 10px;
-}
-
-/* SendGrid stats */
-.pull-left.sendgrid-statistics-header {
-  width: 50%;
-  margin-bottom: 10px;
-}
-
-.pull-right.sendgrid-statistics-change-type #sendgrid-statistics-change-type {
-  width: 150px;
-  margin-top: 12px;
-}
-
+/*
+  Filters
+*/
 .sendgrid-filters-container {
   float:right; 
   margin-right:2.4%;
@@ -54,24 +47,47 @@ root {
 .sendgrid-filters-container .loading {
   float: right;
   padding-top: 2px;
-  margin-top: 4px;
+  margin-top: 6px;
   margin-right: 4px;
 }
 
-#sendgrid-filters {
+.wordpress-new.sendgrid-filters-container .loading {
+  margin-top: 9px;
+}
+
+.sendgrid-filters {
   float: right;
 }
 
-#sendgrid-filters label {
+.sendgrid-filters label {
   display: inline-block;
-  height: 21px;
-}
-
-#sendgrid-start-date, #sendgrid-end-date {
-  width: 95px;
+  height: 18px;
+  width: 59px;
   margin-left: 5px;
 }
 
+.wordpress-new.sendgrid-filters-container label {
+  height: 23px;
+}
+
+.sendgrid-filters #sendgrid-start-date, .sendgrid-filters #sendgrid-end-date {
+  width: 89px;
+  margin-top: 5px;
+}
+
+.sendgrid-filters a.button {
+  margin-left: 2px;
+  margin-top: 5px;
+}
+
+
+#ui-datepicker-div {
+  display: none;
+}
+
+/*
+  Statistics
+*/
 .sendgrid-container {
   width: 100%; 
   position: relative;
@@ -96,7 +112,6 @@ root {
   float:left;
   width: 189px; 
   margin-top: 15px;
-  margin-left: 15px;
   cursor: default;
 }
 
@@ -114,6 +129,11 @@ root {
   text-align: center;
   min-height: 70px;
   border-top: none!important;
+  padding: 10px;
+}
+
+.wordpress-new.sendgrid-container .widget .widget-inside {
+  min-height: 78px;
 }
 
 .sendgrid-container .widget .widget-inside h2 {
@@ -134,7 +154,6 @@ root {
 .sendgrid-container .widget.others {
   font-weight: bold;
   width: 30%;
-  min-width: 193px;
   margin-left: 2.3%;
   margin-bottom: 15px;
 }
@@ -200,6 +219,142 @@ root {
   background: url("../images/logo32.png") no-repeat;
 }
 
-#ui-datepicker-div {
-  display: none;
+/*
+  Responsive
+*/
+@media (min-width: 1500px) {
+  .columns-4 .sendgrid-container .widget.others {
+    width: 46%;
+  }
+  
+  .wordpress-dashboard-new.sendgrid-container .widget.others {
+    width: 46.55%;
+  }
+  
+  .columns-4 .sendgrid-container .widget.others:last-of-type, 
+  .wordpress-dashboard-new.sendgrid-container .widget.others:last-of-type {
+    display: block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 2.3%;
+    margin-left: 2.3%;
+    width: 95.4%;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1800px) {
+  .columns-3 .sendgrid-container .widget.others {
+    width: 46%;
+  }
+  
+  .columns-3 .sendgrid-container .widget.others:last-of-type {
+    display: block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 2.3%;
+    margin-left: 2.3%;
+    width: 95.4%;
+  }
+}
+
+@media (min-width: 1360px) and (max-width: 1500px) {
+  .columns-4 .sendgrid-container .widget.others:first-of-type {
+    margin-top: 10px;
+  }
+  
+  .columns-4 .sendgrid-container .widget.others {
+    display: block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 2.3%;
+    margin-left: 2.3%;
+    width: 95.4%;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1360px) {
+  .columns-2 .sendgrid-container .widget.others,
+  .columns-4 .sendgrid-container .widget.others {
+    width: 46%;
+  }
+  
+  .wordpress-dashboard-new.sendgrid-container .widget.others {
+    width: 46.55%;
+  }
+  
+  .columns-2 .sendgrid-container .widget.others:last-of-type,
+  .columns-4 .sendgrid-container .widget.others:last-of-type, 
+  .wordpress-dashboard-new.sendgrid-container .widget.others:last-of-type {
+    display: block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 2.3%;
+    margin-left: 2.3%;
+    width: 95.4%;
+  }
+}
+
+@media (min-width: 800px) and (max-width: 1000px) {
+  .columns-2 .sendgrid-container .widget.others:first-of-type, 
+  .columns-3 .sendgrid-container .widget.others:first-of-type, 
+  .columns-4 .sendgrid-container .widget.others:first-of-type, 
+  .wordpress-dashboard-new.sendgrid-container .widget.others:first-of-type {
+    margin-top: 10px;
+  }
+  
+  .columns-2 .sendgrid-container .widget.others, 
+  .columns-3 .sendgrid-container .widget.others, 
+  .columns-4 .sendgrid-container .widget.others, 
+  .wordpress-dashboard-new.sendgrid-container .widget.others {
+    display: block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 2.3%;
+    margin-left: 2.3%;
+    width: 95.4%;
+  }
+}
+
+@media (min-width: 560px) and (max-width: 782px) {
+  .sendgrid-filters #sendgrid-start-date, 
+  .sendgrid-filters #sendgrid-end-date {
+    width: 110px;
+  }
+  
+  .sendgrid-container .widget.others {
+    width: 46%;
+  }
+  
+  .wordpress-new.sendgrid-container .widget.others {
+    width: 46.5%;
+  }
+  
+  .sendgrid-container .widget.others:last-of-type {
+    display: block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 2.3%;
+    margin-left: 2.3%;
+    width: 95.4%;
+  }
+}
+
+@media (max-width: 559px) {
+  .sendgrid-filters #sendgrid-start-date, 
+  .sendgrid-filters #sendgrid-end-date {
+    width: 110px;
+  }
+
+  .sendgrid-container .widget.others:first-of-type {
+    margin-top: 10px;
+  }
+  
+  .sendgrid-container .widget.others {
+    display: block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 2.3%;
+    margin-left: 2.3%;
+    width: 95.4%;
+  }
 }

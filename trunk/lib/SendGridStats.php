@@ -38,6 +38,12 @@ function sendgrid_dashboard_statistics()
  */
 function add_dashboard_menu()
 {
+  $sendgridSettings = new wpSendGridSettings();
+  if (!$sendgridSettings->checkUsernamePassword(get_option('sendgrid_user'),get_option('sendgrid_pwd')))
+  {
+    return;
+  }
+  
   add_dashboard_page( "SendGrid Statistics", "SendGrid Statistics", "manage_options", "sendgrid-statistics", "sendgrid_statistics_page"); 
 }
 add_action('admin_menu', 'add_dashboard_menu');
