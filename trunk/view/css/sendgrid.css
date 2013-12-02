@@ -20,6 +20,10 @@
   margin-top: 12px;
 }
 
+.clearfix-clear {
+  clear: both;
+}
+
 .clearfix:before, .clearfix:after {
   content: ".";
   display: block;
@@ -43,6 +47,10 @@
   line-height: 19px;
   overflow: auto;
   padding: 6px 10px;
+}
+
+.full-width {
+  width: 100%;
 }
 
 /*

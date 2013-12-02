@@ -13,7 +13,7 @@
   </div>
   <div class="loading"><img src="<?= plugin_dir_url(__FILE__); ?>../images/loader.gif" style="width: 15px; height: 15px;" /></div>
 </div>
-<br style="clear:both;"/>
+<br class="clearfix-clear"/>
 <div class="sendgrid-container 
   <?php echo ((version_compare(get_bloginfo("version"), '3.7.10', '>') and !isset($_GET['page'])) ? "wordpress-dashboard-new" : ""); ?>
   <?php echo (version_compare(get_bloginfo("version"), '3.7.10', '>') ? "wordpress-new" : ""); ?>" style="position:relative;">
@@ -100,10 +100,10 @@
       </div>
     </div>
   </div>
-  <br style="clear:both;"/>
+  <br class="clearfix-clear"/>
   
   <?php if (!isset($_GET['page']) or mysql_real_escape_string($_GET['page']) != "sendgrid-statistics") { ?>
     <a href="index.php?page=sendgrid-statistics" class="more-statistics">See charts</a>
-    <br style="clear:both;"/>
+    <br class="clearfix-clear"/>
   <?php } ?>
 </div>
