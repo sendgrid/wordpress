@@ -12,7 +12,7 @@
 function my_custom_dashboard_widgets() 
 { 
   $sendgridSettings = new wpSendGridSettings();
-  if (!$sendgridSettings->checkUsernamePassword(get_option('sendgrid_user'),get_option('sendgrid_pwd')))
+  if (!$sendgridSettings->checkUsernamePassword(get_option('sendgrid_user'), get_option('sendgrid_pwd')))
   {
     return;
   }
@@ -39,7 +39,7 @@ function sendgrid_dashboard_statistics()
 function add_dashboard_menu()
 {
   $sendgridSettings = new wpSendGridSettings();
-  if (!$sendgridSettings->checkUsernamePassword(get_option('sendgrid_user'),get_option('sendgrid_pwd')))
+  if (!$sendgridSettings->checkUsernamePassword(get_option('sendgrid_user'), get_option('sendgrid_pwd')))
   {
     return;
   }

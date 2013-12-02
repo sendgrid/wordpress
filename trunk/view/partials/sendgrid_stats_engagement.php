@@ -1,4 +1,4 @@
-<div id="sendgrid_statistics_engagement_widget" class="postbox ">
+<div id="sendgrid_statistics_engagement_widget" class="postbox">
   <h3 class="hndle"><span>SendGrid Engagement</span></h3>
   <div class="inside">
 

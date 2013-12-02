@@ -1,13 +1,13 @@
-<div class="sendgrid-filters-container <?= (version_compare(get_bloginfo( "version" ), '3.7.10', '>') ? "wordpress-new" : ""); ?>">
+<div class="sendgrid-filters-container <?php echo (version_compare(get_bloginfo("version"), '3.7.10', '>') ? "wordpress-new" : ""); ?>">
   <div class="sendgrid-filters">
     <input type="hidden" id="sendgrid-statistics-type" name="sendgrid-statistics-type" value="wordpress" />
     <div class="pull-left">
       <label for="sendgrid-start-date">Start date</label>
-      <input type="text" id="sendgrid-start-date" name="sendgrid-start-date" />
+      <input type="text" id="sendgrid-start-date" name="sendgrid_start_date" />
     </div>
     <div class="pull-left">
       <label for="sendgrid-end-date">End date</label>
-      <input type="text" id="sendgrid-end-date" name="sendgrid-end-date" />
+      <input type="text" id="sendgrid-end-date" name="sendgrid_end_date" />
     </div>
     <a href="#" id="sendgrid-apply-filter" data-filter="<?php if (isset($_GET['page']) and mysql_real_escape_string($_GET['page']) == "sendgrid-statistics") { ?>sendgrid-statistics<?php } else { ?>dashboard<?php } ?>" class="button button-primary">Apply</a>
   </div>
@@ -15,8 +15,8 @@
 </div>
 <br style="clear:both;"/>
 <div class="sendgrid-container 
-    <?= ((version_compare(get_bloginfo( "version" ), '3.7.10', '>') and !isset($_GET['page'])) ? "wordpress-dashboard-new" : ""); ?>
-     <?= (version_compare(get_bloginfo( "version" ), '3.7.10', '>') ? "wordpress-new" : ""); ?>" style="position:relative;">
+  <?php echo ((version_compare(get_bloginfo("version"), '3.7.10', '>') and !isset($_GET['page'])) ? "wordpress-dashboard-new" : ""); ?>
+  <?php echo (version_compare(get_bloginfo("version"), '3.7.10', '>') ? "wordpress-new" : ""); ?>" style="position:relative;">
   <div class="widget others" id="deliveries">	
     <div class="widget-top">
       <div class="widget-title"><h4>Deliveries</h4></div>

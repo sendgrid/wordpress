@@ -54,7 +54,7 @@
           <th scope="row"><?php _e("Sending Address: "); ?></th>
           <td>
             <input type="email" name="sendgrid_email" value="<?php echo $email; ?>" size="20" class="regular-text">
-            <p class="description"><?php _e('Email address from which message will be sent,') ?></p>
+            <p class="description"><?php _e('Email address from which the message will be sent,') ?></p>
           </td>
         </tr>
         <tr valign="top">

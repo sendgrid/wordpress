@@ -1,4 +1,4 @@
-<div id="sendgrid-statistics-compliance-widget" class="postbox ">
+<div id="sendgrid-statistics-compliance-widget" class="postbox">
   <h3 class="hndle"><span>SendGrid Compliance</span></h3>
   <div class="inside">
 
