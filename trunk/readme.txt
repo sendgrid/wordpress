@@ -119,7 +119,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 = 1.2.1 =
 * Fix errors: set_html_content_type error, WP_DEBUG enabled notice, Reply-To header is overwritten by default option
 = 1.3 =
-* Added support for Wordpress 3.8
+* Added support for Wordpress 3.8, fixed visual issues for Wordpress 3.7
 
 == Upgrade notice ==
 
@@ -128,4 +128,4 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 = 1.2 =
 * Now you can switch between Sendgrid general statistics and Sendgrid wordpress statistics.
 = 1.3 =
-* Added support for Wordpress 3.8
+* Added support for Wordpress 3.8, fixed visual issues for Wordpress 3.7
