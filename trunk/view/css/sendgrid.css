@@ -35,6 +35,16 @@
   zoom: 1; /* IE < 8 */
 }
 
+.code {
+  background-color: #F8F8F8;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px 3px 3px 3px;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+}
+
 /*
   Filters
 */
