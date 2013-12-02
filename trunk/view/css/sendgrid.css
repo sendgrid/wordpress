@@ -58,7 +58,7 @@
 */
 .sendgrid-filters-container {
   float:right; 
-  margin-right:2.4%;
+  margin-right: 2.4%;
   margin-left: 2.3%;
 }
 
@@ -98,7 +98,6 @@
   margin-top: 5px;
 }
 
-
 #ui-datepicker-div {
   display: none;
 }
@@ -127,7 +126,7 @@
 }
 
 .sendgrid-container .widget {
-  float:left;
+  float: left;
   width: 189px; 
   margin-top: 15px;
   cursor: default;
@@ -143,7 +142,7 @@
 }
 
 .sendgrid-container .widget .widget-inside {
-  display:block; 
+  display: block; 
   text-align: center;
   min-height: 70px;
   border-top: none!important;
