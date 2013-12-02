@@ -11,7 +11,7 @@
     </select>
   </div>
   
-  <div id="dashboard-widgets-wrap">
+  <div id="dashboard-widgets-wrap" style="width:100%;">
     <div id="dashboard-widgets" class="metabox-holder columns-1">
       <div class="postbox-container">
         <div class="meta-box-sortables">

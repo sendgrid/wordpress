@@ -72,16 +72,16 @@
 .sendgrid-filters label {
   display: inline-block;
   height: 18px;
-  width: 59px;
+  width: 60px;
   margin-left: 5px;
 }
 
 .wordpress-new.sendgrid-filters-container label {
-  height: 23px;
+  height: 24px;
 }
 
 .sendgrid-filters #sendgrid-start-date, .sendgrid-filters #sendgrid-end-date {
-  width: 88px;
+  width: 86px;
   margin-top: 5px;
 }
 
