@@ -1,5 +1,14 @@
-jQuery(document).ready(function($){
+jQuery(document).ready(function($) {
   var defaultDaysBefore = 7;
+  
+  /* Initialize statistic type changer */
+  $('#sendgrid-statistics-change-type').change(function() {
+    statisticsType = $(this).find("option:selected").val();
+    $("#sendgrid-statistics-type").val(statisticsType);
+    $(".sendgrid-statistics-header-toggle").hide();
+    $("#sendgrid-" + statisticsType + "-statistics-header").show();
+    getStats(jQuery("#sendgrid-start-date").val(), jQuery("#sendgrid-end-date").val(), 'sendgrid_get_stats');
+ });
   
   /* Initialize datepicker */
   var date = new Date();
@@ -56,7 +65,7 @@ jQuery(document).ready(function($){
   getStats(_dateToYMD(startDate), _dateToYMD(endDate), 'sendgrid_get_stats');
   function getStats(startDate, endDate, action)
   {
-    $(".sendgrid-container .sendgrid-stats").html("");
+    $(".sendgrid-container .sendgrid-statistics").html("");
     
     /* Show laoders */
     $(".sendgrid-container .loading, .sendgrid-filters-container .loading").show();
@@ -65,6 +74,7 @@ jQuery(document).ready(function($){
       action: action,
       start_date: startDate,
       end_date:   endDate,
+      type: $("#sendgrid-statistics-type").val(),
       sendgrid_nonce: sendgrid_vars.sendgrid_nonce
     };
 
@@ -101,7 +111,7 @@ jQuery(document).ready(function($){
       response = jQuery.parseJSON(response);
       jQuery.each(response, function(key, value) {
         var dateString                = _splitDate(value.date);
-        var date                      = Date.UTC(dateString[0], convertMonthToUTC(dateString[1]), dateString[2]);
+        var date                      = Date.UTC(dateString[0], _convertMonthToUTC(dateString[1]), dateString[2]);
         var requestsThisDay           = value.requests ? value.requests : 0;
         var opensThisDay              = value.opens ? value.opens : 0;
         var clicksThisDay             = value.clicks ? value.clicks : 0;
@@ -268,8 +278,8 @@ jQuery(document).ready(function($){
         mode: "time",
         minTickSize: [1, "day"],
         tickLength: 0,
-        min: Date.UTC(startDateArray[0], convertMonthToUTC(startDateArray[1]), startDateArray[2]),
-        max: Date.UTC(endDateArray[0], convertMonthToUTC(endDateArray[1]), endDateArray[2]),
+        min: Date.UTC(startDateArray[0], _convertMonthToUTC(startDateArray[1]), startDateArray[2]),
+        max: Date.UTC(endDateArray[0], _convertMonthToUTC(endDateArray[1]), endDateArray[2]),
         timeformat: "%b %d",
         reserveSpace: true,
         labelWidth: 50
@@ -294,10 +304,12 @@ jQuery(document).ready(function($){
       },
       colors: colors
     });
-    showInfo(cssSelector);
+    _showInfo(cssSelector);
   }
   
-  /* Flop chart tooltop */
+  /*****************/
+  /**** Helpers ****/
+  /*****************/
   
   /**
    * Bind plothover and hide another tooltip if is already diplayed 
@@ -305,7 +317,7 @@ jQuery(document).ready(function($){
    * @param {String} cssSelector
    * @returns {Void}
    */
-  function showInfo(cssSelector)
+  function _showInfo(cssSelector)
   {
     var previousPoint = null;
     var previousLabel = null;
@@ -321,7 +333,7 @@ jQuery(document).ready(function($){
           var value = item.datapoint[1];
           var color = item.series.color;
 
-          showTooltip(item.pageX, item.pageY, 
+          _showTooltip(item.pageX, item.pageY, 
                       "<b>" + date + "</b><br />" + item.series.label + ": " + value ,
                       color);
         }
@@ -341,7 +353,7 @@ jQuery(document).ready(function($){
    * @param {Number} z
    * @returns {Void}
    */
-  function showTooltip(x, y, contents, z) 
+  function _showTooltip(x, y, contents, z) 
   {
     $('<div id="flot-tooltip">' + contents + '</div>').css({
       position: 'absolute',
@@ -359,8 +371,6 @@ jQuery(document).ready(function($){
       'border-radius': '5px'
     }).appendTo("body").fadeIn(200);
   }
-  
-  /**** Helpers ****/
   
   /**
    * Round number with specific number of decimals
@@ -425,7 +435,7 @@ jQuery(document).ready(function($){
    * @param {String} month
    * @returns {String}
    */
-  function convertMonthToUTC(month) 
+  function _convertMonthToUTC(month) 
   {
     if (month>=10)
     {

@@ -1,6 +1,15 @@
-<div class="wrap" id="sendgrid-statistics-page">
-  <div id="icon-sendgrid" class="icon32"><br></div>
-  <h2>SendGrid Statistics</h2>
+<div class="wrap clearfix" id="sendgrid-statistics-page">
+  <div class="pull-left sendgrid-statistics-header">
+    <div id="icon-sendgrid" class="icon32"><br></div>
+    <h2 id="sendgrid-wordpress-statistics-header" class="sendgrid-statistics-header-toggle">SendGrid Wordpress Statistics</h2>
+    <h2 id="sendgrid-general-statistics-header" class="sendgrid-statistics-header-toggle" style="display: none;">SendGrid General Statistics</h2>
+  </div>
+  <div class="pull-right sendgrid-statistics-change-type">
+    <select id="sendgrid-statistics-change-type">
+      <option value="wordpress" selected="selected">Wordpress statistics</option>
+      <option value="general">General statistics</option>
+    </select>
+  </div>
   
   <div id="dashboard-widgets-wrap">
     <div id="dashboard-widgets" class="metabox-holder columns-1">
