@@ -69,6 +69,8 @@ remove_filter('wp_mail_content_type', 'sg_set_html_content_type');`
 
 == Installation ==
 
+Note: requires PHP version >= 5.3.0
+
 To upload the SendGrid Plugin .ZIP file:
 
 1. Upload the WordPress SendGrid Plugin to the /wp-contents/plugins/ folder.
@@ -115,7 +117,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 = 1.2 =
 * Added statistics for emails sent through wordpress plugin
 = 1.2.1 =
-* Fix errors: set_html_content_type error, WP_DEBUG enabled notice
+* Fix errors: set_html_content_type error, WP_DEBUG enabled notice, Reply-To header is overwritten by default option
 
 == Upgrade notice ==
 
