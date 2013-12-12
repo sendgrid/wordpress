@@ -425,12 +425,15 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
 }
 add_filter('contextual_help', 'showContextualHelp', 10, 3);
 
-/**
- * Return the content type used to send html emails
- *
- * return string Conteny-type needed to send HTML emails
- */
-function set_html_content_type()
+if (!function_exists('set_html_content_type'))
 {
-	return 'text/html';
+  /**
+   * Return the content type used to send html emails
+   *
+   * return string Conteny-type needed to send HTML emails
+   */
+  function set_html_content_type()
+  {
+    return 'text/html';
+  }
 }
