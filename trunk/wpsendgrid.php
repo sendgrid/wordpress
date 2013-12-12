@@ -3,7 +3,7 @@
 Plugin Name: SendGrid
 Plugin URI: http://wordpress.org/plugins/sendgrid-email-delivery-simplified/
 Description: Email Delivery. Simplified. SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
-Version: 1.2
+Version: 1.2.1
 Author: SendGrid
 Author URI: http://sendgrid.com
 License: GPLv2
@@ -15,9 +15,9 @@ require_once plugin_dir_path( __FILE__ ) . '/lib/sendgrid-php/SendGrid_loader.ph
 
 $sendgridSettings = new wpSendGridSettings();
 $plugin           = plugin_basename(__FILE__);
-define(SENDGRID_CATEGORY, 'wp_sendgrid_plugin');
-define(SENDGRID_PLUGIN_SETTINGS, 'settings_page_sendgrid-settings');
-define(SENDGRID_PLUGIN_PAGE, 'dashboard_page_sendgrid-statistics');
+define('SENDGRID_CATEGORY', 'wp_sendgrid_plugin');
+define('SENDGRID_PLUGIN_SETTINGS', 'settings_page_sendgrid-settings');
+define('SENDGRID_PLUGIN_PAGE', 'dashboard_page_sendgrid-statistics');
 
 if (!function_exists('wp_mail'))
 {
@@ -165,6 +165,9 @@ if (!function_exists('wp_mail'))
                 $bcc[$key] = trim($recipient);
               }
               break;
+            case 'reply-to':
+              $replyto = $content;
+              break;
             default:
               // Add it to our grand headers array
               $headers[trim( $name )] = trim( $content );
@@ -282,9 +285,13 @@ if (!function_exists('wp_mail'))
     {
       $mail->setBccs($bcc);
     }
-    $reply_to = trim(get_option('sendgrid_reply_to'));
-    if ($reply_to)
+    if (isset($replyto))
     {
+      $mail->setReplyTo($replyto);
+    }
+    else
+    {
+      $reply_to = trim(get_option('sendgrid_reply_to'));
       $mail->setReplyTo($reply_to);
     }
     // add attachemnts
@@ -418,12 +425,15 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
 }
 add_filter('contextual_help', 'showContextualHelp', 10, 3);
 
-/**
- * Return the content type used to send html emails
- *
- * return string Conteny-type needed to send HTML emails
- */
-function set_html_content_type()
+if (!function_exists('set_html_content_type'))
 {
-	return 'text/html';
+  /**
+   * Return the content type used to send html emails
+   *
+   * return string Conteny-type needed to send HTML emails
+   */
+  function set_html_content_type()
+  {
+    return 'text/html';
+  }
 }

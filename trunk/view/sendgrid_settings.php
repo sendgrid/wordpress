@@ -6,7 +6,7 @@
       <img src="<?php echo plugins_url('/images/logo.png', __FILE__) ?>" width="100" alt="" />
     </a>
     <h2 class="title"><?php echo _e('SendGrid Options') ?></h2>
-    <?php if ($status == 'save-error' or $status == 'save-success'): ?>
+    <?php if (isset($status) and ($status == 'save-error' or $status == 'save-success')): ?>
       <div id="message" class="<?php echo $status ?>">
         <strong><?php echo $message ?></strong>
       </div>
@@ -95,7 +95,7 @@
   <?php if ($valid_credentials): ?>
     <div class="stuffbox">
       <h2 class="title"><?php _e('SendGrid Test') ?></h2>
-      <?php if ($status == 'send-failed' or $status == 'send-success'): ?>
+      <?php if (isset($status) and ($status == 'send-failed' or $status == 'send-success')): ?>
         <div id="message" class="<?php echo $status ?>">
           <strong><?php echo $message ?></strong>
         </div>
@@ -107,7 +107,7 @@
             <th scope="row"><?php _e("To: "); ?></th>
             <td>
               <div class="inside">
-                <input type="email" name="sendgrid_to" required="true" value="<?php echo $success ? '' : $to; ?>" size="20">
+                <input type="email" name="sendgrid_to" required="true" value="<?php echo isset($success) ? '' : isset($to) ? $to : '' ; ?>" size="20">
               </div>
             </td>
           </tr>
@@ -115,7 +115,7 @@
             <th scope="row"><?php _e("Subject: "); ?></th>
             <td>
               <div class="inside">
-                <input type="text" name="sendgrid_subj" required="true" value="<?php echo $success ? '' : $subject; ?>" size="20">
+                <input type="text" name="sendgrid_subj" required="true" value="<?php echo isset($success) ? '' : isset($subject) ? $subject : '' ; ?>" size="20">
               </div>
             </td>
           </tr>
@@ -123,7 +123,7 @@
             <th scope="row"><?php _e("Body: "); ?></th>
             <td>
               <div class="inside">
-                <textarea name="sendgrid_body" rows="5"><?php echo $success ? '' : $body; ?></textarea>
+                <textarea name="sendgrid_body" rows="5"><?php echo isset($success) ? '' : isset($body) ? $body : '' ; ?></textarea>
               </div>
             </td>
           </tr>
@@ -131,7 +131,7 @@
             <th scope="row"><?php _e("Headers: "); ?></th>
             <td>
               <div class="inside">
-                <textarea name="sendgrid_headers" rows="3"><?php echo $success ? '' : $headers; ?></textarea>
+                <textarea name="sendgrid_headers" rows="3"><?php echo isset($success) ? '' : isset($headers) ? $headers : ''; ?></textarea>
               </div>
             </td>
           </tr>
