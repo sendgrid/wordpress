@@ -3,7 +3,7 @@
     <input type="hidden" id="sendgrid-statistics-type" name="sendgrid-statistics-type" value="wordpress" />
     <label for="sendgrid-start-date">Start date</label><input type="text" id="sendgrid-start-date" name="sendgrid-start-date" />
     <label for="sendgrid-end-date">End date</label><input type="text" id="sendgrid-end-date" name="sendgrid-end-date" />
-    <a href="#" id="sendgrid-apply-filter" data-filter="<?php if (mysql_real_escape_string($_GET['page']) == "sendgrid-statistics") { ?>sendgrid-statistics<?php } else { ?>dashboard<?php } ?>" class="button">Apply</a>
+    <a href="#" id="sendgrid-apply-filter" data-filter="<?php if (isset($_GET['page']) and mysql_real_escape_string($_GET['page']) == "sendgrid-statistics") { ?>sendgrid-statistics<?php } else { ?>dashboard<?php } ?>" class="button">Apply</a>
   </div>
   <div class="loading"><img src="<?= plugin_dir_url(__FILE__); ?>../images/loader.gif" style="width: 15px; height: 15px;" /></div>
 </div>
@@ -95,7 +95,7 @@
   </div>
   <br style="clear:both;"/>
   
-  <?php if (mysql_real_escape_string($_GET['page']) != "sendgrid-statistics") { ?>
+  <?php if (isset($_GET['page']) and mysql_real_escape_string($_GET['page']) != "sendgrid-statistics") { ?>
     <a href="index.php?page=sendgrid-statistics" class="more-statistics">See charts</a>
     <br style="clear:both;"/>
   <?php } ?>

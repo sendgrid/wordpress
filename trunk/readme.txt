@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 3.7
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,9 +43,9 @@ Where:
 * `$headers` - Array or "\n" separated  list of additional headers. Optional.
 * `$attachments` - Array or "\n"/"," separated list of files to attach. Optional.
 
-The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have to set the content type to 'text/html' running `add_filter('wp_mail_content_type', 'set_html_content_type');` function before to `wp_mail()` one.
+The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have to set the content type to 'text/html' running `add_filter('wp_mail_content_type', 'sg_set_html_content_type');` function before to `wp_mail()` one.
 
-After wp_mail function you need to run the `remove_filter('wp_mail_content_type', 'set_html_content_type');` to remove the 'text/html' filter to avoid conflicts --http://core.trac.wordpress.org/ticket/23578
+After wp_mail function you need to run the `remove_filter('wp_mail_content_type', 'sg_set_html_content_type');` to remove the 'text/html' filter to avoid conflicts --http://core.trac.wordpress.org/ticket/23578
 
 Example about how to send an HTML email using different headers:
 
@@ -62,10 +62,10 @@ $headers[] = 'Bcc: address5@sendgrid.com';
  
 $attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
  
-add_filter('wp_mail_content_type', 'set_html_content_type');
+add_filter('wp_mail_content_type', 'sg_set_html_content_type');
 $mail = wp_mail($to, $subject, $message, $headers, $attachments);
  
-remove_filter('wp_mail_content_type', 'set_html_content_type');`
+remove_filter('wp_mail_content_type', 'sg_set_html_content_type');`
 
 == Installation ==
 
@@ -114,6 +114,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * Fix missing argument warning message
 = 1.2 =
 * Added statistics for emails sent through wordpress plugin
+= 1.2.1 =
+* Fix errors: set_html_content_type error, WP_DEBUG enabled notice
 
 == Upgrade notice ==
 
