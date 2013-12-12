@@ -400,10 +400,10 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
 
       '$attachments = array(\'/tmp/img1.jpg\', \'/tmp/img2.jpg\');<br /><br />' .
 
-      'add_filter(\'wp_mail_content_type\', \'sg_set_html_content_type\');<br />' .
+      'add_filter(\'wp_mail_content_type\', \'set_html_content_type\');<br />' .
       '$mail = wp_mail($to, $subject, $message, $headers, $attachments);<br />' .
 
-      'remove_filter(\'wp_mail_content_type\', \'sg_set_html_content_type\');</div><br /><br />' .
+      'remove_filter(\'wp_mail_content_type\', \'set_html_content_type\');</div><br /><br />' .
 
       'Where:<br />' .
       '<ul>' .
@@ -415,9 +415,9 @@ function showContextualHelp($contextual_help, $screen_id, $screen)
       '</ul>' .
       __('The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have ' .
       'to set the content type to \'text/html\' running') . ' <span class="code">add_filter(\'wp_mail_content_type\', ' .
-      '\'sg_set_html_content_type\');</span> ' . __('function before to wp_mail() one') . '.<br /><br />' .
+      '\'set_html_content_type\');</span> ' . __('function before to wp_mail() one') . '.<br /><br />' .
       __('After wp_mail function you need to run the ') . '<span class="code">remove_filter(\'wp_mail_content_type\', ' .
-      '\'sg_set_html_content_type\');</span>' . __(' to remove the \'text/html\' filter to avoid conflicts') .
+      '\'set_html_content_type\');</span>' . __(' to remove the \'text/html\' filter to avoid conflicts') .
       ' -- http://core.trac.wordpress.org/ticket/23578';
   }
 
@@ -430,7 +430,7 @@ add_filter('contextual_help', 'showContextualHelp', 10, 3);
  *
  * return string Conteny-type needed to send HTML emails
  */
-function sg_set_html_content_type()
+function set_html_content_type()
 {
 	return 'text/html';
 }
