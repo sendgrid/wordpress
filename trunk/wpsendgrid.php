@@ -165,6 +165,9 @@ if (!function_exists('wp_mail'))
                 $bcc[$key] = trim($recipient);
               }
               break;
+            case 'reply-to':
+              $replyto = $content;
+              break;
             default:
               // Add it to our grand headers array
               $headers[trim( $name )] = trim( $content );
@@ -282,9 +285,13 @@ if (!function_exists('wp_mail'))
     {
       $mail->setBccs($bcc);
     }
-    $reply_to = trim(get_option('sendgrid_reply_to'));
-    if ($reply_to)
+    if (isset($replyto))
     {
+      $mail->setReplyTo($replyto);
+    }
+    else
+    {
+      $reply_to = trim(get_option('sendgrid_reply_to'));
       $mail->setReplyTo($reply_to);
     }
     // add attachemnts
