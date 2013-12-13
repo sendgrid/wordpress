@@ -51,7 +51,7 @@ class wpSendGridSettings
   { 
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-      if ($_POST['email_test'])
+      if (isset($_POST['email_test']) and $_POST['email_test'])
       {
         $to = $_POST['sendgrid_to'];
         $subject = $_POST['sendgrid_subj'];
@@ -64,13 +64,13 @@ class wpSendGridSettings
           if ($sent->message == "success")
           {
             $message = 'Email sent.';
-            $status = 'send-success';
+            $status = 'updated';
           }
           else 
           {
             $errors = ($sent->errors[0]) ? $sent->errors[0] : $sent;
             $message = 'Email not sent. ' . $errors;
-            $status = 'send-failed';
+            $status = 'error';
           }
 
         }
@@ -79,19 +79,19 @@ class wpSendGridSettings
           if ($sent === true)
           {
             $message = 'Email sent.';
-            $status = 'send-success';
+            $status = 'updated';
           }
           else 
           {
             $message = 'Email not sent. ' . $sent;
-            $status = 'send-failed';
+            $status = 'error';
           }
         }
       }
       else
       {
         $message = 'Options saved.';
-        $status = 'save-success';
+        $status = 'updated';
         
         $user = $_POST['sendgrid_user'];
         update_option('sendgrid_user', $user);
@@ -104,7 +104,7 @@ class wpSendGridSettings
         {
           $message = 'You must have <a href="http://wordpress.org/plugins/swift-mailer/" target="_blank">' .
                       'Swift-mailer plugin</a> installed and activated';
-          $status = 'save-error';
+          $status = 'error';
           update_option('sendgrid_api', 'api');
         }
         else
@@ -139,13 +139,13 @@ class wpSendGridSettings
         if (!$valid_credentials)
         {
           $message = 'Invalid username/password';
-          $status = 'save-error';
+          $status = 'error';
         }
       }
       else
       {
         $message = 'You must have PHP-curl extension enabled';
-        $status = 'save-error';
+        $status = 'error';
       }
     }
         
