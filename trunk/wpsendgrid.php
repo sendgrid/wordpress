@@ -285,15 +285,14 @@ if (!function_exists('wp_mail'))
     {
       $mail->setBccs($bcc);
     }
-    if (isset($replyto))
+    if (!isset($replyto))
     {
-      $mail->setReplyTo($replyto);
+      $replyto = trim(get_option('sendgrid_reply_to'));
     }
-    else
-    {
-      $reply_to = trim(get_option('sendgrid_reply_to'));
-      $mail->setReplyTo($reply_to);
-    }
+    preg_match('/.*<(.*)>.*/i', $replyto, $result);
+    $replyto = $result[1];
+    $mail->setReplyTo($replyto);
+    
     // add attachemnts
     if (count($attached_files))
     {
