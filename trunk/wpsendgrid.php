@@ -289,8 +289,11 @@ if (!function_exists('wp_mail'))
     {
       $replyto = trim(get_option('sendgrid_reply_to'));
     }
-    preg_match('/.*<(.*)>.*/i', $replyto, $result);
-    $replyto = $result[1];
+    $replay_to_found = preg_match('/.*<(.*)>.*/i', $replyto, $result);
+    if ($replay_to_found)
+    {
+      $replyto = $result[1];
+    }
     $mail->setReplyTo($replyto);
     
     // add attachemnts
