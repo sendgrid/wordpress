@@ -121,7 +121,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 = 1.3 =
 * Added support for Wordpress 3.8, fixed visual issues for Wordpress 3.7
 = 1.3.1 = 
-* Fixed replay-to to accept: "name <email@example.com>"
+* Fixed reply-to to accept: "name <email@example.com>"
 
 == Upgrade notice ==
 
