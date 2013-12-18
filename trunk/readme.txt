@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 3.8
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * Fix errors: set_html_content_type error, WP_DEBUG enabled notice, Reply-To header is overwritten by default option
 = 1.3 =
 * Added support for Wordpress 3.8, fixed visual issues for Wordpress 3.7
+= 1.3.1 = 
+* Fixed replay-to to accept: "name <email@example.com>"
 
 == Upgrade notice ==
 
