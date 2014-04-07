@@ -11,7 +11,7 @@
     </div>
     <a href="#" id="sendgrid-apply-filter" data-filter="<?php if (isset($_GET['page']) and mysql_real_escape_string($_GET['page']) == "sendgrid-statistics") { ?>sendgrid-statistics<?php } else { ?>dashboard<?php } ?>" class="button button-primary">Apply</a>
   </div>
-  <div class="loading"><img src="<?= plugin_dir_url(__FILE__); ?>../images/loader.gif" style="width: 15px; height: 15px;" /></div>
+  <div class="loading"><img src="<?php echo plugin_dir_url(__FILE__); ?>../images/loader.gif" style="width: 15px; height: 15px;" /></div>
 </div>
 <br class="clearfix-clear"/>
 <div class="sendgrid-container 

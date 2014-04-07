@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 3.8
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,7 +69,11 @@ remove_filter('wp_mail_content_type', 'set_html_content_type');`
 
 == Installation ==
 
-Note: requires PHP version >= 5.3.0
+Requirements:
+
+1. PHP version >= 5.3.0.
+2. You need to have PHP-curl extension enabled.
+3. To send emails through SMTP you need to install also the 'Swift Mailer' plugin. After installing 'Swift Mailer' plugin, you must have PHP-short_open_tag setting enabled in your php.ini file.
 
 To upload the SendGrid Plugin .ZIP file:
 
@@ -122,6 +126,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * Added support for Wordpress 3.8, fixed visual issues for Wordpress 3.7
 = 1.3.1 = 
 * Fixed reply-to to accept: "name <email@example.com>"
+= 1.3.2 = 
+* Fix URL for loading image
 
 == Upgrade notice ==
 
