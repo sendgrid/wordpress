@@ -155,69 +155,69 @@ jQuery(document).ready(function($) {
         dropStats.push([date, dropsThisDay]);
         blockStats.push([date, blocksThisDay]);
       });
-      
-      /* Prepare data for charts */
-      var dataDeliveries = [
-        {
-          label : 'Requests',
-          data  : requestStats,
-          points: { symbol: "circle" }
-        },
-        {
-          label : 'Drops',
-          data  : dropStats,
-          points: { symbol: "square" }
-        },
-        {
-          label : 'Delivered',
-          data  : deliveredStats,
-          points: { symbol: "diamond" }
-        }];
-      
-      var dataCompliance = [
-        {
-          label : 'Spam reports',
-          data  : spamreportStats,
-          points: { symbol: "circle" }
-        },
-        {
-          label : 'Bounces',
-          data  : bounceStats,
-          points: { symbol: "square" }
-        },
-        {
-          label : 'Blocked',
-          data  : blockStats,
-          points: { symbol: "diamond" }
-        }
-      ];
-      
-      var dataEngagement = [
-        {
-          label : 'Unsubscribes',
-          data  : unsubscribeStats,
-          points: { symbol: "diamond" }
-        },
-        {
-          label : 'Unique Opens',
-          data  : uniqueOpenStats,
-          points: { symbol: "triangle" }
-        },
-        {
-          label : 'Opens',
-          data  : openStats,
-          points: { symbol: "square" }
-        },
-        {
-          label : 'Clicks',
-          data  : clickStats,
-          points: { symbol: "cross" }
-        }
-      ];
 
       /* Show charts only on SendGrid Statistics page */
       if (filterType === "sendgrid-statistics")
       {
+        /* Prepare data for charts */
+        var dataDeliveries = [
+            {
+                label : 'Requests',
+                data  : requestStats,
+                points: { symbol: "circle" }
+            },
+            {
+                label : 'Drops',
+                data  : dropStats,
+                points: { symbol: "square" }
+            },
+            {
+                label : 'Delivered',
+                data  : deliveredStats,
+                points: { symbol: "diamond" }
+            }];
+
+        var dataCompliance = [
+            {
+                label : 'Spam reports',
+                data  : spamreportStats,
+                points: { symbol: "circle" }
+            },
+            {
+                label : 'Bounces',
+                data  : bounceStats,
+                points: { symbol: "square" }
+            },
+            {
+                label : 'Blocked',
+                data  : blockStats,
+                points: { symbol: "diamond" }
+            }
+        ];
+
+        var dataEngagement = [
+            {
+                label : 'Unsubscribes',
+                data  : unsubscribeStats,
+                points: { symbol: "diamond" }
+            },
+            {
+                label : 'Unique Opens',
+                data  : uniqueOpenStats,
+                points: { symbol: "triangle" }
+            },
+            {
+                label : 'Opens',
+                data  : openStats,
+                points: { symbol: "square" }
+            },
+            {
+                label : 'Clicks',
+                data  : clickStats,
+                points: { symbol: "cross" }
+            }
+        ];
+
         showChart("#deliveries-container", "#deliveries-container-legend", startDate, 
                   endDate, dataDeliveries, ["#328701", "#bcd516", "#fba617"]);
         showChart("#compliance-container", "#compliance-container-legend", startDate, 

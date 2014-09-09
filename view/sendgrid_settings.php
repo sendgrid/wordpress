@@ -1,11 +1,9 @@
-<link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'css/sendgrid.css'; ?>" type="text/css">
-
-<div class="wrap"> 
+<div class="wrap">
   <a href="http://sendgrid.com" target="_blank">
     <img src="<?php echo plugins_url('/images/logo.png', __FILE__) ?>" width="100" alt="" />
   </a>
   <h2><?php echo _e('SendGrid Options') ?></h2>
-  <?php if (isset($status) and ($status == 'updated' or $status == 'error')): ?>
+  <?php if ( isset( $status ) and ( 'updated' == $status or 'error' == $status ) ): ?>
     <div id="message" class="<?php echo $status ?>">
       <p>
         <strong><?php echo $message ?></strong>
@@ -13,7 +11,7 @@
     </div>
   <?php endif; ?>
   <h3><?php echo _e('SendGrid credentials') ?></h3>
-  <form class="form-table" name="sendgrid_form" method="POST" action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+  <form class="form-table" name="sendgrid_form" method="POST" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ); ?>">
     <table class="form-table">
       <tbody>
         <tr valign="top">
@@ -32,8 +30,8 @@
           <th scope="row"><?php _e("Send Mail with: "); ?></th>
           <td>
             <select name="sendgrid_api">
-              <option value="api" id="api" <?php echo ($method == 'api') ? 'selected' : '' ?>><?php _e('API') ?></option>
-              <option value="smtp" id="smtp" <?php echo ($method == 'smtp') ? 'selected' : '' ?>><?php _e('SMTP') ?></option>
+              <option value="api" id="api" <?php echo ( 'api' == $method ) ? 'selected' : '' ?>><?php _e('API') ?></option>
+              <option value="smtp" id="smtp" <?php echo ( 'smtp' == $method ) ? 'selected' : '' ?>><?php _e('SMTP') ?></option>
             </select>
           </td>
         </tr>
@@ -65,6 +63,15 @@
             <p class="description"><?php _e('Email address where replies will be returned.') ?></p>
           </td>
         </tr>
+        <tr valign="top">
+          <th scope="row"><?php _e("Categories: "); ?></th>
+          <td>
+            <input type="text" name="sendgrid_categories" value="<?php echo $categories; ?>" size="20" class="regular-text">
+            <span><small><em><?php _e('Leave blank to send without categories.') ?></em></small></span>
+            <p class="description"><?php _e('Associates the category of the email this should be logged as. <br />
+            Categories must be separated by commas (Example: category1, category2).') ?></p>
+          </td>
+        </tr>
       </tbody>
     </table>
     <p class="submit">
@@ -72,7 +79,7 @@
     </p>
   </form>  
   <br />
-  <?php if ($valid_credentials): ?>
+  <?php if ( $valid_credentials ): ?>
     <h2><?php _e('SendGrid Test') ?></h2>
     <h3><?php _e('Send a test email with these settings') ?></h3>
     <form name="sendgrid_test" method="POST" action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
