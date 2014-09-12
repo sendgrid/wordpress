@@ -6,8 +6,16 @@
   </div>
   <div class="pull-right sendgrid-statistics-change-type">
     <select id="sendgrid-statistics-change-type">
-      <option value="wordpress" selected="selected">Wordpress statistics</option>
       <option value="general">General statistics</option>
+      <option value="wordpress" selected="selected">Wordpress statistics</option>
+      <?php $categories = explode(',', get_option('sendgrid_categories')); ?>
+      <?php if($categories): ?>
+      <optgroup label="Categories:">
+        <?php foreach ($categories as $cateogry): ?>
+        <option value="<?php echo $cateogry; ?>"><?php echo $cateogry; ?></option>
+        <?php endforeach; ?>
+      </optgroup>
+      <?php endif; ?>
     </select>
   </div>
   

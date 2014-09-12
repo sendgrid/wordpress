@@ -123,9 +123,14 @@ class Sendgrid_Statistics
       $parameters['end_date']   = $_POST['end_date'];
     }
 
-    if  ( $_POST['type'] and 'wordpress' == $_POST['type'] ) {
-      $parameters['category'] = 'wp_sendgrid_plugin';
-    }
+    if ( $_POST['type']) {
+      if('wordpress' == $_POST['type'] ) {
+        $parameters['category'] = 'wp_sendgrid_plugin';
+      }
+      else {
+        $parameters['category'] = urlencode($_POST['type']);
+      }
+    } 
 
     echo Sendgrid_Tools::curl_request( 'api/stats.get.json', $parameters );
 
