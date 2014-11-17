@@ -101,8 +101,8 @@ class Sendgrid_Settings
       }
     }
     
-    $user       = get_option('sendgrid_user');
-    $password   = get_option('sendgrid_pwd');
+    $user       = defined( 'SENDGRID_USER' ) ? SENDGRID_USER : get_option('sendgrid_user');
+    $password   = defined( 'SENDGRID_PWD' ) ? SENDGRID_PWD : get_option('sendgrid_pwd');
     $method     = get_option('sendgrid_api');
     $name       = get_option('sendgrid_from_name');
     $email      = get_option('sendgrid_from_email');
