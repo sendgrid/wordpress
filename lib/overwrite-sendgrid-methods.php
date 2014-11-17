@@ -43,7 +43,7 @@ if ( ! function_exists('wp_mail'))
    */
   function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() )
   {
-    $sendgrid = new SendGrid( get_option('sendgrid_user'), get_option('sendgrid_pwd') );
+    $sendgrid = new SendGrid( Sendgrid_Settings::get_user(), Sendgrid_Settings::get_pwd() );
     $mail     = new SendGrid\Mail();
     $method   = get_option( 'sendgrid_api' );
 
