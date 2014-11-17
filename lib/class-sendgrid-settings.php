@@ -101,8 +101,8 @@ class Sendgrid_Settings
       }
     }
     
-    $user       = defined( 'SENDGRID_USER' ) ? SENDGRID_USER : get_option('sendgrid_user');
-    $password   = defined( 'SENDGRID_PWD' ) ? SENDGRID_PWD : get_option('sendgrid_pwd');
+    $user       = self::get_user();
+    $password   = self::get_pwd();
     $method     = get_option('sendgrid_api');
     $name       = get_option('sendgrid_from_name');
     $email      = get_option('sendgrid_from_email');
@@ -174,5 +174,23 @@ class Sendgrid_Settings
     }
 
     wp_enqueue_style( 'sendgrid', plugin_dir_url( __FILE__ ) . '../view/css/sendgrid.css' );
+  }
+
+  public static function get_user()
+  {
+    if( defined( 'SENDGRID_USER' ) ) {
+      return SENDGRID_USER;
+    } else {
+      return get_option('sendgrid_user');
+    }
+  }
+
+  public static function get_pwd()
+  {
+    if( defined( 'SENDGRID_PWD' ) ) {
+      return SENDGRID_PWD;
+    } else {
+      return get_option('sendgrid_pwd');
+    }
   }
 }
