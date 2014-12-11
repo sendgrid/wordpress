@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,11 +27,11 @@ Emails are tracked and automatically tagged for statistics within the SendGrid D
 There are a couple levels of integration between your WordPress installation and the SendGrid plugin:
 
 * The simplest option is to Install it, Configure it, and the SendGrid plugin for WordPress will start sending your emails through SendGrid.
-* We amended wp_mail() function so all email sends from wordpress should go through SendGrid. The wp_mail function is sending text emails as default, but you have an option of sending an email with HTML content.
+* We amended wp_mail() function so all email sends from WordPress should go through SendGrid. The wp_mail function is sending text emails as default, but you have an option of sending an email with HTML content.
 
 How to use `wp_mail()` function:
 
-We amended `wp_mail()` function so all email sends from wordpress should go through SendGrid.
+We amended `wp_mail()` function so all email sends from WordPress should go through SendGrid.
 
 You can send emails using the following function: `wp_mail($to, $subject, $message, $headers = '', $attachments = array())`
 
@@ -50,7 +50,7 @@ After wp_mail function you need to run the `remove_filter('wp_mail_content_type'
 Example about how to send an HTML email using different headers:
 
 `$subject = 'test plugin';
-$message = 'testing wordpress plugin';
+$message = 'testing WordPress plugin';
 $to = 'address1@sendgrid.com, Address2 <address2@sendgrid.com@>, address3@sendgrid.com';
 or
 $to = array('address1@sendgrid.com', 'Address2 <address2@sendgrid.com>', 'address3@sendgrid.com');
@@ -107,52 +107,56 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Changelog ==
 
-= 1.0 =
-* Fixed issue: Add error message when PHP-curl extension is not enabled.
-= 1.1 =
-* Added SendGrid Statistics 
-= 1.1.1 =
-* Added default category on sending
-= 1.1.2 =
-* Fix display for october charts
-= 1.1.3 =
-* Fix missing argument warning message
-= 1.2 =
-* Added statistics for emails sent through wordpress plugin
-= 1.2.1 =
-* Fix errors: set_html_content_type error, WP_DEBUG enabled notice, Reply-To header is overwritten by default option
-= 1.3 =
-* Added support for Wordpress 3.8, fixed visual issues for Wordpress 3.7
-= 1.3.1 = 
-* Fixed reply-to to accept: "name <email@example.com>"
-= 1.3.2 = 
-* Fix URL for loading image
-= 1.4 =
-* Fix warnings for static method, add notice for php version < 5.3.0, refactor plugin code
-= 1.4.1 =
-* Added support to set additional categories
-= 1.4.2 =
-* Added SendGrid Statistics for the categories added in the SendGrid Settings Page
-= 1.4.3 =
-* Update plugin logo, description, screenshots on installation page
+= 1.4.5 =
+* Fix changelog order in readme file
 = 1.4.4 =
 * Fix unicode filename for icon-128x128.png image
+= 1.4.3 =
+* Update plugin logo, description, screenshots on installation page
+= 1.4.2 =
+* Added SendGrid Statistics for the categories added in the SendGrid Settings Page
+= 1.4.1 =
+* Added support to set additional categories
+= 1.4 =
+* Fix warnings for static method, add notice for php version < 5.3.0, refactor plugin code
+= 1.3.2 = 
+* Fix URL for loading image
+= 1.3.1 = 
+* Fixed reply-to to accept: "name <email@example.com>"
+= 1.3 =
+* Added support for WordPress 3.8, fixed visual issues for WordPress 3.7
+= 1.2.1 =
+* Fix errors: set_html_content_type error, WP_DEBUG enabled notice, Reply-To header is overwritten by default option
+= 1.2 =
+* Added statistics for emails sent through WordPress plugin
+= 1.1.3 =
+* Fix missing argument warning message
+= 1.1.2 =
+* Fix display for october charts
+= 1.1.1 =
+* Added default category on sending
+= 1.1 =
+* Added SendGrid Statistics 
+= 1.0 =
+* Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 == Upgrade notice ==
 
-= 1.1 =
-* SendGrid Statistics can be used by selecting the time interval for which you want to see your statistics.
-= 1.2 =
-* Now you can switch between Sendgrid general statistics and Sendgrid wordpress statistics.
-= 1.3 =
-* Added support for Wordpress 3.8, fixed visual issues for Wordpress 3.7
-= 1.4 =
-* Fix warnings for static method, add notice for php version < 5.3.0, refactor plugin code
-= 1.4.1 =
-* Added support to set additional categories
-= 1.4.2 =
-* Added SendGrid Statistics for the categories added in the SendGrid Settings Page
-= 1.4.3 =
-* Update plugin logo, description, screenshots on installation page
+= 1.4.5 =
+* Fix changelog order in readme file
 = 1.4.4 =
 * Fix unicode filename for icon-128x128.png image
+= 1.4.3 =
+* Update plugin logo, description, screenshots on installation page
+= 1.4.2 =
+* Added SendGrid Statistics for the categories added in the SendGrid Settings Page
+= 1.4.1 =
+* Added support to set additional categories
+= 1.4 =
+* Fix warnings for static method, add notice for php version < 5.3.0, refactor plugin code
+= 1.3 =
+* Added support for WordPress 3.8, fixed visual issues for WordPress 3.7
+= 1.2 =
+* Now you can switch between Sendgrid general statistics and Sendgrid WordPress statistics.
+= 1.1 =
+* SendGrid Statistics can be used by selecting the time interval for which you want to see your statistics.
