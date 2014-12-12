@@ -17,13 +17,13 @@
         <tr valign="top">
           <th scope="row"><?php _e("Username: "); ?></th>
           <td>
-            <input type="text" required="true" name="sendgrid_user" value="<?php echo $user; ?>" size="20" class="regular-text">
+            <input type="text" required="true" name="sendgrid_user" value="<?php echo $user; ?>" size="20" class="regular-text" <?php disabled( defined( 'SENDGRID_USER' ) ); ?>>
           </td>
         </tr>
         <tr valign="top">
           <th scope="row"><?php _e("Password: "); ?></th>
           <td>
-            <input type="password" required="true" name="sendgrid_pwd" value="<?php echo $password; ?>" size="20" class="regular-text">
+            <input type="password" required="true" name="sendgrid_pwd" value="<?php echo $password; ?>" size="20" class="regular-text" <?php disabled( defined( 'SENDGRID_PWD' ) ); ?>>
           </td>
         </tr>
         <tr valign="top">
