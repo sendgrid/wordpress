@@ -17,19 +17,28 @@
         <tr valign="top">
           <th scope="row"><?php _e("Username: "); ?></th>
           <td>
-            <input type="text" required="true" name="sendgrid_user" value="<?php echo $user; ?>" size="20" class="regular-text">
+            <input type="text" required="true" name="sendgrid_user" value="<?php echo $user; ?>" size="20" class="regular-text" <?php disabled( $are_global_credentials ); ?>>
           </td>
         </tr>
         <tr valign="top">
           <th scope="row"><?php _e("Password: "); ?></th>
           <td>
-            <input type="password" required="true" name="sendgrid_pwd" value="<?php echo $password; ?>" size="20" class="regular-text">
+            <input type="password" required="true" name="sendgrid_pwd" value="<?php echo ( $are_global_credentials ? "******" : $password );  ?>" size="20" class="regular-text" <?php disabled( $are_global_credentials ); ?>>
           </td>
         </tr>
+        <?php if ( $are_global_credentials ): ?>
+        <tr valign="top">
+          <td colspan="2">
+            <p>
+              <?php _e('Your credentials are already configured in the config file. You can not, also, specify them in the interface.'); ?>
+            </p>
+          </td>
+        </tr>
+        <?php endif; ?>
         <tr valign="top">
           <th scope="row"><?php _e("Send Mail with: "); ?></th>
           <td>
-            <select name="sendgrid_api">
+            <select name="sendgrid_api" <?php disabled( defined('SENDGRID_SEND_METHOD') ); ?>>
               <option value="api" id="api" <?php echo ( 'api' == $method ) ? 'selected' : '' ?>><?php _e('API') ?></option>
               <option value="smtp" id="smtp" <?php echo ( 'smtp' == $method ) ? 'selected' : '' ?>><?php _e('SMTP') ?></option>
             </select>
@@ -44,21 +53,21 @@
         <tr valign="top">
           <th scope="row"><?php _e("Name: "); ?></th>
           <td>
-            <input type="text" name="sendgrid_name" value="<?php echo $name; ?>" size="20" class="regular-text">
+            <input type="text" name="sendgrid_name" value="<?php echo $name; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_FROM_NAME') ); ?>>
             <p class="description"><?php _e('Name as it will appear in recipient clients.') ?></p>
           </td>
         </tr>
         <tr valign="top">
           <th scope="row"><?php _e("Sending Address: "); ?></th>
           <td>
-            <input type="email" name="sendgrid_email" value="<?php echo $email; ?>" size="20" class="regular-text">
+            <input type="email" name="sendgrid_email" value="<?php echo $email; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_FROM_EMAIL') ); ?>>
             <p class="description"><?php _e('Email address from which the message will be sent,') ?></p>
           </td>
         </tr>
         <tr valign="top">
           <th scope="row"><?php _e("Reply Address: "); ?></th>
           <td>
-            <input type="email" name="sendgrid_reply_to" value="<?php echo $reply_to; ?>" size="20" class="regular-text">
+            <input type="email" name="sendgrid_reply_to" value="<?php echo $reply_to; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_REPLY_TO') ); ?>>
             <span><small><em><?php _e('Leave blank to use Sending Address.') ?></em></small></span>
             <p class="description"><?php _e('Email address where replies will be returned.') ?></p>
           </td>
@@ -66,10 +75,17 @@
         <tr valign="top">
           <th scope="row"><?php _e("Categories: "); ?></th>
           <td>
-            <input type="text" name="sendgrid_categories" value="<?php echo $categories; ?>" size="20" class="regular-text">
+            <input type="text" name="sendgrid_categories" value="<?php echo $categories; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_CATEGORIES') ); ?>>
             <span><small><em><?php _e('Leave blank to send without categories.') ?></em></small></span>
             <p class="description"><?php _e('Associates the category of the email this should be logged as. <br />
             Categories must be separated by commas (Example: category1, category2).') ?></p>
+          </td>
+        </tr>
+        <tr valign="top">
+          <td colspan="2">
+            <p>
+              <?php _e('Disabled fields in this form means that they are already configured in the config file.'); ?>
+            </p>
           </td>
         </tr>
       </tbody>
@@ -79,7 +95,7 @@
     </p>
   </form>  
   <br />
-  <?php if ( $valid_credentials ): ?>
+  <?php if ( !isset($status) or 'updated' == $status ): ?>
     <h2><?php _e('SendGrid Test') ?></h2>
     <h3><?php _e('Send a test email with these settings') ?></h3>
     <form name="sendgrid_test" method="POST" action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">

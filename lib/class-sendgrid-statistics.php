@@ -25,7 +25,7 @@ class Sendgrid_Statistics
    */
   public static function add_dashboard_widget()
   {
-    if ( ! Sendgrid_Tools::check_username_password( get_option('sendgrid_user'), get_option('sendgrid_pwd') ) ) {
+    if ( ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) ) {
       return;
     }
 
@@ -50,7 +50,7 @@ class Sendgrid_Statistics
    */
   public static function add_statistics_menu()
   {
-    if ( ! Sendgrid_Tools::check_username_password( get_option('sendgrid_user'), get_option('sendgrid_pwd') ) ) {
+    if ( ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) ) {
       return;
     }
 
@@ -111,8 +111,8 @@ class Sendgrid_Statistics
     }
 
     $parameters = array();
-    $parameters['api_user']  = get_option('sendgrid_user');
-    $parameters['api_key']   = get_option('sendgrid_pwd');
+    $parameters['api_user']  = Sendgrid_Tools::get_username();
+    $parameters['api_key']   = Sendgrid_Tools::get_password();
     $parameters['data_type'] = 'global';
     $parameters['metric']    = 'all';
 

@@ -43,9 +43,9 @@ if ( ! function_exists('wp_mail'))
    */
   function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() )
   {
-    $sendgrid = new SendGrid( get_option('sendgrid_user'), get_option('sendgrid_pwd') );
+    $sendgrid = new SendGrid( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
     $mail     = new SendGrid\Mail();
-    $method   = get_option( 'sendgrid_api' );
+    $method   = Sendgrid_Tools::get_send_method();
 
     // Compact the input, apply the filters, and extract them back out
     extract( apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) ) );
@@ -166,7 +166,7 @@ if ( ! function_exists('wp_mail'))
     // From email and name
     // If we don't have a name from the input headers
     if ( !isset( $from_name ) )
-      $from_name = get_option( 'sendgrid_from_name' );
+      $from_name = Sendgrid_Tools::get_from_name();
 
     /* If we don't have an email from the input headers default to wordpress@$sitename
      * Some hosts will block outgoing mail from this address if it doesn't exist but
@@ -176,7 +176,7 @@ if ( ! function_exists('wp_mail'))
      */
 
     if ( !isset( $from_email ) ) {
-      $from_email = trim( get_option('sendgrid_from_email') );
+      $from_email = trim( Sendgrid_Tools::get_from_email() );
       if (!$from_email)
       {
         // Get the site domain and get rid of www.
@@ -251,7 +251,7 @@ if ( ! function_exists('wp_mail'))
          ->setCategory( SENDGRID_CATEGORY )
          ->setFrom( $from_email );
 
-    $categories = explode( ',', get_option('sendgrid_categories') );
+    $categories = explode( ',', Sendgrid_Tools::get_categories() );
     foreach ($categories as $category)
     {
       $mail->addCategory($category);
@@ -279,7 +279,7 @@ if ( ! function_exists('wp_mail'))
     }
     if ( ! isset( $replyto ) )
     {
-      $replyto = trim( get_option('sendgrid_reply_to') );
+      $replyto = trim( Sendgrid_Tools::get_reply_to() );
     }
     $reply_to_found = preg_match( '/.*<(.*)>.*/i', $replyto, $result );
     if ( $reply_to_found )

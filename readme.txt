@@ -3,8 +3,8 @@ Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
-Tested up to: 4.0
-Stable tag: 1.4.5
+Tested up to: 4.0.1
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,19 @@ To auto install the SendGrid Plugin from the WordPress admin:
 4. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
 5. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
 
+Define SendGrid settings as global variables (wp-config.php):
+
+1. Set credentials (both need to be set in order to get credentials from variables and not from the database):
+    * Username: define('SENDGRID_USERNAME', 'sendgrid_username');
+    * Password: define('SENDGRID_PASSWORD', 'sendgrid_password');
+
+2. Set email related settings:
+    * Send method ('api' or 'smtp'): define('SENDGRID_SEND_METHOD', 'api');
+    * From name: define('SENDGRID_FROM_NAME', 'Example Name');
+    * From email: define('SENDGRID_FROM_EMAIL', 'from_email@example.com');
+    * Reply to email: define('SENDGRID_REPLY_TO', 'reply_to@example.com');
+    * Categories: define('SENDGRID_CATEGORIES', 'category_1,category_2');
+
 == Frequently asked questions ==
 
 = What credentials do I need to add on settings page =
@@ -107,6 +120,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Changelog ==
 
+= 1.4.6 =
+* Added constants for SendGrid settings
 = 1.4.5 =
 * Fix changelog order in readme file
 = 1.4.4 =
@@ -142,6 +157,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.4.6 =
+* Added constants for  SendGrid settings
 = 1.4.5 =
 * Fix changelog order in readme file
 = 1.4.4 =

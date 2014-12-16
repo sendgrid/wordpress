@@ -8,7 +8,7 @@
     <select id="sendgrid-statistics-change-type">
       <option value="general">General statistics</option>
       <option value="wordpress" selected="selected">Wordpress statistics</option>
-      <?php $categories = explode( ',', get_option('sendgrid_categories') ); ?>
+      <?php $categories = Sendgrid_Tools::get_categories_array(); ?>
       <?php if ( is_array( $categories ) and count( $categories ) > 0 ): ?>
       <optgroup label="Categories:">
         <?php foreach ( $categories as $cateogry ): ?>

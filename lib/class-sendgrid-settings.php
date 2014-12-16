@@ -40,7 +40,7 @@ class Sendgrid_Settings
         $body    = $_POST['sendgrid_body'];
         $headers = $_POST['sendgrid_headers'];
         $sent    = wp_mail($to, $subject, $body, $headers);
-        if ( 'api' == get_option('sendgrid_api') )
+        if ( 'api' == Sendgrid_Tools::get_send_method() )
         {
           $sent = json_decode( $sent );
           if ( "success" == $sent->message )
@@ -54,7 +54,7 @@ class Sendgrid_Settings
           }
 
         }
-        elseif ( 'smtp' == get_option('sendgrid_api') )
+        elseif ( 'smtp' == Sendgrid_Tools::get_send_method() )
         {
           if ( true === $sent )
           {
@@ -68,55 +68,78 @@ class Sendgrid_Settings
       } else {
         $message = 'Options saved.';
         $status  = 'updated';
-        
-        $user = $_POST['sendgrid_user'];
-        update_option( 'sendgrid_user', $user );
 
-        $password = $_POST['sendgrid_pwd'];        
-        update_option( 'sendgrid_pwd', $password );
-
-        $method = $_POST['sendgrid_api'];
-        if ( 'smtp' == $method and ! class_exists('Swift') )
+        if (isset($_POST['sendgrid_user']))
         {
-          $message = 'You must have <a href="http://wordpress.org/plugins/swift-mailer/" target="_blank">' .
-                      'Swift-mailer plugin</a> installed and activated';
-          $status  = 'error';
-
-          update_option( 'sendgrid_api', 'api' );
-        } else {
-          update_option( 'sendgrid_api', $method );
+          $user = $_POST['sendgrid_user'];
+          update_option('sendgrid_user', $user);
         }
 
-        $name = $_POST['sendgrid_name'];
-        update_option( 'sendgrid_from_name', $name );
+        if (isset($_POST['sendgrid_pwd']))
+        {
+          $password = $_POST['sendgrid_pwd'];
+          update_option('sendgrid_pwd', $password);
+        }
 
-        $email = $_POST['sendgrid_email'];
-        update_option( 'sendgrid_from_email', $email );
+        if (isset($_POST['sendgrid_api']))
+        {
+          $method = $_POST['sendgrid_api'];
+          update_option('sendgrid_api', $method);
+        }
 
-        $reply_to = $_POST['sendgrid_reply_to'];
-        update_option( 'sendgrid_reply_to', $reply_to );
+        if (isset($_POST['sendgrid_name']))
+        {
+          $name = $_POST['sendgrid_name'];
+          update_option('sendgrid_from_name', $name);
+        }
 
-        $categories = $_POST['sendgrid_categories'];
-        update_option( 'sendgrid_categories', $categories );
+        if (isset($_POST['sendgrid_email']))
+        {
+          $email = $_POST['sendgrid_email'];
+          update_option('sendgrid_from_email', $email);
+        }
+
+        if (isset($_POST['sendgrid_reply_to']))
+        {
+          $reply_to = $_POST['sendgrid_reply_to'];
+          update_option('sendgrid_reply_to', $reply_to);
+        }
+
+        if (isset($_POST['sendgrid_categories']))
+        {
+          $categories = $_POST['sendgrid_categories'];
+          update_option('sendgrid_categories', $categories);
+        }
       }
     }
     
-    $user       = get_option('sendgrid_user');
-    $password   = get_option('sendgrid_pwd');
-    $method     = get_option('sendgrid_api');
-    $name       = get_option('sendgrid_from_name');
-    $email      = get_option('sendgrid_from_email');
-    $reply_to   = get_option('sendgrid_reply_to');
-    $categories = get_option('sendgrid_categories');
+    $user       = Sendgrid_Tools::get_username();
+    $password   = Sendgrid_Tools::get_password();
+    $method     = Sendgrid_Tools::get_send_method();
+    $name       = Sendgrid_Tools::get_from_name();
+    $email      = Sendgrid_Tools::get_from_email();
+    $reply_to   = Sendgrid_Tools::get_reply_to();
+    $categories = Sendgrid_Tools::get_categories();
 
-    $valid_credentials = false;
+    $allowed_methods = array('smtp', 'api');
+    if (!in_array($method, $allowed_methods))
+    {
+      $message = 'Invalid send method, available methods are: "api" or "smtp".';
+      $status = 'error';
+    }
+
+    if ('smtp' == $method and !class_exists('Swift'))
+    {
+      $message = 'You must have <a href="http://wordpress.org/plugins/swift-mailer/" target="_blank">' .
+        'Swift-mailer plugin</a> installed and activated';
+      $status = 'error';
+    }
+
     if ( $user and $password )
     {
       if ( in_array( 'curl', get_loaded_extensions() ) )
       {
-        $valid_credentials = Sendgrid_Tools::check_username_password( $user, $password );
-
-        if ( ! $valid_credentials )
+        if ( ! Sendgrid_Tools::check_username_password( $user, $password ) )
         {
           $message = 'Invalid username/password';
           $status  = 'error';
@@ -126,6 +149,8 @@ class Sendgrid_Settings
         $status  = 'error';
       }
     }
+
+    $are_global_credentials = ( defined('SENDGRID_USERNAME') and defined('SENDGRID_PASSWORD') );
         
     require_once dirname( __FILE__ ) . '/../view/sendgrid_settings.php';
   }

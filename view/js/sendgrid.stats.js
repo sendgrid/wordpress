@@ -109,6 +109,9 @@ jQuery(document).ready(function($) {
 
       /* Get stats from request */
       response = jQuery.parseJSON(response);
+      if (undefined != response.error) {
+        response = [];
+      }
       jQuery.each(response, function(key, value) {
         var dateString                = _splitDate(value.date);
         var date                      = Date.UTC(dateString[0], _convertMonthToUTC(dateString[1]), dateString[2]);

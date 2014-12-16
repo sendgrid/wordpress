@@ -79,4 +79,24 @@
     remove_filter('wp_mail_content_type', 'set_html_content_type');
   </span>
   to remove the 'text/html' filter to avoid conflicts -- http://core.trac.wordpress.org/ticket/23578
+  <p><b>Define SendGrid settings as global variables (wp-config.php):</b></p>
+  <p>
+    <ol>
+      <li>Set credentials (both need to be set in order to get credentials from variables and not from the database):
+        <ul>
+          <li>Username: <span class="code">define('SENDGRID_USERNAME', 'sendgrid_username');</span></li>
+          <li>Password: <span class="code">define('SENDGRID_PASSWORD', 'sendgrid_password');</span></li>
+        </ul>
+      </li>
+      <li>Set email related settings:
+        <ul>
+          <li>Send method ('api' or 'smtp'): <span class="code">define('SENDGRID_SEND_METHOD', 'api');</span></li>
+          <li>From name: <span class="code">define('SENDGRID_FROM_NAME', 'Example Name');</span></li>
+          <li>From email: <span class="code">define('SENDGRID_FROM_EMAIL', 'from_email@example.com');</span></li>
+          <li>Reply to email: <span class="code">define('SENDGRID_REPLY_TO', 'reply_to@example.com');</span></li>
+          <li>Categories: <span class="code">define('SENDGRID_CATEGORIES', 'category_1,category_2');</span></li>
+        </ul>
+      </li>
+    </ol>
+  </p>
 </p>
