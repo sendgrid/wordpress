@@ -18,6 +18,21 @@ class Sendgrid_Tools
     curl_setopt( $ch, CURLOPT_URL, $url );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
 
+    // cURL proxy support
+    $proxy = new \WP_HTTP_Proxy();
+
+    if ( $proxy->is_enabled() && $proxy->send_through_proxy( $url ) ) {
+
+      curl_setopt( $ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP );
+      curl_setopt( $ch, CURLOPT_PROXY, $proxy->host() );
+      curl_setopt( $ch, CURLOPT_PROXYPORT, $proxy->port() );
+
+      if ( $proxy->use_authentication() ) {
+        curl_setopt( $ch, CURLOPT_PROXYAUTH, CURLAUTH_ANY );
+        curl_setopt( $ch, CURLOPT_PROXYUSERPWD, $proxy->authentication() );
+      }
+    }
+
     $data = curl_exec( $ch );
     curl_close( $ch );
 
@@ -44,6 +59,21 @@ class Sendgrid_Tools
     $process = curl_init();
     curl_setopt( $process, CURLOPT_URL, "http://sendgrid.com/$api?$data" );
     curl_setopt( $process, CURLOPT_RETURNTRANSFER, 1 );
+
+    // cURL proxy support
+    $proxy = new \WP_HTTP_Proxy();
+
+    if ( $proxy->is_enabled() && $proxy->send_through_proxy( $url ) ) {
+
+      curl_setopt( $process, CURLOPT_PROXYTYPE, CURLPROXY_HTTP );
+      curl_setopt( $process, CURLOPT_PROXY, $proxy->host() );
+      curl_setopt( $process, CURLOPT_PROXYPORT, $proxy->port() );
+
+      if ( $proxy->use_authentication() ) {
+        curl_setopt( $process, CURLOPT_PROXYAUTH, CURLAUTH_ANY );
+        curl_setopt( $process, CURLOPT_PROXYUSERPWD, $proxy->authentication() );
+      }
+    }
 
     return curl_exec( $process );
   }
