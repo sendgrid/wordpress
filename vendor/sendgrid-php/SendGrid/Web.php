@@ -138,6 +138,21 @@ class Web extends Api implements MailInterface
     curl_setopt($session, CURLOPT_CONNECTTIMEOUT, 5);
     curl_setopt($session, CURLOPT_TIMEOUT, 30);
 
+    // cURL proxy support
+    $proxy = new \WP_HTTP_Proxy();
+
+    if ( $proxy->is_enabled() && $proxy->send_through_proxy( $request ) ) {
+
+      curl_setopt( $session, CURLOPT_PROXYTYPE, CURLPROXY_HTTP );
+      curl_setopt( $session, CURLOPT_PROXY, $proxy->host() );
+      curl_setopt( $session, CURLOPT_PROXYPORT, $proxy->port() );
+
+      if ( $proxy->use_authentication() ) {
+        curl_setopt( $session, CURLOPT_PROXYAUTH, CURLAUTH_ANY );
+        curl_setopt( $session, CURLOPT_PROXYUSERPWD, $proxy->authentication() );
+      }
+    }
+
     // obtain response
     $response = curl_exec($session);
     curl_close($session);
