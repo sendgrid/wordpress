@@ -42,7 +42,7 @@ class Sendgrid_Settings
         $sent    = wp_mail($to, $subject, $body, $headers);
         if ( 'api' == Sendgrid_Tools::get_send_method() )
         {
-          $sent = json_decode( $sent );
+          $sent = json_decode( $sent['body'] );
           if ( "success" == $sent->message )
           {
             $message = 'Email sent.';
@@ -137,15 +137,9 @@ class Sendgrid_Settings
 
     if ( $user and $password )
     {
-      if ( in_array( 'curl', get_loaded_extensions() ) )
+      if ( ! Sendgrid_Tools::check_username_password( $user, $password ) )
       {
-        if ( ! Sendgrid_Tools::check_username_password( $user, $password ) )
-        {
-          $message = 'Invalid username/password';
-          $status  = 'error';
-        }
-      } else {
-        $message = 'You must have PHP-curl extension enabled';
+        $message = 'Invalid username/password';
         $status  = 'error';
       }
     }

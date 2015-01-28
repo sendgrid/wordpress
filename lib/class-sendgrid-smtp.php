@@ -1,8 +1,6 @@
 <?php
 
-namespace SendGrid;
-
-class Smtp extends Api implements MailInterface
+class Smtp
 {
   //the available ports
   const TLS = 587;
@@ -12,6 +10,8 @@ class Smtp extends Api implements MailInterface
   //the list of port instances, to be recycled
   private $swift_instances = array();
   protected $port;
+  protected $username,
+            $password;
 
   public function __construct($username, $password)
   {
@@ -22,7 +22,8 @@ class Smtp extends Api implements MailInterface
     if (!class_exists('Swift')) {
       require_once 'swift_required.php';
     }
-    call_user_func_array("parent::__construct", func_get_args());
+    $this->username = $username;
+    $this->password = $password;
 
     //set the default port
     $this->port = Smtp::TLS;
@@ -65,7 +66,7 @@ class Smtp extends Api implements MailInterface
    * @param Mail $mail - the SendGridMail object
    * @return the SwiftMessage object
    */
-  protected function _mapToSwift(Mail $mail)
+  protected function _mapToSwift(SendGrid\Email $mail)
   {
     $message = new \Swift_Message($mail->getSubject());
 
@@ -93,36 +94,7 @@ class Smtp extends Api implements MailInterface
     if(($replyto = $mail->getReplyTo())) {
       $message->setReplyTo($replyto);
     }
-
-    // determine whether or not we can use SMTP recipients (non header based)
-    if($mail->useHeaders())
-    {
-      //send header based email
-      $message->setTo($mail->getFrom());
-
-       //here we'll add the recipients list to the headers
-      $headers = $mail->getHeaders();
-      $headers['to'] = $mail->getTos();
-      $mail->setHeaders($headers);
-    }
-    else
-    {
-      $recipients = array();
-      foreach ($mail->getTos() as $recipient)
-      {
-        if(preg_match("/(.*)<(.*)>/", $recipient, $results))
-        {
-          $recipients[trim($results[2])] = trim($results[1]);
-        }
-        else
-        {
-          $recipients[] = $recipient;
-        }
-      }
-
-      $message->setTo($recipients);
-    }
-
+    
     $attachments = $mail->getAttachments();
 
     //add any attachments that were added
@@ -134,10 +106,9 @@ class Smtp extends Api implements MailInterface
       }
     }
 
-    //add all the headers
-    $headers = $message->getHeaders();
-    $headers->addTextHeader('X-SMTPAPI', $mail->getHeadersJson());
-
+    $message_headers  = $message->getHeaders();
+    $message_headers->addTextHeader("x-smtpapi", $mail->smtpapi->jsonString());
+    
     return $message;
   }
 
@@ -146,7 +117,7 @@ class Smtp extends Api implements MailInterface
    * @param Mail $mail - the SendGridMailMessage to be sent
    * @return true if mail was sendable (not necessarily sent)
    */
-  public function send(Mail $mail)
+  public function send(SendGrid\Email $mail)
   {
     $swift = $this->_getSwiftInstance($this->port);
 

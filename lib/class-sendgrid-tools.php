@@ -14,14 +14,8 @@ class Sendgrid_Tools
     $url = 'https://sendgrid.com/api/profile.get.json?';
     $url .= "api_user=$username&api_key=$password";
 
-    $ch = curl_init();
-    curl_setopt( $ch, CURLOPT_URL, $url );
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
-
-    $data = curl_exec( $ch );
-    curl_close( $ch );
-
-    $response = json_decode( $data, true );
+    $response = wp_remote_get( $url );
+    $response = json_decode( $response['body'], true );
 
     if ( isset( $response['error'] ) )
     {
@@ -41,11 +35,11 @@ class Sendgrid_Tools
   public static function curl_request( $api = 'api/stats.get.json', $parameters = array() )
   {
     $data = urldecode( http_build_query( $parameters ) );
-    $process = curl_init();
-    curl_setopt( $process, CURLOPT_URL, "http://sendgrid.com/$api?$data" );
-    curl_setopt( $process, CURLOPT_RETURNTRANSFER, 1 );
+    $url = "https://sendgrid.com/$api?$data";
 
-    return curl_exec( $process );
+    $response = wp_remote_get( $url );
+
+    return $response['body'];
   }
 
   /**

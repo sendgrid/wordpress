@@ -2,11 +2,33 @@
 
 if ( ! function_exists('wp_mail'))
 {
-  require_once plugin_dir_path( __FILE__ ) . '../vendor/sendgrid-php/SendGrid_loader.php';
+  require( plugin_dir_path( __FILE__ ) . '../vendor/sendgrid-php/sendgrid-php.php' );
 
   define( 'SENDGRID_CATEGORY', 'wp_sendgrid_plugin' );
   define( 'SENDGRID_PLUGIN_SETTINGS', 'settings_page_sendgrid-settings' );
   define( 'SENDGRID_PLUGIN_STATISTICS', 'dashboard_page_sendgrid-statistics' );
+
+  /**
+   * Override Email send
+   *
+   * @param   SendGrid\Email  $email      Email object with email info 
+   * @param   SendGrid        $sendgrid   Sendgrid object with credentials info
+   * @return  array                       Array of results
+   */
+  function wp_send( SendGrid\Email $email, $sendgrid ) 
+  {
+    $form             = $email->toWebFormat();
+    $form['api_user'] = Sendgrid_Tools::get_username(); 
+    $form['api_key']  = Sendgrid_Tools::get_password(); 
+
+    $form = array(
+      'body' => $form
+    );
+
+    $response = wp_remote_post( $sendgrid->url, $form );
+ 
+    return $response;
+  }
 
   /**
    * Send mail, similar to PHP's mail
@@ -44,7 +66,8 @@ if ( ! function_exists('wp_mail'))
   function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() )
   {
     $sendgrid = new SendGrid( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
-    $mail     = new SendGrid\Mail();
+    $mail     = new SendGrid\Email();
+
     $method   = Sendgrid_Tools::get_send_method();
 
     // Compact the input, apply the filters, and extract them back out
@@ -248,7 +271,7 @@ if ( ! function_exists('wp_mail'))
     $mail->setTos( $to )
          ->setSubject( $subject )
          ->setText( $message )
-         ->setCategory( SENDGRID_CATEGORY )
+         ->addCategory( SENDGRID_CATEGORY )
          ->setFrom( $from_email );
 
     $categories = explode( ',', Sendgrid_Tools::get_categories() );
@@ -258,9 +281,9 @@ if ( ! function_exists('wp_mail'))
     }
 
     // send HTML content
-	  if ( 'text/plain' !== $content_type )
+    if ( 'text/plain' !== $content_type )
     {
-		  $mail->setHtml( $message );
+      $mail->setHtml( $message );
     }
     // set from name
     if ( $from_email )
@@ -299,13 +322,15 @@ if ( ! function_exists('wp_mail'))
     {
       if ( 'api' == $method )
       {
-        return $sendgrid->web->send( $mail );
+        return wp_send( $mail, $sendgrid );
       }
       elseif ( 'smtp' == $method )
       {
         if ( class_exists('Swift') )
         {
-          return $sendgrid->smtp->send( $mail );
+          $smtp = new Smtp( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+
+          return $smtp->send( $mail );
         }
         else 
         {
