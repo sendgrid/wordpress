@@ -15,6 +15,10 @@ class Sendgrid_Tools
     $url .= "api_user=$username&api_key=$password";
 
     $response = wp_remote_get( $url );
+    if ( !is_array($response) || !isset( $response['body'] ) )
+    {
+      return false;
+    }
     $response = json_decode( $response['body'], true );
 
     if ( isset( $response['error'] ) )
@@ -38,6 +42,10 @@ class Sendgrid_Tools
     $url = "https://sendgrid.com/$api?$data";
 
     $response = wp_remote_get( $url );
+    if ( !is_array($response) || !isset( $response['body'] ) )
+    {
+      return false;
+    }
 
     return $response['body'];
   }
