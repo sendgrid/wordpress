@@ -21,7 +21,7 @@ if ( version_compare( phpversion(), '5.3.0', '<' ) ) {
   */
   function php_version_error()
   {
-    echo '<div class="error"><p>'.__('SendGrid: Plugin require PHP >= 5.3.0.') . '</p></div>';
+    echo '<div class="error"><p>'.__('SendGrid: Plugin requires PHP >= 5.3.0.') . '</p></div>';
   }
 } else {
   require_once plugin_dir_path( __FILE__ ) . '/lib/class-sendgrid-tools.php';
