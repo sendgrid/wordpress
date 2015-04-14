@@ -21,12 +21,54 @@ if ( ! function_exists('wp_mail'))
     $form['api_user'] = Sendgrid_Tools::get_username(); 
     $form['api_key']  = Sendgrid_Tools::get_password(); 
 
-    $form = array(
-      'body' => $form
-    );
+    $files = preg_grep( '/files/', array_keys( $form ) );
 
-    $response = wp_remote_post( $sendgrid->url, $form );
- 
+    if ( count( $files) > 0 )
+    {
+      if ( in_array( 'curl', get_loaded_extensions() ) )
+      {
+        $session = curl_init( $sendgrid->url );
+        curl_setopt( $session, CURLOPT_POST, true );
+        curl_setopt( $session, CURLOPT_POSTFIELDS, $form );
+        curl_setopt( $session, CURLOPT_HEADER, false );
+        curl_setopt( $session, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $session, CURLOPT_CONNECTTIMEOUT, 5 );
+        curl_setopt( $session, CURLOPT_TIMEOUT, 30 );
+        curl_setopt( $session, CURLOPT_SSL_VERIFYPEER, false);
+
+        $response = curl_exec( $session );
+
+        $response = array(
+          'body' => $response
+        );
+
+        curl_close( $session );
+      }
+      else
+      {
+        update_option( 'sendgrid_curl_option', 'disabled' );
+
+        foreach ( $files as $key => $value )
+        {
+          unset( $form[$value] );
+        }
+
+        $data = array(
+          'body' => $form
+        );
+
+        $response = wp_remote_post( $sendgrid->url, $data );
+      }
+    }
+    else
+    {
+      $data = array(
+        'body' => $form
+      );
+
+      $response = wp_remote_post( $sendgrid->url, $data );
+    }
+
     return $response;
   }
 
