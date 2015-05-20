@@ -8,6 +8,27 @@ if ( ! function_exists('wp_mail'))
   define( 'SENDGRID_PLUGIN_SETTINGS', 'settings_page_sendgrid-settings' );
   define( 'SENDGRID_PLUGIN_STATISTICS', 'dashboard_page_sendgrid-statistics' );
 
+  // overwrite SendGrid class constructor for sending emails without having curl extension enabled
+  class SendGridwp extends SendGrid
+  {
+    public function __construct( $apiUser, $apiKey, $options = array() )
+    {
+      $this->apiUser = $apiUser;
+      $this->apiKey = $apiKey;
+
+      $options['turn_off_ssl_verification'] = ( isset($options['turn_off_ssl_verification'] ) &&
+        $options['turn_off_ssl_verification'] == true );
+      $protocol = isset( $options['protocol'] ) ? $options['protocol'] : 'https';
+      $host = isset( $options['host'] ) ? $options['host'] : 'api.sendgrid.com';
+      $port = isset( $options['port'] ) ? $options['port'] : '';
+      $this->options  = $options;
+
+      $this->url = isset( $options['url'] ) ? 
+        $options['url'] : $protocol . '://' . $host . ( $port ? ':' . $port : '' );
+      $this->endpoint = isset( $options['endpoint'] ) ? $options['endpoint'] : '/api/mail.send.json';
+    }
+  }
+
   /**
    * Override Email send
    *
@@ -21,28 +42,19 @@ if ( ! function_exists('wp_mail'))
     $form['api_user'] = Sendgrid_Tools::get_username(); 
     $form['api_key']  = Sendgrid_Tools::get_password(); 
 
+    $url = $sendgrid->url . $sendgrid->endpoint;
+
     $files = preg_grep( '/files/', array_keys( $form ) );
 
     if ( count( $files) > 0 )
     {
       if ( in_array( 'curl', get_loaded_extensions() ) )
       {
-        $session = curl_init( $sendgrid->url );
-        curl_setopt( $session, CURLOPT_POST, true );
-        curl_setopt( $session, CURLOPT_POSTFIELDS, $form );
-        curl_setopt( $session, CURLOPT_HEADER, false );
-        curl_setopt( $session, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $session, CURLOPT_CONNECTTIMEOUT, 5 );
-        curl_setopt( $session, CURLOPT_TIMEOUT, 30 );
-        curl_setopt( $session, CURLOPT_SSL_VERIFYPEER, false);
-
-        $response = curl_exec( $session );
+        $response = $sendgrid->postRequest($sendgrid->endpoint, $form);
 
         $response = array(
-          'body' => $response
+          'body' => $response->raw_body
         );
-
-        curl_close( $session );
       }
       else
       {
@@ -54,10 +66,10 @@ if ( ! function_exists('wp_mail'))
         }
 
         $data = array(
-          'body' => $form
+          'body' => $form 
         );
 
-        $response = wp_remote_post( $sendgrid->url, $data );
+        $response = wp_remote_post( $url, $data );
       }
     }
     else
@@ -66,7 +78,7 @@ if ( ! function_exists('wp_mail'))
         'body' => $form
       );
 
-      $response = wp_remote_post( $sendgrid->url, $data );
+      $response = wp_remote_post( $url, $data );
     }
 
     return $response;
@@ -107,7 +119,14 @@ if ( ! function_exists('wp_mail'))
    */
   function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() )
   {
-    $sendgrid = new SendGrid( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+    if ( in_array( 'curl', get_loaded_extensions() ) )
+    {
+       $sendgrid = new SendGrid( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+    }
+    else
+    {
+       $sendgrid = new SendGridwp( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+    }
     $mail     = new SendGrid\Email();
 
     $method   = Sendgrid_Tools::get_send_method();
