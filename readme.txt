@@ -3,8 +3,8 @@ Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
-Tested up to: 4.1.1
-Stable tag: 1.5.4
+Tested up to: 4.3
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ SendGrid's cloud-based email infrastructure relieves businesses of the cost and 
 
 The SendGrid plugin uses SMTP or API integration to send outgoing emails from your WordPress installation. It replaces the wp_mail function included with WordPress. 
 
-First, you need to have PHP-curl extension enabled. To send emails through SMTP you need to install also the 'Swift Mailer' plugin. After installing 'Swift Mailer' plugin, you must have PHP-short_open_tag setting enabled in your php.ini file.
+First, you need to have PHP-curl extension enabled. To send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
 
 To have the SendGrid plugin running after you have activated it, go to the plugin's settings page and set the SendGrid credentials, and how your email will be sent - either through SMTP or API.
 
@@ -73,7 +73,7 @@ Requirements:
 
 1. PHP version >= 5.3.0
 2. You need to have PHP-curl extension enabled in order to send attachments.
-3. To send emails through SMTP you need to install also the 'Swift Mailer' plugin. After installing 'Swift Mailer' plugin, you must have PHP-short_open_tag setting enabled in your php.ini file.
+3. To send emails through SMTP you need to install also the 'Swift Mailer' plugin.
 
 To upload the SendGrid Plugin .ZIP file:
 
@@ -90,7 +90,7 @@ To auto install the SendGrid Plugin from the WordPress admin:
 4. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
 5. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
 
-Define SendGrid settings as global variables (wp-config.php):
+SendGrid settings can optionally be defined as global variables (wp-config.php):
 
 1. Set credentials (both need to be set in order to get credentials from variables and not from the database):
     * Username: define('SENDGRID_USERNAME', 'sendgrid_username');
@@ -121,6 +121,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Changelog ==
 
+= 1.6 =
+* Fix setTo method in SMTP option, update documentation, add link to SendGrid portal
 = 1.5.4 =
 * Updated the plugin to use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v3.0.0
 = 1.5.3 =
@@ -168,6 +170,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.6 =
+* Fix setTo method in SMTP option, update documentation, add link to SendGrid portal
 = 1.5.4 =
 * Updated the plugin to use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v3.0.0
 = 1.5.3 =

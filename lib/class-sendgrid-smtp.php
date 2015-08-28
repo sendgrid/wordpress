@@ -76,7 +76,7 @@ class Smtp
      * but Swift still requires a 'to' address. So we'll falsify it with the from address, as it will be 
      * ignored anyway.
      */
-    $message->setTo($mail->getFrom());
+    $message->setTo($mail->to);
     $message->setFrom($mail->getFrom(true));
     $message->setCc($mail->getCcs());
     $message->setBcc($mail->getBccs());
