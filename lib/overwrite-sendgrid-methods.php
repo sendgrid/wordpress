@@ -161,6 +161,7 @@ if ( ! function_exists('wp_mail'))
     // Headers
     $cc  = array();
     $bcc = array();
+    $unique_args = array();
     if ( empty( $headers ) ) {
       $headers = array();
     } else {
@@ -237,6 +238,20 @@ if ( ! function_exists('wp_mail'))
               break;
             case 'reply-to':
               $replyto = $content;
+              break;
+            case 'unique-args':
+              if ( false !== strpos( $content, ';' ) ) {
+                $unique_args = explode( ';', $content );
+              }
+              else {
+                $unique_args = (array) trim( $content );
+              }
+              foreach ( $unique_args as $unique_arg ) {
+                if ( false !== strpos( $content, '=' ) ) {
+                  list( $key, $val ) = explode( '=', $unique_arg );
+                  $mail->addUniqueArg( trim( $key ), trim( $val ) );
+                } 
+              }
               break;
             default:
               // Add it to our grand headers array
