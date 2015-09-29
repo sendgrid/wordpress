@@ -12,7 +12,7 @@ One of the most notable changes is how `addTo()` behaves. We are now using our W
 
 Smtpapi addressing methods cannot be mixed with non Smtpapi addressing methods. Meaning you cannot currently use Cc and Bcc with `addSmtpapiTo()`.
 
-The `send()` method now raises a `\SendGrid\Exception` if the response code is not 200 and returns an instance of `\SendGrid\Response`.
+The `send()` method now raises a `\SendGrid\Exception` by default if the response code is not 200 and returns an instance of `\SendGrid\Response`.
 
 ---
 
@@ -53,7 +53,7 @@ Add SendGrid to your `composer.json` file. If you are not using [Composer](http:
 ```json
 {  
   "require": {
-    "sendgrid/sendgrid": "~3.0"
+    "sendgrid/sendgrid": "~3.2"
   }
 }
 ```
@@ -84,10 +84,12 @@ There is a [sendgrid-php-example app](https://github.com/sendgrid/sendgrid-php-e
 
 ## Usage
 
-To begin using this library, initialize the SendGrid object with your SendGrid credentials.
+To begin using this library, initialize the SendGrid object with your SendGrid credentials OR a SendGrid [API Key](https://sendgrid.com/docs/User_Guide/Account/api_keys.html). API Key is the preferred method. API Keys are in beta. To configure API keys, visit https://sendgrid.com/beta/settings/api_key.
 
 ```php
 $sendgrid = new SendGrid('username', 'password');
+// OR
+$sendgrid = new SendGrid('sendgrid api key');
 ```
 
 Create a new SendGrid Email object and add your message details.
@@ -109,6 +111,17 @@ Send it.
 ```php
 $sendgrid->send($email);
 ```
+
+### Exceptions
+
+A `SendGrid\Exception` is raised by default if the response is not 200 OK.
+
+To disable exceptions, pass in the `raise_exceptions => false` option when creating a `SendGrid\Client`.
+
+```php
+$client = new SendGrid('SENDGRID_APIKEY', array('raise_exceptions' => false));
+```
+
 ### Options
 Options may be passed to the library when initializing the SendGrid object:
 
@@ -120,6 +133,7 @@ $options = array(
     'endpoint' => '/api/mail.send.json',
     'port' => null,
     'url' => null,
+    'raise_exceptions' => false
 );
 $sendgrid = new SendGrid('username', 'password', $options);
 ```
@@ -331,8 +345,6 @@ $email = new SendGrid\Email();
 $email
     ->setFrom('foo@bar.com')
     ->setFromName('Foo Bar')
-    ->setFrom('other@example.com')
-    ->setFromName('Other Guy')
 ;
 $sendgrid->send($email);
 ```
@@ -601,7 +613,7 @@ $email = new SendGrid\Email();
 $email
     ->addTo('foo@bar.com')
     ->setHtml('<div>Our logo:<img src="cid:file-cid"></div>')
-    ->addAttachment("../path/to/file.txt", "super_file.txt", "file-cid")
+    ->addAttachment("../path/to/file.png", "super_file.png", "file-cid")
 ;
 ```
 

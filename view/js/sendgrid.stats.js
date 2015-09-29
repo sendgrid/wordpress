@@ -114,6 +114,7 @@ jQuery(document).ready(function($) {
       }
       jQuery.each(response, function(key, value) {
         var dateString                = _splitDate(value.date);
+        value = value.stats[0].metrics;
         var date                      = Date.UTC(dateString[0], _convertMonthToUTC(dateString[1]), dateString[2]);
         var requestsThisDay           = value.requests ? value.requests : 0;
         var opensThisDay              = value.opens ? value.opens : 0;

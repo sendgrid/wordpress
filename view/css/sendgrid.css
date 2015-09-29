@@ -375,3 +375,7 @@
     width: 95.4%;
   }
 }
+
+.creds {
+  display: none;
+}

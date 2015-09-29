@@ -66,25 +66,28 @@ class Sendgrid_Settings
           }
         }
       } else {
-        $message = 'Options saved.';
-        $status  = 'updated';
-
-        if (isset($_POST['sendgrid_user']))
-        {
-          $user = $_POST['sendgrid_user'];
-          update_option('sendgrid_user', $user);
-        }
-
-        if (isset($_POST['sendgrid_pwd']))
-        {
-          $password = $_POST['sendgrid_pwd'];
-          update_option('sendgrid_pwd', $password);
-        }
-
-        if (isset($_POST['sendgrid_api']))
-        {
-          $method = $_POST['sendgrid_api'];
-          update_option('sendgrid_api', $method);
+        if ( isset ($_POST['auth_method'] ) ) {
+          if ( $_POST['auth_method'] == 'apikey' ) {
+            if ( ! $_POST['sendgrid_api_key'] ){
+              $message = 'Api key is required';
+              $status  = 'error';
+            } else {
+              if ( ! Sendgrid_Tools::check_api_key( $_POST['sendgrid_api_key'] ) ) {
+                $message = 'Invalid api key';
+                $status  = 'error';
+              }
+            }
+          } else {
+            if ( ! $_POST['sendgrid_user'] or ! $_POST['sendgrid_pwd'] ) {
+              $message = 'Username/Password are required';
+              $status  = 'error';
+            } else {
+              if ( ! Sendgrid_Tools::check_username_password( $_POST['sendgrid_user'], $_POST['sendgrid_pwd'] ) ) {
+                $message = 'Invalid username/password';
+                $status  = 'error';
+              }
+            }
+          }
         }
 
         if (isset($_POST['sendgrid_name']))
@@ -110,16 +113,53 @@ class Sendgrid_Settings
           $categories = $_POST['sendgrid_categories'];
           update_option('sendgrid_categories', $categories);
         }
+
+        if (isset($_POST['sendgrid_api']))
+        {
+          $method = $_POST['sendgrid_api'];
+          update_option('sendgrid_api', $method);
+        }
+
+        if (isset($_POST['auth_method']))
+        {
+          $auth_method = $_POST['auth_method'];
+          update_option('sendgrid_auth_method', $auth_method);
+        }
+
+        if ( ! isset( $status ) or ( isset( $status ) and ( $status != 'error' ) ) ) {
+          $message = 'Options saved.';
+          $status  = 'updated';
+
+          if (isset($_POST['sendgrid_api_key']))
+          {
+            $user = $_POST['sendgrid_api_key'];
+            update_option('sendgrid_api_key', $user);
+          }
+
+          if (isset($_POST['sendgrid_user']))
+          {
+            $user = $_POST['sendgrid_user'];
+            update_option('sendgrid_user', $user);
+          }
+
+          if (isset($_POST['sendgrid_pwd']))
+          {
+            $password = $_POST['sendgrid_pwd'];
+            update_option('sendgrid_pwd', $password);
+          }
+        }
       }
     }
     
-    $user       = Sendgrid_Tools::get_username();
-    $password   = Sendgrid_Tools::get_password();
-    $method     = Sendgrid_Tools::get_send_method();
-    $name       = Sendgrid_Tools::get_from_name();
-    $email      = Sendgrid_Tools::get_from_email();
-    $reply_to   = Sendgrid_Tools::get_reply_to();
-    $categories = Sendgrid_Tools::get_categories();
+    $user        = Sendgrid_Tools::get_username();
+    $password    = Sendgrid_Tools::get_password();
+    $api_key     = Sendgrid_Tools::get_api_key();
+    $method      = Sendgrid_Tools::get_send_method();
+    $auth_method = Sendgrid_Tools::get_auth_method();
+    $name        = Sendgrid_Tools::get_from_name();
+    $email       = Sendgrid_Tools::get_from_email();
+    $reply_to    = Sendgrid_Tools::get_reply_to();
+    $categories  = Sendgrid_Tools::get_categories();
 
     $allowed_methods = array('smtp', 'api');
     if (!in_array($method, $allowed_methods))
@@ -135,16 +175,22 @@ class Sendgrid_Settings
       $status = 'error';
     }
 
-    if ( $user and $password )
-    {
-      if ( ! Sendgrid_Tools::check_username_password( $user, $password ) )
-      {
-        $message = 'Invalid username/password';
-        $status  = 'error';
+    if ( $api_key ) {
+      if ( ! Sendgrid_Tools::check_api_key( $api_key ) ) {
+          $message = 'Invalid api key';
+          $status  = 'error';
+        }
+    } else {
+      if ( $user and $password ) {
+        if ( ! Sendgrid_Tools::check_username_password( $user, $password ) ) {
+            $message = 'Invalid username/password';
+            $status  = 'error';
+        }
       }
     }
 
     $are_global_credentials = ( defined('SENDGRID_USERNAME') and defined('SENDGRID_PASSWORD') );
+    $is_global_api_key = defined('SENDGRID_API_KEY');
         
     require_once dirname( __FILE__ ) . '/../view/sendgrid_settings.php';
   }
@@ -193,5 +239,7 @@ class Sendgrid_Settings
     }
 
     wp_enqueue_style( 'sendgrid', plugin_dir_url( __FILE__ ) . '../view/css/sendgrid.css' );
+
+    wp_enqueue_script( 'sendgrid', plugin_dir_url( __FILE__ ) . '../view/js/sendgrid.settings.js', array('jquery') );
   }
 }

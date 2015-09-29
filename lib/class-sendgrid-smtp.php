@@ -1,6 +1,6 @@
 <?php
 
-class Smtp
+class SGSmtp
 {
   //the available ports
   const TLS = 587;
@@ -26,7 +26,7 @@ class Smtp
     $this->password = $password;
 
     //set the default port
-    $this->port = Smtp::TLS;
+    $this->port = SGSmtp::TLS;
   }
 
   /* setPort

@@ -38,9 +38,17 @@ if ( ! function_exists('wp_mail'))
    */
   function wp_send( SendGrid\Email $email, $sendgrid ) 
   {
-    $form             = $email->toWebFormat();
-    $form['api_user'] = Sendgrid_Tools::get_username(); 
-    $form['api_key']  = Sendgrid_Tools::get_password(); 
+    $form    = $email->toWebFormat();
+    $headers = array();
+    $api_key = Sendgrid_Tools::get_api_key();
+    if ( ! $api_key ) {
+      $form['api_user'] = Sendgrid_Tools::get_username(); 
+      $form['api_key']  = Sendgrid_Tools::get_password();
+    } else {
+      $headers = array(
+        'Authorization' => 'Bearer ' . $api_key
+      );
+    }
 
     $url = $sendgrid->url . $sendgrid->endpoint;
 
@@ -65,18 +73,19 @@ if ( ! function_exists('wp_mail'))
           unset( $form[$value] );
         }
 
-        $data = array(
-          'body' => $form 
-        );
-
+        $data = array('body' => $form);
+        if ( count( $headers ) ) {
+          $data['headers'] = $headers;
+        }
         $response = wp_remote_post( $url, $data );
       }
     }
     else
     {
-      $data = array(
-        'body' => $form
-      );
+      $data = array('body' => $form);
+      if ( count( $headers ) ) {
+        $data['headers'] = $headers;
+      }
 
       $response = wp_remote_post( $url, $data );
     }
@@ -121,11 +130,19 @@ if ( ! function_exists('wp_mail'))
   {
     if ( in_array( 'curl', get_loaded_extensions() ) )
     {
-       $sendgrid = new SendGrid( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+      if ( ! Sendgrid_Tools::get_api_key()) {
+        $sendgrid = new SendGrid( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+      } else {
+        $sendgrid = new SendGrid( Sendgrid_Tools::get_api_key() );
+      }
     }
     else
     {
-       $sendgrid = new SendGridwp( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+      if ( ! Sendgrid_Tools::get_api_key() ) {
+        $sendgrid = new SendGridwp( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+      } else {
+        $sendgrid = new SendGridwp( Sendgrid_Tools::get_api_key() );
+      }
     }
     $mail     = new SendGrid\Email();
 
@@ -404,8 +421,8 @@ if ( ! function_exists('wp_mail'))
       {
         if ( class_exists('Swift') )
         {
-          $smtp = new Smtp( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
-
+          $smtp = new SGSmtp( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+        
           return $smtp->send( $mail );
         }
         else 
