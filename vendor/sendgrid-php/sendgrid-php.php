@@ -1,4 +1,4 @@
 <?php
-require 'vendor/autoload.php';
-require 'lib/SendGrid.php';
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/lib/SendGrid.php';
 ?>
