@@ -160,6 +160,20 @@ class Sendgrid_Tools
   }
 
   /**
+   * Return port from the database or global variable
+   *
+   * @return string port
+   */
+  public static function get_port()
+  {
+    if ( defined('SENDGRID_PORT') ) {
+      return SENDGRID_PORT;
+    } else {
+      return get_option('sendgrid_port');
+    }
+  }
+
+  /**
    * Return auth method from the database or global variable
    *
    * @return string auth_method

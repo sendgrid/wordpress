@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 1.6.3
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,9 +120,14 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 6. Header provided in the send test email form. 
 7. If you click in the right corner from the top of the page on the "Help" button, a popup window with more information will appear. 
 8. Select the time interval for which you want to see SendGrid statistics and charts.
+9. Now you are able to configure port number when using SMTP method.
 
 == Changelog ==
 
+= 1.6.5 =
+* Add configurable port number for SMTP method, Specify full path for sendgrid php library, Fix special characters and new lines issues
+= 1.6.4 =
+* Add support for toName in API method, Add required Text Domain
 = 1.6.3 =
 * Update Smtp class name to avoid conflicts
 = 1.6.2 =
@@ -178,6 +183,10 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.6.5 =
+* Add configurable port number for SMTP method, Specify full path for sendgrid php library, Fix special characters and new lines issues
+= 1.6.4 =
+* Add support for toName in API method, Add required Text Domain
 = 1.6.3 =
 * Update Smtp class name to avoid conflicts
 = 1.6.2 =

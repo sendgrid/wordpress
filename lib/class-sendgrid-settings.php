@@ -36,10 +36,16 @@ class Sendgrid_Settings
       if ( isset( $_POST['email_test'] ) and $_POST['email_test'] )
       {
         $to      = $_POST['sendgrid_to'];
-        $subject = $_POST['sendgrid_subj'];
-        $body    = $_POST['sendgrid_body'];
+        $subject = stripslashes( $_POST['sendgrid_subj'] );
+        $body    = stripslashes( $_POST['sendgrid_body'] );
         $headers = $_POST['sendgrid_headers'];
-        $sent    = wp_mail($to, $subject, $body, $headers);
+        if ( preg_match( "/content-type:\s*text\/html/i", $headers ) ) {
+          $body_br = nl2br( $body );
+        } else {
+          $body_br =  $body;
+        }
+
+        $sent    = wp_mail($to, $subject, $body_br, $headers);
         if ( 'api' == Sendgrid_Tools::get_send_method() )
         {
           $sent = json_decode( $sent['body'] );
@@ -126,6 +132,11 @@ class Sendgrid_Settings
           update_option('sendgrid_auth_method', $auth_method);
         }
 
+        if ( isset( $_POST['sendgrid_port'] ) ) {
+          $port = $_POST['sendgrid_port'];
+          update_option('sendgrid_port', $port);
+        }
+
         if ( ! isset( $status ) or ( isset( $status ) and ( $status != 'error' ) ) ) {
           $message = 'Options saved.';
           $status  = 'updated';
@@ -156,10 +167,11 @@ class Sendgrid_Settings
     $api_key     = Sendgrid_Tools::get_api_key();
     $method      = Sendgrid_Tools::get_send_method();
     $auth_method = Sendgrid_Tools::get_auth_method();
-    $name        = Sendgrid_Tools::get_from_name();
+    $name        = stripslashes( Sendgrid_Tools::get_from_name() );
     $email       = Sendgrid_Tools::get_from_email();
     $reply_to    = Sendgrid_Tools::get_reply_to();
-    $categories  = Sendgrid_Tools::get_categories();
+    $categories  = stripslashes( Sendgrid_Tools::get_categories() );
+    $port        = Sendgrid_Tools::get_port();
 
     $allowed_methods = array('smtp', 'api');
     if (!in_array($method, $allowed_methods))
@@ -191,6 +203,7 @@ class Sendgrid_Settings
 
     $are_global_credentials = ( defined('SENDGRID_USERNAME') and defined('SENDGRID_PASSWORD') );
     $is_global_api_key = defined('SENDGRID_API_KEY');
+    $has_port = defined('SENDGRID_PORT');
         
     require_once dirname( __FILE__ ) . '/../view/sendgrid_settings.php';
   }

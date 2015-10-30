@@ -62,6 +62,16 @@
             </select>
           </td>
         </tr>
+        <tr valign="top" class="port">
+          <th scope="row"><?php _e("PORT: "); ?></th>
+          <td>
+            <select name="sendgrid_port" id="sendgrid_port" <?php disabled( $has_port ); ?>>
+              <option value="<?php echo SGSmtp::TLS ?>" id="tls" <?php echo ( ( SGSmtp::TLS == $port ) or (! $port ) ) ? 'selected' : '' ?>><?php echo SGSmtp::TLS ?></option>
+              <option value="<?php echo SGSmtp::TLS_ALTERNATIVE ?>" id="tls_alt" <?php echo ( SGSmtp::TLS_ALTERNATIVE == $port ) ? 'selected' : '' ?>><?php echo SGSmtp::TLS_ALTERNATIVE ?></option>
+              <option value="<?php echo SGSmtp::SSL ?>" id="ssl" <?php echo ( SGSmtp::SSL == $port ) ? 'selected' : '' ?>><?php echo SGSmtp::SSL ?></option>
+            </select>
+          </td>
+        </tr>
       </tbody>
     </table>
     <br />

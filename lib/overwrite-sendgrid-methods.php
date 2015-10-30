@@ -340,17 +340,16 @@ if ( ! function_exists('wp_mail'))
         }
       }
     }
-    
-    if ( ( 'api' == $method ) and ( count( $cc ) or count( $bcc ) ) )
+
+    $toname = array();
+    foreach ( (array) $to as $key => $recipient )
     {
-      foreach ( (array) $to as $key => $recipient )
+      // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
+      if ( preg_match(  '/(.*)<(.+)>/', $recipient, $matches ) )
       {
-        // Break $recipient into name and address parts if in the format "Foo <bar@baz.com>"
-        if ( preg_match(  '/(.*)<(.+)>/', $recipient, $matches ) )
-        {
-          if ( 3 == count( $matches ) ) {
-            $to[ $key ] = trim( $matches[2] );
-          }
+        if ( 3 == count( $matches ) ) {
+          $to[ $key ] = trim( $matches[2] );
+          $toname[ $key ] = trim( $matches[1] );
         }
       }
     }
@@ -361,11 +360,17 @@ if ( ! function_exists('wp_mail'))
 
     $content_type = apply_filters( 'wp_mail_content_type', $content_type );
 
-    $mail->setTos( $to )
-         ->setSubject( $subject )
+    $mail->setSubject( $subject )
          ->setText( $message )
          ->addCategory( SENDGRID_CATEGORY )
          ->setFrom( $from_email );
+
+    if ( 'api' == $method ) {
+      $mail->addTo( $to , $toname );
+    }
+    else {
+      $mail->addTo( $to );
+    }
 
     $categories = explode( ',', Sendgrid_Tools::get_categories() );
     foreach ($categories as $category)
@@ -422,7 +427,10 @@ if ( ! function_exists('wp_mail'))
         if ( class_exists('Swift') )
         {
           $smtp = new SGSmtp( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
-        
+          if ( Sendgrid_Tools::get_port() ) {
+            $smtp->setPort( Sendgrid_Tools::get_port() );
+          }
+
           return $smtp->send( $mail );
         }
         else 
