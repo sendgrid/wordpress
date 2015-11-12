@@ -3,14 +3,12 @@
 Plugin Name: SendGrid
 Plugin URI: http://wordpress.org/plugins/sendgrid-email-delivery-simplified/
 Description: Email Delivery. Simplified. SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
-Version: 1.6.5
+Version: 1.6.6
 Author: SendGrid
 Author URI: http://sendgrid.com
 Text Domain: sendgrid-email-delivery-simplified
 License: GPLv2
 */
-
-$plugin = plugin_basename( __FILE__ );
 
 if ( version_compare( phpversion(), '5.3.0', '<' ) ) {
   add_action( 'admin_notices', 'php_version_error' );
@@ -57,7 +55,7 @@ else
   require_once plugin_dir_path( __FILE__ ) . '/lib/class-sendgrid-smtp.php';
 
   // Initialize SendGrid Settings
-  new Sendgrid_Settings( $plugin );
+  new Sendgrid_Settings( plugin_basename( __FILE__ ) );
 
   // Initialize SendGrid Statistics
   new Sendgrid_Statistics();

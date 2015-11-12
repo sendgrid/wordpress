@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -124,6 +124,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Changelog ==
 
+= 1.6.6 =
+* Remove $plugin variable to avoid conflict with other plugins
 = 1.6.5 =
 * Add configurable port number for SMTP method, Specify full path for sendgrid php library, Fix special characters and new lines issues
 = 1.6.4 =
@@ -183,6 +185,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.6.6 =
+* Remove $plugin variable to avoid conflict with other plugins
 = 1.6.5 =
 * Add configurable port number for SMTP method, Specify full path for sendgrid php library, Fix special characters and new lines issues
 = 1.6.4 =
