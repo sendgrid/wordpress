@@ -129,9 +129,9 @@ class Sendgrid_Statistics
 
     if ( $_POST['type'] && 'general' != $_POST['type'] ) {
       if( 'wordpress' == $_POST['type'] ) {
-        $parameters['category'] = 'wp_sendgrid_plugin';
+        $parameters['categories'] = 'wp_sendgrid_plugin';
       } else {
-        $parameters['category'] = urlencode( $_POST['type'] );
+        $parameters['categories'] = urlencode( $_POST['type'] );
       }
     }
 
