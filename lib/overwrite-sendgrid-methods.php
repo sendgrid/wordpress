@@ -175,6 +175,11 @@ if ( ! function_exists('wp_mail'))
       }
     }
 
+    $template = Sendgrid_Tools::get_template();
+    if ( $template) {
+      $mail->setTemplateId( $template );
+    }
+
     // Headers
     $cc  = array();
     $bcc = array();
@@ -268,6 +273,14 @@ if ( ! function_exists('wp_mail'))
                   list( $key, $val ) = explode( '=', $unique_arg );
                   $mail->addUniqueArg( trim( $key ), trim( $val ) );
                 } 
+              }
+              break;
+            case 'template':
+              $template_ok = Sendgrid_Tools::check_template( trim( $content ) );
+              if ( $template_ok ) {
+                $mail->setTemplateId( trim( $content ) );
+              } elseif ( Sendgrid_Tools::get_template() ) {
+                $mail->setTemplateId( Sendgrid_Tools::get_template() );
               }
               break;
             default:

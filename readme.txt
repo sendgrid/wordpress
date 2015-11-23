@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 1.6.6
+Stable tag: 1.6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,8 @@ First, you need to have PHP-curl extension enabled. To send emails through SMTP 
 To have the SendGrid plugin running after you have activated it, go to the plugin's settings page and set the SendGrid credentials, and how your email will be sent - either through SMTP or API.
 
 You can also set default values for the "Name", "Sending Address" and the "Reply Address", so that you don't need to set these headers every time you want to send an email from your application.
+
+You can set the template ID to be used in all your emails on the settings page or you can set it for each email in headers. 
 
 Emails are tracked and automatically tagged for statistics within the SendGrid Dashboard. You can also add general tags to every email sent, as well as particular tags based on selected emails defined by your requirements. 
 
@@ -60,6 +62,7 @@ $headers[] = 'From: Me Myself <me@example.net>';
 $headers[] = 'Cc: address4@sendgrid.com';
 $headers[] = 'Bcc: address5@sendgrid.com';
 $headers[] = 'unique-args:customer=mycustomer;location=mylocation'
+$headers[] = 'template: templateID'
  
 $attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
  
@@ -93,9 +96,10 @@ To auto install the SendGrid Plugin from the WordPress admin:
 
 SendGrid settings can optionally be defined as global variables (wp-config.php):
 
-1. Set credentials (both need to be set in order to get credentials from variables and not from the database):
+1. Set credentials (You can use credentials or Api key. If using credentials, both need to be set in order to get credentials from variables and not from the database):
     * Username: define('SENDGRID_USERNAME', 'sendgrid_username');
     * Password: define('SENDGRID_PASSWORD', 'sendgrid_password');
+    * API key:  define('SENDGRID_API_KEY', 'sendgrid_api_key');
 
 2. Set email related settings:
     * Send method ('api' or 'smtp'): define('SENDGRID_SEND_METHOD', 'api');
@@ -103,6 +107,7 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
     * From email: define('SENDGRID_FROM_EMAIL', 'from_email@example.com');
     * Reply to email: define('SENDGRID_REPLY_TO', 'reply_to@example.com');
     * Categories: define('SENDGRID_CATEGORIES', 'category_1,category_2');
+    * Template: define('SENDGRID_TEMPLATE', 'templateID');
 
 == Frequently asked questions ==
 
@@ -121,9 +126,12 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 7. If you click in the right corner from the top of the page on the "Help" button, a popup window with more information will appear. 
 8. Select the time interval for which you want to see SendGrid statistics and charts.
 9. Now you are able to configure port number when using SMTP method.
+10. You are able to configure what template to use for sending emails.
 
 == Changelog ==
 
+= 1.6.7 =
+* Ability to use email templates, fix category statistics, display sender test form if we only have sending errors
 = 1.6.6 =
 * Remove $plugin variable to avoid conflict with other plugins
 = 1.6.5 =
@@ -185,6 +193,8 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.6.7 =
+* Ability to use email templates, fix category statistics, display sender test form if we only have sending errors
 = 1.6.6 =
 * Remove $plugin variable to avoid conflict with other plugins
 = 1.6.5 =

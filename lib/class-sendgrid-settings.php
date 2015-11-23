@@ -57,6 +57,7 @@ class Sendgrid_Settings
             $errors  = ( $sent->errors[0] ) ? $sent->errors[0] : $sent;
             $message = 'Email not sent. ' . $errors;
             $status  = 'error';
+            $error_type = 'sending';
           }
 
         }
@@ -69,6 +70,7 @@ class Sendgrid_Settings
           } else {
             $message = 'Email not sent. ' . $sent;
             $status  = 'error';
+            $error_type = 'sending';
           }
         }
       } else {
@@ -118,6 +120,12 @@ class Sendgrid_Settings
         {
           $categories = $_POST['sendgrid_categories'];
           update_option('sendgrid_categories', $categories);
+        }
+
+        if ( isset( $_POST['sendgrid_template'] ) )
+        {
+          $template = $_POST['sendgrid_template'];
+          update_option( 'sendgrid_template', $template );
         }
 
         if (isset($_POST['sendgrid_api']))
@@ -171,6 +179,7 @@ class Sendgrid_Settings
     $email       = Sendgrid_Tools::get_from_email();
     $reply_to    = Sendgrid_Tools::get_reply_to();
     $categories  = stripslashes( Sendgrid_Tools::get_categories() );
+    $template    = stripslashes( Sendgrid_Tools::get_template() );
     $port        = Sendgrid_Tools::get_port();
 
     $allowed_methods = array('smtp', 'api');
@@ -198,6 +207,13 @@ class Sendgrid_Settings
             $message = 'Invalid username/password';
             $status  = 'error';
         }
+      }
+    }
+
+    if ( $template ) {
+      if ( ! Sendgrid_Tools::check_template( $template ) ) {
+        $message = 'Template not found';
+        $status  = 'error';
       }
     }
 

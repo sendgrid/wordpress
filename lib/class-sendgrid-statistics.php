@@ -127,15 +127,17 @@ class Sendgrid_Statistics
       $parameters['end_date']   = $_POST['end_date'];
     }
 
-    if ( $_POST['type'] && 'general' != $_POST['type'] ) {
+    $endpoint = 'v3/stats';
+    
+    if ( isset( $_POST['type'] ) && 'general' != $_POST['type'] ) {
       if( 'wordpress' == $_POST['type'] ) {
-        $parameters['category'] = 'wp_sendgrid_plugin';
+        $parameters['categories'] = 'wp_sendgrid_plugin';
       } else {
-        $parameters['category'] = urlencode( $_POST['type'] );
+        $parameters['categories'] = urlencode( $_POST['type'] );
       }
+      $endpoint = 'v3/categories/stats';
     }
-
-    echo Sendgrid_Tools::curl_request( 'v3/stats', $parameters );
+    echo Sendgrid_Tools::curl_request( $endpoint, $parameters );
 
     die();
   }

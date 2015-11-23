@@ -11,7 +11,7 @@ class Sendgrid_Tools
    */
   public static function check_username_password( $username, $password )
   {
-    $url = 'https://sendgrid.com/api/profile.get.json?';
+    $url = 'https://api.sendgrid.com/api/profile.get.json?';
     $url .= "api_user=" . urlencode($username) . "&api_key=" . urlencode($password);
 
     $response = wp_remote_get( $url );
@@ -55,6 +55,37 @@ class Sendgrid_Tools
     $response = json_decode( $response['body'], true );
 
     if ( isset( $response['errors'] ) ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Check template
+   *
+   * @param   string  $template   sendgrid template
+   * @return  bool
+   */
+  public static function check_template( $template )
+  {
+    $url = 'v3/templates/' . $template;
+
+    $parameters['api_user'] = Sendgrid_Tools::get_username();
+    $parameters['api_key']  = Sendgrid_Tools::get_password();
+    $parameters['apikey']   = Sendgrid_Tools::get_api_key();
+
+    $response = Sendgrid_Tools::curl_request( $url, $parameters );
+
+    if ( !$response ) 
+    {
+      return false;
+    }
+
+    $response = json_decode( $response, true );
+
+    if ( isset( $response['error'] ) )
+    {
       return false;
     }
 
@@ -263,5 +294,19 @@ class Sendgrid_Tools
     }
 
     return array();
+  }
+
+  /**
+   * Return template from the database or global variable
+   *
+   * @return string template
+   */
+  public static function get_template()
+  {
+    if ( defined('SENDGRID_TEMPLATE') ) {
+      return SENDGRID_TEMPLATE;
+    } else {
+      return get_option( 'sendgrid_template' );
+    }
   }
 }

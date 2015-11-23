@@ -110,6 +110,15 @@
           </td>
         </tr>
         <tr valign="top">
+          <th scope="row"><?php _e("Template: "); ?></th>
+          <td>
+            <input type="text" name="sendgrid_template" value="<?php echo $template; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_TEMPLATE') ); ?>>
+            <span><small><em><?php _e('Leave blank to send without template.') ?></em></small></span>
+            <p class="description"><?php _e('The template ID used to send emails. <br />
+            Example: 0b1240a5-188d-4ea7-93c1-19a7a89466b2.') ?></p>
+          </td>
+        </tr>
+        <tr valign="top">
           <td colspan="2">
             <p>
               <?php _e('Disabled fields in this form means that they are already configured in the config file.'); ?>
@@ -123,7 +132,7 @@
     </p>
   </form>  
   <br />
-  <?php if ( !isset($status) or 'updated' == $status ): ?>
+  <?php if ( !isset($status) or ( 'updated' == $status ) or ( 'error' == $status and isset( $error_type ) and 'sending' == $error_type ) ): ?>
     <h2><?php _e('SendGrid Test') ?></h2>
     <h3><?php _e('Send a test email with these settings') ?></h3>
     <form name="sendgrid_test" method="POST" action="<?php echo str_replace('%7E', '~', $_SERVER['REQUEST_URI']); ?>">
