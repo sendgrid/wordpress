@@ -1,4 +1,4 @@
-=== SendGrid ===
+# SendGrid
 Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Send emails throught Sendgrid from your WordPress installation using SMTP or API integration.
 
-== Description ==
+## Description
 
 SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
 
@@ -51,7 +51,8 @@ After wp_mail function you need to run the `remove_filter('wp_mail_content_type'
 
 Example about how to send an HTML email using different headers:
 
-`$subject = 'test plugin';
+```php
+$subject = 'test plugin';
 $message = 'testing WordPress plugin';
 $to = 'address1@sendgrid.com, Address2 <address2@sendgrid.com@>, address3@sendgrid.com';
 or
@@ -70,8 +71,8 @@ add_filter('wp_mail_content_type', 'set_html_content_type');
 $mail = wp_mail($to, $subject, $message, $headers, $attachments);
  
 remove_filter('wp_mail_content_type', 'set_html_content_type');`
-
-== Installation ==
+```
+## Installation
 
 Requirements:
 
@@ -109,13 +110,13 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
     * Categories: define('SENDGRID_CATEGORIES', 'category_1,category_2');
     * Template: define('SENDGRID_TEMPLATE', 'templateID');
 
-== Frequently asked questions ==
+## Frequently asked questions
 
-= What credentials do I need to add on settings page =
+### What credentials do I need to add on settings page
 
 Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a> and use these credentials.
 
-== Screenshots ==
+## Screenshots
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
 2. After activation "Settings" link will appear. 
@@ -128,114 +129,163 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 9. Now you are able to configure port number when using SMTP method.
 10. You are able to configure what template to use for sending emails.
 
-== Changelog ==
+## Changelog
 
-= 1.6.7 =
+**1.6.7**
 * Ability to use email templates, fix category statistics, display sender test form if we only have sending errors
-= 1.6.6 =
+
+**1.6.6**
 * Remove $plugin variable to avoid conflict with other plugins
-= 1.6.5 =
+
+**1.6.5**
 * Add configurable port number for SMTP method, Specify full path for sendgrid php library, Fix special characters and new lines issues
-= 1.6.4 =
+
+**1.6.4**
 * Add support for toName in API method, Add required Text Domain
-= 1.6.3 =
+
+**1.6.3**
 * Update Smtp class name to avoid conflicts
-= 1.6.2 =
+
+**1.6.2**
 * Add Api Keys for authentication, use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v3.2.0
-= 1.6.1 =
-* Add unique arguments 
-= 1.6 =
+
+**1.6.1**
+* Add unique arguments **1.6
 * Fix setTo method in SMTP option, update documentation, add link to SendGrid portal
-= 1.5.4 =
+
+**1.5.4**
 * Updated the plugin to use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v3.0.0
-= 1.5.3 =
+
+**1.5.3**
 * Fix attachments issue
-= 1.5.2 =
+
+**1.5.2**
 * Fix urlencoded username issue
-= 1.5.1 =
+
+**1.5.1**
 * Fix wp_remote issue
-= 1.5.0 =
+
+**1.5.0**
 * Updated the plugin to use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v2.2.0
-= 1.4.6 =
+
+**1.4.6**
 * Added constants for SendGrid settings
-= 1.4.5 =
+
+**1.4.5**
 * Fix changelog order in readme file
-= 1.4.4 =
+
+**1.4.4**
 * Fix unicode filename for icon-128x128.png image
-= 1.4.3 =
+
+**1.4.3**
 * Update plugin logo, description, screenshots on installation page
-= 1.4.2 =
+
+**1.4.2**
 * Added SendGrid Statistics for the categories added in the SendGrid Settings Page
-= 1.4.1 =
+
+**1.4.1**
 * Added support to set additional categories
-= 1.4 =
+
+**1.4**
 * Fix warnings for static method, add notice for php version < 5.3.0, refactor plugin code
-= 1.3.2 = 
+
+**1.3.2**
 * Fix URL for loading image
-= 1.3.1 = 
+
+**1.3.1**
 * Fixed reply-to to accept: "name <email@example.com>"
-= 1.3 =
+
+**1.3**
 * Added support for WordPress 3.8, fixed visual issues for WordPress 3.7
-= 1.2.1 =
+
+**1.2.1**
 * Fix errors: set_html_content_type error, WP_DEBUG enabled notice, Reply-To header is overwritten by default option
-= 1.2 =
+
+**1.2**
 * Added statistics for emails sent through WordPress plugin
-= 1.1.3 =
+
+**1.1.3**
 * Fix missing argument warning message
-= 1.1.2 =
+
+**1.1.2**
 * Fix display for october charts
-= 1.1.1 =
+
+**1.1.1**
 * Added default category on sending
-= 1.1 =
+
+**1.1**
 * Added SendGrid Statistics 
-= 1.0 =
+
+**1.0**
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
-== Upgrade notice ==
+## Upgrade notice
 
-= 1.6.7 =
+**1.6.7**
 * Ability to use email templates, fix category statistics, display sender test form if we only have sending errors
-= 1.6.6 =
+
+**1.6.6**
 * Remove $plugin variable to avoid conflict with other plugins
-= 1.6.5 =
+
+**1.6.5**
 * Add configurable port number for SMTP method, Specify full path for sendgrid php library, Fix special characters and new lines issues
-= 1.6.4 =
+
+**1.6.4**
 * Add support for toName in API method, Add required Text Domain
-= 1.6.3 =
+
+**1.6.3**
 * Update Smtp class name to avoid conflicts
-= 1.6.2 =
+
+**1.6.2**
 * Add Api Keys for authentication, use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v3.2.0
-= 1.6.1 =
+
+**1.6.1**
 * Add unique arguments 
-= 1.6 =
+
+**1.6**
 * Fix setTo method in SMTP option, update documentation, add link to SendGrid portal
-= 1.5.4 =
+
+**1.5.4**
 * Updated the plugin to use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v3.0.0
-= 1.5.3 =
+
+**1.5.3**
 * Fix attachments issue
-= 1.5.2 =
+
+**1.5.2**
 * Fix urlencoded username issue
-= 1.5.1 =
+
+**1.5.1**
 * Fix wp_remote issue
-= 1.5.0 =
+
+**1.5.0**
 * Updated the plugin to use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v2.2.0
-= 1.4.6 =
+
+**1.4.6**
 * Added constants for  SendGrid settings
-= 1.4.5 =
+
+**1.4.5**
 * Fix changelog order in readme file
-= 1.4.4 =
+
+**1.4.4**
 * Fix unicode filename for icon-128x128.png image
-= 1.4.3 =
+
+**1.4.3**
 * Update plugin logo, description, screenshots on installation page
-= 1.4.2 =
+
+**1.4.2**
 * Added SendGrid Statistics for the categories added in the SendGrid Settings Page
-= 1.4.1 =
+
+**1.4.1**
 * Added support to set additional categories
-= 1.4 =
+
+**1.4**
 * Fix warnings for static method, add notice for php version < 5.3.0, refactor plugin code
-= 1.3 =
+
+**1.3** 
 * Added support for WordPress 3.8, fixed visual issues for WordPress 3.7
-= 1.2 =
+
+**1.2** 
 * Now you can switch between Sendgrid general statistics and Sendgrid WordPress statistics.
-= 1.1 =
+
+**1 1.1** 
 * SendGrid Statistics can be used by selecting the time interval for which you want to see your statistics.
