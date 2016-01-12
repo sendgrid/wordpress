@@ -261,6 +261,9 @@ if ( ! function_exists('wp_mail'))
             case 'reply-to':
               $replyto = $content;
               break;
+            case 'category':
+              $category = $content;
+              break;
             case 'unique-args':
               if ( false !== strpos( $content, ';' ) ) {
                 $unique_args = explode( ';', $content );
@@ -372,10 +375,13 @@ if ( ! function_exists('wp_mail'))
       $content_type = 'text/plain';
 
     $content_type = apply_filters( 'wp_mail_content_type', $content_type );
-
+    $SENDGRID_CATEGORY = SENDGRID_CATEGORY;
+    if (isset($category)) {
+        $SENDGRID_CATEGORY = $category;
+    }
     $mail->setSubject( $subject )
          ->setText( $message )
-         ->addCategory( SENDGRID_CATEGORY )
+         ->addCategory( $SENDGRID_CATEGORY )
          ->setFrom( $from_email );
 
     if ( 'api' == $method ) {
