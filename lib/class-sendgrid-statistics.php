@@ -25,8 +25,12 @@ class Sendgrid_Statistics
    */
   public static function add_dashboard_widget()
   {
-    if ( ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) 
-      and ! Sendgrid_Tools::check_api_key( Sendgrid_Tools::get_api_key() ) ) {
+    $api_key = Sendgrid_Tools::get_api_key();
+
+    if ( ( Sendgrid_Tools::get_auth_method() == "apikey" and 
+      ( ! Sendgrid_Tools::check_api_key( Sendgrid_Tools::get_api_key() ) or ! Sendgrid_Tools::check_api_key_stats( $api_key ) ) ) or
+      ( Sendgrid_Tools::get_auth_method() == "username" and
+      ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) ) ) {
       return;
     }
 
@@ -51,8 +55,9 @@ class Sendgrid_Statistics
    */
   public static function add_statistics_menu()
   {
-    if ( ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) 
-      and ! Sendgrid_Tools::check_api_key( Sendgrid_Tools::get_api_key() ) ) {
+    if ( ( Sendgrid_Tools::get_auth_method() == "apikey" and ! Sendgrid_Tools::check_api_key( Sendgrid_Tools::get_api_key() ) ) or
+      ( Sendgrid_Tools::get_auth_method() == "username" and
+      ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) ) ) {
       return;
     }
 
@@ -67,6 +72,14 @@ class Sendgrid_Statistics
    */
   public static function show_statistics_page()
   {
+    $api_key = Sendgrid_Tools::get_api_key();
+
+    if ( ( "apikey" == Sendgrid_Tools::get_auth_method() ) and isset( $api_key ) and ! Sendgrid_Tools::check_api_key_stats( $api_key ) )
+    {
+      $message = 'Your Api key is not having statistics permissions';
+      $status  = 'error';
+    }
+
     require plugin_dir_path( __FILE__ ) . '../view/sendgrid_stats.php';
   }
 
@@ -116,7 +129,13 @@ class Sendgrid_Statistics
 
     $parameters['api_user'] = Sendgrid_Tools::get_username();
     $parameters['api_key']  = Sendgrid_Tools::get_password();
-    $parameters['apikey']   = Sendgrid_Tools::get_api_key();
+
+    $api_key = Sendgrid_Tools::get_api_key();
+    if ( "apikey" == Sendgrid_Tools::get_auth_method() )
+    {
+      $parameters['apikey']   = $api_key;
+    }
+
 
     $parameters['data_type'] = 'global';
 

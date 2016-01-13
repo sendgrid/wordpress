@@ -39,7 +39,7 @@ class Sendgrid_Tools
    */
   public static function check_api_key( $api_key )
   {
-    $url = 'https://api.sendgrid.com/v3/user/profile';
+    $url = 'https://api.sendgrid.com/api/mail.send.json';
 
     $args = array(
       'headers' => array(
@@ -54,7 +54,39 @@ class Sendgrid_Tools
 
     $response = json_decode( $response['body'], true );
 
-    if ( isset( $response['errors'] ) ) {
+    if ( isset( $response['errors'] ) and 
+      ( ( 'Authenticated user is not authorized to send mail' == $response['errors'][0] ) or
+      ( 'The provided authorization grant is invalid, expired, or revoked' == $response['errors'][0] ) ) ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Check api_key stats permissions
+   *
+   * @param   string  $api_key   sendgrid api_key
+   * @return  bool
+   */
+  public static function check_api_key_stats( $api_key )
+  {
+    $url = 'https://api.sendgrid.com/v3/stats';
+
+    $args = array(
+      'headers' => array(
+        'Authorization' => 'Bearer ' . $api_key )
+    );
+
+    $response = wp_remote_get( $url, $args );
+
+    if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
+      return false;
+    }
+
+    $response = json_decode( $response['body'], true );
+
+    if ( isset( $response['errors'] ) and ( 'access forbidden' == $response['errors'][0]['message'] ) ) {
       return false;
     }
 
@@ -102,7 +134,7 @@ class Sendgrid_Tools
   public static function curl_request( $api = 'v3/stats', $parameters = array() )
   {
     $args = array();
-    if ( ! $parameters['apikey'] ) {
+    if ( ! isset( $parameters['apikey'] ) ) {
       $creds = base64_encode($parameters['api_user'] . ':' . $parameters['api_key']);
 
       $args = array(

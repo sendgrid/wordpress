@@ -379,3 +379,7 @@
 .creds {
   display: none;
 }
+
+#sendgrid-statistics-page .error {
+  width: 1660px;
+}

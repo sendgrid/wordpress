@@ -81,7 +81,7 @@ class Sendgrid_Settings
               $status  = 'error';
             } else {
               if ( ! Sendgrid_Tools::check_api_key( $_POST['sendgrid_api_key'] ) ) {
-                $message = 'Invalid api key';
+                $message = 'Invalid or without permissions api key';
                 $status  = 'error';
               }
             }

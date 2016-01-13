@@ -283,6 +283,13 @@ if ( ! function_exists('wp_mail'))
                 $mail->setTemplateId( Sendgrid_Tools::get_template() );
               }
               break;
+            case 'categories':
+              $categories = explode( ',', trim( $content ) );
+              foreach ( $categories as $category )
+              {
+                $mail->addCategory( $category );
+              }
+              break;
             default:
               // Add it to our grand headers array
               $headers[trim( $name )] = trim( $content );
