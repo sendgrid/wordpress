@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 1.6.9
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,7 +97,8 @@ To auto install the SendGrid Plugin from the WordPress admin:
 
 SendGrid settings can optionally be defined as global variables (wp-config.php):
 
-1. Set credentials (You can use credentials or Api key. If using credentials, both need to be set in order to get credentials from variables and not from the database. If using API key you need to make sure you set the Mail Send and Stats permissions to FULL ACCESS when you created the api key on Sendgrid side, so you can send emails and see statistics on wordpress):
+1. Set credentials (You can use credentials or Api key. If using credentials, both need to be set in order to get credentials from variables and not from the database. If using API key you need to make sure you set the Mail Send permissions to FULL ACCESS, Stats to READ ACCESS and Template Engine to READ or FULL ACCESS when you created the api key on SendGrid side, so you can send emails and see statistics on wordpress):
+    * Auth method ('apikey' or 'credentials'): define('SENDGRID_AUTH_METHOD', 'apikey');
     * Username: define('SENDGRID_USERNAME', 'sendgrid_username');
     * Password: define('SENDGRID_PASSWORD', 'sendgrid_password');
     * API key:  define('SENDGRID_API_KEY', 'sendgrid_api_key');
@@ -131,6 +132,14 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Changelog ==
 
+= 1.7.0 = 
+* BREAKING CHANGE : wp_mail() now returns only true/false to mirror the return values of the original wp_mail().
+* Added the possibility of setting the api key or username/password empty
+* Added the possibility of selecting the authentication method
+* Removed dependency on cURL, now all API requests are made through Wordpress
+* Sending mail via SMTP now supports API keys
+* Security improvements
+* Refactored old code
 = 1.6.9 =
 * Add categories in headers, add errror message on statistics page if API key is not having permissions
 = 1.6.8 =
@@ -198,6 +207,14 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.7.0 = 
+* BREAKING CHANGE : wp_mail() now returns only true/false to mirror the return values of the original wp_mail().
+* Added the possibility of setting the api key or username/password empty
+* Added the possibility of selecting the authentication method
+* Removed dependency on cURL, now all API requests are made through Wordpress
+* Sending mail via SMTP now supports API keys
+* Security improvements
+* Refactored old code
 = 1.6.9 =
 * Add categories in headers, add errror message on statistics page if API key is not having permissions
 = 1.6.8 =

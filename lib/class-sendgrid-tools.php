@@ -2,6 +2,12 @@
 
 class Sendgrid_Tools
 {
+  const CACHE_GROUP = "sendgrid";
+  const CHECK_CREDENTIALS_CACHE_KEY = "sendgrid_credentials_check";
+  const CHECK_API_KEY_CACHE_KEY = "sendgrid_api_key_check";
+  const VALID_CREDENTIALS_STATUS = "valid";
+  const INVALID_CREDENTIALS_STATUS = "invalid";
+
   /**
    * Check username/password
    *
@@ -9,8 +15,20 @@ class Sendgrid_Tools
    * @param   string  $password   sendgrid password
    * @return  bool
    */
-  public static function check_username_password( $username, $password )
+  public static function check_username_password( $username, $password, $clear_cache = false )
   {
+    if ( !$username or !$password )
+      return false;
+
+    if ( $clear_cache )
+      wp_cache_delete(self::CHECK_CREDENTIALS_CACHE_KEY, self::CACHE_GROUP);
+
+    $valid_username_password = wp_cache_get(self::CHECK_CREDENTIALS_CACHE_KEY, self::CACHE_GROUP);
+    if ( self::VALID_CREDENTIALS_STATUS == $valid_username_password )
+      return true;
+    elseif ( self::INVALID_CREDENTIALS_STATUS == $valid_username_password )
+      return false;
+
     $url = 'https://api.sendgrid.com/api/profile.get.json?';
     $url .= "api_user=" . urlencode($username) . "&api_key=" . urlencode($password);
 
@@ -18,6 +36,8 @@ class Sendgrid_Tools
     
     if ( !is_array($response) or !isset( $response['body'] ) )
     {
+      wp_cache_set(self::CHECK_CREDENTIALS_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60);
+
       return false;
     }
 
@@ -25,30 +45,48 @@ class Sendgrid_Tools
 
     if ( isset( $response['error'] ) )
     {
+      wp_cache_set(self::CHECK_CREDENTIALS_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60);
+
       return false;
     }
+
+    wp_cache_set(self::CHECK_CREDENTIALS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 1800);
 
     return true;
   }
 
   /**
-   * Check api_key
+   * Check apikey
    *
-   * @param   string  $api_key   sendgrid api_key
+   * @param   string  $apikey   sendgrid apikey
    * @return  bool
    */
-  public static function check_api_key( $api_key )
+  public static function check_api_key( $apikey, $clear_cache = false )
   {
+    if ( ! $apikey ) 
+      return false;
+
+    if ( $clear_cache )
+      wp_cache_delete(self::CHECK_API_KEY_CACHE_KEY, self::CACHE_GROUP);
+
+    $valid_apikey = wp_cache_get(self::CHECK_API_KEY_CACHE_KEY, self::CACHE_GROUP);
+    if ( self::VALID_CREDENTIALS_STATUS == $valid_apikey )
+      return true;
+    elseif ( self::INVALID_CREDENTIALS_STATUS == $valid_apikey )
+      return false;
+
     $url = 'https://api.sendgrid.com/api/mail.send.json';
 
     $args = array(
       'headers' => array(
-        'Authorization' => 'Bearer ' . $api_key )
+        'Authorization' => 'Bearer ' . $apikey )
     );
 
     $response = wp_remote_get( $url, $args );
-    
+
     if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
+      wp_cache_set(self::CHECK_API_KEY_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60);
+
       return false;
     }
 
@@ -57,38 +95,12 @@ class Sendgrid_Tools
     if ( isset( $response['errors'] ) and 
       ( ( 'Authenticated user is not authorized to send mail' == $response['errors'][0] ) or
       ( 'The provided authorization grant is invalid, expired, or revoked' == $response['errors'][0] ) ) ) {
+      wp_cache_set(self::CHECK_API_KEY_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60);
+
       return false;
     }
 
-    return true;
-  }
-
-  /**
-   * Check api_key stats permissions
-   *
-   * @param   string  $api_key   sendgrid api_key
-   * @return  bool
-   */
-  public static function check_api_key_stats( $api_key )
-  {
-    $url = 'https://api.sendgrid.com/v3/stats';
-
-    $args = array(
-      'headers' => array(
-        'Authorization' => 'Bearer ' . $api_key )
-    );
-
-    $response = wp_remote_get( $url, $args );
-
-    if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
-      return false;
-    }
-
-    $response = json_decode( $response['body'], true );
-
-    if ( isset( $response['errors'] ) and ( 'access forbidden' == $response['errors'][0]['message'] ) ) {
-      return false;
-    }
+    wp_cache_set(self::CHECK_API_KEY_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 1800);
 
     return true;
   }
@@ -101,41 +113,40 @@ class Sendgrid_Tools
    */
   public static function check_template( $template )
   {
+    if ( '' == $template )
+      return true;
+
     $url = 'v3/templates/' . $template;
 
-    $parameters['api_user'] = Sendgrid_Tools::get_username();
-    $parameters['api_key']  = Sendgrid_Tools::get_password();
+    $parameters['auth_method'] = Sendgrid_Tools::get_auth_method();
+    $parameters['api_username'] = Sendgrid_Tools::get_username();
+    $parameters['api_password']  = Sendgrid_Tools::get_password();
     $parameters['apikey']   = Sendgrid_Tools::get_api_key();
 
-    $response = Sendgrid_Tools::curl_request( $url, $parameters );
+    $response = Sendgrid_Tools::do_request( $url, $parameters );
 
-    if ( !$response ) 
-    {
+    if ( ! $response ) 
       return false;
-    }
 
     $response = json_decode( $response, true );
-
-    if ( isset( $response['error'] ) )
-    {
+    if ( isset( $response['error'] ) or ( isset( $response['errors'] ) && isset( $response['errors'][0]['message'] ) ) )
       return false;
-    }
 
     return true;
   }
 
   /**
-   * Make cURL request to SendGrid API
+   * Make request to SendGrid API
    *
    * @param type $api
    * @param type $parameters
    * @return json
    */
-  public static function curl_request( $api = 'v3/stats', $parameters = array() )
+  public static function do_request( $api = 'v3/stats', $parameters = array() )
   {
     $args = array();
-    if ( ! isset( $parameters['apikey'] ) ) {
-      $creds = base64_encode($parameters['api_user'] . ':' . $parameters['api_key']);
+    if ( "credentials" == $parameters['auth_method'] ) {
+      $creds = base64_encode($parameters['api_username'] . ':' . $parameters['api_password']);
 
       $args = array(
         'headers' => array(
@@ -150,6 +161,11 @@ class Sendgrid_Tools
         )
       );
     }
+
+    unset($parameters['auth_method']);
+    unset($parameters['api_username']);
+    unset($parameters['api_password']);
+    unset($parameters['apikey']);
 
     $data = urldecode( http_build_query( $parameters ) );
     $url = "https://api.sendgrid.com/$api?$data";
@@ -171,11 +187,30 @@ class Sendgrid_Tools
    */
   public static function get_username()
   {
-    if ( defined('SENDGRID_USERNAME') and defined('SENDGRID_PASSWORD') ) {
+    if ( defined('SENDGRID_USERNAME') ) {
       return SENDGRID_USERNAME;
     } else {
-      return get_option('sendgrid_user');
+      $username = get_option('sendgrid_user');
+      if( $username ) {
+        delete_option('sendgrid_user');
+        update_option('sendgrid_username', $username);
+      }
+
+      return get_option('sendgrid_username');
     }
+  }
+
+  /**
+   * Sets username in the database
+   * @param type string $username
+   * @return bool
+   */
+  public static function set_username($username)
+  {
+    if( ! isset( $username ) )
+      return update_option('sendgrid_username', '');
+
+    return update_option('sendgrid_username', $username);
   }
 
   /**
@@ -185,11 +220,31 @@ class Sendgrid_Tools
    */
   public static function get_password()
   {
-    if ( defined('SENDGRID_USERNAME') and defined('SENDGRID_PASSWORD') ) {
+    if ( defined('SENDGRID_PASSWORD') ) {
       return SENDGRID_PASSWORD;
     } else {
-      return get_option('sendgrid_pwd');
+      $password = get_option('sendgrid_pwd');
+      if( $password ) {
+        delete_option('sendgrid_pwd');
+        update_option('sendgrid_password', self::encrypt( $password, AUTH_KEY ) );
+      }
+
+      $password = get_option('sendgrid_password');
+      return ( $password == '' ? '' : self::decrypt($password, AUTH_KEY) );
     }
+  }
+
+  /**
+   * Sets password in the database
+   * @param type string $password
+   * @return bool
+   */
+  public static function set_password($password)
+  {
+    if( $password == '' )
+      return update_option('sendgrid_password', '');
+
+    return update_option('sendgrid_password', self::encrypt( $password, AUTH_KEY ));
   }
 
   /**
@@ -202,8 +257,27 @@ class Sendgrid_Tools
     if ( defined('SENDGRID_API_KEY') ) {
       return SENDGRID_API_KEY;
     } else {
-      return get_option('sendgrid_api_key');
+      $apikey = get_option('sendgrid_api_key');
+      if( $apikey ) {
+        delete_option('sendgrid_api_key');
+        update_option('sendgrid_apikey', self::encrypt( $apikey, AUTH_KEY ));
+      }
+
+      $apikey = get_option('sendgrid_apikey');
+      return ( $apikey == '' ? '' : self::decrypt($apikey, AUTH_KEY) );
     }
+  }
+
+  /**
+   * Sets api_key in the database
+   * @param type string $apikey
+   * @return bool
+   */
+  public static function set_api_key($apikey)
+  {
+    if( $apikey == '' )
+      return update_option('sendgrid_apikey', '');
+    return update_option('sendgrid_apikey', self::encrypt( $apikey, AUTH_KEY ));
   }
 
   /**
@@ -223,6 +297,32 @@ class Sendgrid_Tools
   }
 
   /**
+   * Return auth method from the database or global variable
+   *
+   * @return string auth_method
+   */
+  public static function get_auth_method()
+  {
+    if ( defined('SENDGRID_AUTH_METHOD') ) {
+      return SENDGRID_AUTH_METHOD;
+    } elseif ( get_option('sendgrid_auth_method') ) {
+      $auth_method = get_option('sendgrid_auth_method');
+      if ( 'username' == $auth_method ) {
+        $auth_method = 'credentials';
+        update_option('sendgrid_auth_method', $auth_method);
+      }
+
+      return $auth_method;
+    } elseif ( Sendgrid_Tools::get_api_key() ) {
+      return 'apikey';
+    } elseif ( Sendgrid_Tools::get_username() and Sendgrid_Tools::get_password() ) {
+      return 'credentials';
+    } else {
+      return 'apikey';
+    }
+  }
+
+  /**
    * Return port from the database or global variable
    *
    * @return string port
@@ -233,26 +333,6 @@ class Sendgrid_Tools
       return SENDGRID_PORT;
     } else {
       return get_option('sendgrid_port');
-    }
-  }
-
-  /**
-   * Return auth method from the database or global variable
-   *
-   * @return string auth_method
-   */
-  public static function get_auth_method()
-  {
-    if ( defined('SENDGRID_AUTH_METHOD') ) {
-      return SENDGRID_AUTH_METHOD;
-    } elseif ( Sendgrid_Tools::get_api_key() ) {
-      return 'apikey';
-    } elseif ( Sendgrid_Tools::get_username() and Sendgrid_Tools::get_password() and ! Sendgrid_Tools::get_api_key() ) {
-      return 'username';
-    } elseif ( get_option('sendgrid_auth_method') ) {
-      return get_option('sendgrid_auth_method');
-    } else {
-      return 'apikey';
     }
   }
 
@@ -340,5 +420,87 @@ class Sendgrid_Tools
     } else {
       return get_option( 'sendgrid_template' );
     }
+  }
+
+  /**
+   * Returns encrypted string using the key or empty string in case of error
+   *
+   * @return string template
+   */
+  private static function encrypt($input_string, $key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+    if(false === $iv_size)
+      return '';
+
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    if(false === $iv)
+      return '';
+
+    $h_key = hash('sha256', $key, TRUE);
+    $encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $h_key, $input_string, MCRYPT_MODE_ECB, $iv);
+    if(false === $encrypted)
+      return '';
+
+    $encoded = base64_encode($encrypted);
+    if(false === $encoded)
+      return '';
+
+    return $encoded;
+  }
+
+  /**
+   * Returns decrypted string using the key or empty string in case of error
+   *
+   * @return string template
+   */
+  private static function decrypt($encrypted_input_string, $key) {
+      $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+      if(false === $iv_size)
+        return '';
+
+      $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+      if(false === $iv)
+        return '';
+
+      $h_key = hash('sha256', $key, TRUE);
+      $decoded = base64_decode($encrypted_input_string);
+      if(false === $decoded)
+        return '';
+
+      $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $h_key, $decoded, MCRYPT_MODE_ECB, $iv);
+      if(false === $decrypted)
+        return '';
+
+      return trim($decrypted);
+  }
+
+  /**
+   * Check apikey stats permissions
+   *
+   * @param   string  $apikey   sendgrid apikey
+   * @return  bool
+   */
+  public static function check_api_key_stats( $apikey )
+  {
+    $url = 'https://api.sendgrid.com/v3/stats';
+
+    $args = array(
+      'headers' => array(
+        'Authorization' => 'Bearer ' . $apikey )
+    );
+
+    $response = wp_remote_get( $url, $args );
+
+    if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
+      return false;
+    }
+
+    $response = json_decode( $response['body'], true );
+
+    if ( isset( $response['errors'] ) and ( 'access forbidden' == $response['errors'][0]['message'] ) ) {
+      return false;
+    }
+
+    return true;
   }
 }
