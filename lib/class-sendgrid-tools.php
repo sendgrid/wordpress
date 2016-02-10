@@ -8,6 +8,10 @@ class Sendgrid_Tools
   const VALID_CREDENTIALS_STATUS = "valid";
   const INVALID_CREDENTIALS_STATUS = "invalid";
 
+  // used static variable because php 5.3 doesn't support array as constant
+  public static $allowed_ports = array(Sendgrid_SMTP::TLS, Sendgrid_SMTP::TLS_ALTERNATIVE, Sendgrid_SMTP::SSL);
+  public static $allowed_auth_methods = array('apikey', 'credentials');
+
   /**
    * Check username/password
    *
@@ -224,13 +228,14 @@ class Sendgrid_Tools
       return SENDGRID_PASSWORD;
     } else {
       $password = get_option('sendgrid_pwd');
-      if( $password ) {
-        delete_option('sendgrid_pwd');
-        update_option('sendgrid_password', self::encrypt( $password, AUTH_KEY ) );
+      $new_password = get_option('sendgrid_password');
+      if( $new_password && ! $password ) {
+        update_option('sendgrid_pwd', self::decrypt( $new_password, AUTH_KEY ) );
+        delete_option('sendgrid_password');
       }
 
-      $password = get_option('sendgrid_password');
-      return ( $password == '' ? '' : self::decrypt($password, AUTH_KEY) );
+      $password = get_option('sendgrid_pwd');
+      return $password;
     }
   }
 
@@ -241,10 +246,7 @@ class Sendgrid_Tools
    */
   public static function set_password($password)
   {
-    if( $password == '' )
-      return update_option('sendgrid_password', '');
-
-    return update_option('sendgrid_password', self::encrypt( $password, AUTH_KEY ));
+    return update_option('sendgrid_pwd', $password);
   }
 
   /**
@@ -258,13 +260,14 @@ class Sendgrid_Tools
       return SENDGRID_API_KEY;
     } else {
       $apikey = get_option('sendgrid_api_key');
-      if( $apikey ) {
-        delete_option('sendgrid_api_key');
-        update_option('sendgrid_apikey', self::encrypt( $apikey, AUTH_KEY ));
+      $new_apikey = get_option('sendgrid_apikey');
+      if( $new_apikey && ! $apikey ) {
+        update_option('sendgrid_api_key', self::decrypt( $new_apikey, AUTH_KEY ));
+        delete_option('sendgrid_apikey');
       }
 
-      $apikey = get_option('sendgrid_apikey');
-      return ( $apikey == '' ? '' : self::decrypt($apikey, AUTH_KEY) );
+      $apikey = get_option('sendgrid_api_key');
+      return $apikey;
     }
   }
 
@@ -275,9 +278,7 @@ class Sendgrid_Tools
    */
   public static function set_api_key($apikey)
   {
-    if( $apikey == '' )
-      return update_option('sendgrid_apikey', '');
-    return update_option('sendgrid_apikey', self::encrypt( $apikey, AUTH_KEY ));
+    return update_option('sendgrid_api_key', $apikey);
   }
 
   /**
@@ -393,19 +394,31 @@ class Sendgrid_Tools
   }
 
   /**
+   * Return stats categories from the database or global variable
+   *
+   * @return string categories
+   */
+  public static function get_stats_categories()
+  {
+    if ( defined('SENDGRID_STATS_CATEGORIES') ) {
+      return SENDGRID_STATS_CATEGORIES;
+    } else {
+      return get_option('sendgrid_stats_categories');
+    }
+  }
+
+  /**
    * Return categories array
    *
    * @return array categories
    */
   public static function get_categories_array()
   {
-    $categories = Sendgrid_Tools::get_categories();
-    if ( strlen( trim( $categories ) ) )
-    {
-      return explode( ',', $categories );
-    }
-
-    return array();
+    $general_categories = Sendgrid_Tools::get_categories();
+    $stats_categories   = Sendgrid_Tools::get_stats_categories();
+    $general_categories_array = $general_categories? explode( ',', trim( $general_categories ) ):array();
+    $stats_categories_array   = $stats_categories? explode( ',', trim( $stats_categories ) ):array();
+    return array_unique( array_merge( $general_categories_array, $stats_categories_array ) );
   }
 
   /**
@@ -423,11 +436,29 @@ class Sendgrid_Tools
   }
 
   /**
-   * Returns encrypted string using the key or empty string in case of error
+   * Return content type from the database or global variable
+   *
+   * @return string content_type
+   */
+  public static function get_content_type()
+  {
+    if ( defined('SENDGRID_CONTENT_TYPE') ) {
+      return SENDGRID_CONTENT_TYPE;
+    } else {
+      return get_option('sendgrid_content_type');
+    }
+  }
+
+  /**
+   * Returns decrypted string using the key or empty string in case of error
    *
    * @return string template
    */
-  private static function encrypt($input_string, $key) {
+  private static function decrypt($encrypted_input_string, $key) {
+    if (!extension_loaded('mcrypt')) {
+      return '';
+    }
+
     $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
     if(false === $iv_size)
       return '';
@@ -437,41 +468,15 @@ class Sendgrid_Tools
       return '';
 
     $h_key = hash('sha256', $key, TRUE);
-    $encrypted = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $h_key, $input_string, MCRYPT_MODE_ECB, $iv);
-    if(false === $encrypted)
+    $decoded = base64_decode($encrypted_input_string);
+    if(false === $decoded)
       return '';
 
-    $encoded = base64_encode($encrypted);
-    if(false === $encoded)
+    $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $h_key, $decoded, MCRYPT_MODE_ECB, $iv);
+    if(false === $decrypted)
       return '';
 
-    return $encoded;
-  }
-
-  /**
-   * Returns decrypted string using the key or empty string in case of error
-   *
-   * @return string template
-   */
-  private static function decrypt($encrypted_input_string, $key) {
-      $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
-      if(false === $iv_size)
-        return '';
-
-      $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-      if(false === $iv)
-        return '';
-
-      $h_key = hash('sha256', $key, TRUE);
-      $decoded = base64_decode($encrypted_input_string);
-      if(false === $decoded)
-        return '';
-
-      $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $h_key, $decoded, MCRYPT_MODE_ECB, $iv);
-      if(false === $decrypted)
-        return '';
-
-      return trim($decrypted);
+    return trim($decrypted);
   }
 
   /**

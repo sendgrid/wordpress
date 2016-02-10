@@ -254,10 +254,17 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     }
   }
 
-  // Set Content-Type and charset
-  // If we don't have a content-type from the input headers
-  if ( ! isset( $content_type ) )
-    $content_type = 'text/plain';
+  // Set Content-Type from header of from global variable
+  $global_content_type = Sendgrid_Tools::get_content_type();
+  if ( ! isset( $content_type ) ) {
+    if ( ! ( $global_content_type ) or ( 'plaintext' == $global_content_type ) ) {
+      $content_type = 'text/plain';
+    } elseif ( 'html' == $global_content_type ) {
+      $content_type = 'text/html';  
+    } else {
+      $content_type = 'text/plain';
+    }
+  }
 
   $content_type = apply_filters( 'wp_mail_content_type', $content_type );
 
@@ -314,6 +321,10 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
   }
 
   $sendgrid = Sendgrid_WP::get_instance();
+
+  if ( ! $sendgrid ) {
+    return false;
+  }
 
   return $sendgrid->send($mail);
 }

@@ -3,14 +3,16 @@ jQuery(document).ready(function($) {
   if ( $('#auth_method').find("option:selected").val() == 'apikey' ) {
     $(".apikey").show();
     $(".credentials").hide();
-  } else {
+    $(".send_method").show();
+  } else if ( $('#auth_method').find("option:selected").val() == 'credentials' ) {
     $(".apikey").hide();
     $(".credentials").show();
+    $(".send_method").show();
   }
 
   if ( $('#send_method').find("option:selected").val() == 'api' ) {
     $(".port").hide();
-  } else {
+  } else if ( $('#send_method').find("option:selected").val() == 'smtp' ) {
     $(".port").show();
   }
 

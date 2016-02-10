@@ -72,7 +72,7 @@ class Sendgrid_Settings {
 
     wp_enqueue_style( 'sendgrid', plugin_dir_url( __FILE__ ) . '../view/css/sendgrid.css' );
 
-    wp_enqueue_script( 'sendgrid', plugin_dir_url( __FILE__ ) . '../view/js/sendgrid.settings-v1.7.0.js', array('jquery') );
+    wp_enqueue_script( 'sendgrid', plugin_dir_url( __FILE__ ) . '../view/js/sendgrid.settings-v1.7.3.js', array('jquery') );
   }
 
   /**
@@ -85,25 +85,30 @@ class Sendgrid_Settings {
       $response = self::do_post($_POST);
     }
     
-    $user        = Sendgrid_Tools::get_username();
-    $password    = Sendgrid_Tools::get_password();
-    $api_key     = Sendgrid_Tools::get_api_key();
-    $send_method = Sendgrid_Tools::get_send_method();
-    $auth_method = Sendgrid_Tools::get_auth_method();
-    $name        = stripslashes( Sendgrid_Tools::get_from_name() );
-    $email       = Sendgrid_Tools::get_from_email();
-    $reply_to    = Sendgrid_Tools::get_reply_to();
-    $categories  = stripslashes( Sendgrid_Tools::get_categories() );
-    $template    = stripslashes( Sendgrid_Tools::get_template() );
-    $port        = Sendgrid_Tools::get_port();
+    $status = '';
+    $message = '';
 
-    $allowed_methods = array('API');
+    $user             = Sendgrid_Tools::get_username();
+    $password         = Sendgrid_Tools::get_password();
+    $api_key          = Sendgrid_Tools::get_api_key();
+    $send_method      = Sendgrid_Tools::get_send_method();
+    $auth_method      = Sendgrid_Tools::get_auth_method();
+    $name             = stripslashes( Sendgrid_Tools::get_from_name() );
+    $email            = Sendgrid_Tools::get_from_email();
+    $reply_to         = Sendgrid_Tools::get_reply_to();
+    $categories       = stripslashes( Sendgrid_Tools::get_categories() );
+    $template         = stripslashes( Sendgrid_Tools::get_template() );
+    $port             = Sendgrid_Tools::get_port();
+    $content_type     = Sendgrid_Tools::get_content_type();
+    $stats_categories = stripslashes( Sendgrid_Tools::get_stats_categories() );
+
+    $allowed_send_methods = array('API');
     if ( class_exists( 'Swift' ) ) {
-      $allowed_methods[] = 'SMTP';
+      $allowed_send_methods[] = 'SMTP';
     }
 
-    if ( ! in_array( strtoupper( $send_method ), $allowed_methods ) ) {
-      $message = 'Invalid send method, available methods are: "API" or "SMTP".';
+    if ( ! in_array( strtoupper( $send_method ), $allowed_send_methods ) ) {
+      $message = 'Invalid send method configured in the config file, available methods are: ' . join( ", ", $allowed_send_methods );
       $status = 'error';
     }
 
@@ -119,6 +124,25 @@ class Sendgrid_Settings {
       $message = 'Template not found.';
       $status  = 'error';
     }
+ 
+    if ( ! in_array( $port, Sendgrid_Tools::$allowed_ports ) ) {
+      $message = 'Invalid port configured in the config file, available ports are: ' . join( ",", Sendgrid_Tools::$allowed_ports );
+      $status = 'error';
+    }
+
+    if ( ! in_array( $auth_method, Sendgrid_Tools::$allowed_auth_methods ) ) {
+      $message = 'Invalid authentication method configured in the config file, available options are: ' . join( ", ", Sendgrid_Tools::$allowed_auth_methods );
+      $status = 'error';
+    }
+
+    $allowed_content_type = array('plaintext', 'html');
+
+    if ( defined('SENDGRID_CONTENT_TYPE') ) {
+      if ( ! in_array( SENDGRID_CONTENT_TYPE , $allowed_content_type ) ) {
+        $message = 'Invalid content type, available content types are: "plaintext" or "html".';
+        $status = 'error';
+      }
+    }
 
     $is_env_auth_method = defined('SENDGRID_AUTH_METHOD');
     $is_env_send_method = defined('SENDGRID_SEND_METHOD');
@@ -126,8 +150,9 @@ class Sendgrid_Settings {
     $is_env_password = defined('SENDGRID_PASSWORD');
     $is_env_api_key = defined('SENDGRID_API_KEY');
     $is_env_port = defined('SENDGRID_PORT');
+    $is_env_content_type = defined('SENDGRID_CONTENT_TYPE');
     
-    if ( $response ) {
+    if ( $response && $status != 'error' ) {
       $message = $response['message'];
       $status = $response['status'];
       if( array_key_exists('error_type', $response) ) {
@@ -229,6 +254,10 @@ class Sendgrid_Settings {
       update_option('sendgrid_categories', $params['sendgrid_categories']);
     }
 
+    if ( isset( $params['sendgrid_stats_categories'] ) ) {
+      update_option('sendgrid_stats_categories', $params['sendgrid_stats_categories']);
+    }
+
     if ( isset( $params['sendgrid_template'] ) ) {
       if ( ! Sendgrid_Tools::check_template( $params['sendgrid_template'] ) ) {
         $response = array(
@@ -244,12 +273,16 @@ class Sendgrid_Settings {
       update_option('sendgrid_api', $params['send_method']);
     }
 
-    if ( isset( $params['auth_method'] ) ) {
+    if ( isset( $params['auth_method'] ) && in_array( $params['auth_method'], Sendgrid_Tools::$allowed_auth_methods ) ) {
       update_option('sendgrid_auth_method', $params['auth_method']);
     }
 
     if ( isset( $params['sendgrid_port'] ) ) {
       update_option('sendgrid_port', $params['sendgrid_port']);
+    }
+
+    if ( isset( $params['content_type'] ) ) {
+      update_option( 'sendgrid_content_type', $params['content_type'] );
     }
 
     if( isset( $response ) and $response['status'] == 'error')

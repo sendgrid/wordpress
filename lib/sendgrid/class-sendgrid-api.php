@@ -48,6 +48,8 @@ class Sendgrid_API implements Sendgrid_Send {
     }
 
     $response = wp_remote_post( self::URL, $data );
+    if ( !is_array( $response ) or !isset( $response['body'] ) )
+      return false;
 
     if ( "success" == json_decode( $response['body'])->message )
       return true;

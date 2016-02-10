@@ -23,19 +23,21 @@ class Sendgrid_WP {
         break;
     }
 
-    return null;
+    return self::api_instance( $auth_method );
   }
 
   private static function api_instance( $auth_method ) {
     switch ( $auth_method ) {
       case 'apikey':
-          return new Sendgrid_API( "apikey", Sendgrid_Tools::get_api_key() );
+        return new Sendgrid_API( "apikey", Sendgrid_Tools::get_api_key() );
         break;
       
       case 'credentials':
-          return new Sendgrid_API( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
+        return new Sendgrid_API( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
         break;
     }
+
+    return null;
   }
 
   private static function smtp_instance( $auth_method ) 
@@ -57,10 +59,18 @@ class Sendgrid_WP {
       case 'credentials':
         $smtp = new Sendgrid_SMTP( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
         break;
+
+      default:
+        return null;
+        break;
     }
 
     if ( Sendgrid_Tools::get_port() ) {
-      $smtp->set_port( Sendgrid_Tools::get_port() );
+      if ( in_array( Sendgrid_Tools::get_port(), Sendgrid_Tools::$allowed_ports ) ) {
+        $smtp->set_port( Sendgrid_Tools::get_port() );
+      } else {
+        $smtp->set_port( Sendgrid_SMTP::TLS );
+      }
     }
 
     return $smtp;

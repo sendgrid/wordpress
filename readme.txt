@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 1.7.0
+Stable tag: 1.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -110,6 +110,7 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
     * Reply to email: define('SENDGRID_REPLY_TO', 'reply_to@example.com');
     * Categories: define('SENDGRID_CATEGORIES', 'category_1,category_2');
     * Template: define('SENDGRID_TEMPLATE', 'templateID');
+    * Content-type: define('SENDGRID_CONTENT_TYPE', 'html');
 
 == Frequently asked questions ==
 
@@ -129,11 +130,23 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 8. Select the time interval for which you want to see SendGrid statistics and charts.
 9. Now you are able to configure port number when using SMTP method.
 10. You are able to configure what template to use for sending emails.
+11. You are able to configure categories for which you would like to see your stats.
 
 == Changelog ==
 
+= 1.7.3 =
+* Add global config for content-type
+* Validate send_method and port set in config file
+* Be able to define categories for which you would like to see your stats
+= 1.7.2 =
+* Check your credentials after updating, you might need to reenter your credentials
+* Fixed mcrypt library depencency issue
+= 1.7.1 =
+* BREAKING CHANGE: Don't make update if you don't have mcrypt php library enabled
+* Fixed a timeout issue from version 1.7.0
 = 1.7.0 = 
-* BREAKING CHANGE : wp_mail() now returns only true/false to mirror the return values of the original wp_mail().
+* BREAKING CHANGE : wp_mail() now returns only true/false to mirror the return values of the original wp_mail(). If you have written something custom in your function.php that depends on the old behavior of the wp_mail() you should check your code to make sure it will still work right with boolean as return value instead of array
+* BREAKING CHANGE: Don't make update if you don't have mcrypt php library enabled
 * Added the possibility of setting the api key or username/password empty
 * Added the possibility of selecting the authentication method
 * Removed dependency on cURL, now all API requests are made through Wordpress
@@ -207,8 +220,19 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.7.3 =
+* Add global config for content-type
+* Validate send_method and port set in config file
+* Be able to define categories for which you would like to see your stats
+= 1.7.2 =
+* Check your credentials after updating, you might need to reenter your credentials
+* Fixed mcrypt library depencency issue
+= 1.7.1 =
+* BREAKING CHANGE: Don't make update if you don't have mcrypt php library enabled
+* Fixed a timeout issue from version 1.7.0
 = 1.7.0 = 
-* BREAKING CHANGE : wp_mail() now returns only true/false to mirror the return values of the original wp_mail().
+* BREAKING CHANGE : wp_mail() now returns only true/false to mirror the return values of the original wp_mail(). If you have written something custom in your function.php that depends on the old behavior of the wp_mail() you should check your code to make sure it will still work right with boolean as return value instead of array
+* BREAKING CHANGE: Don't make update if you don't have mcrypt php library enabled
 * Added the possibility of setting the api key or username/password empty
 * Added the possibility of selecting the authentication method
 * Removed dependency on cURL, now all API requests are made through Wordpress

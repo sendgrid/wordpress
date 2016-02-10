@@ -109,7 +109,7 @@ class Sendgrid_Statistics
     }
 
     // Javascript
-    wp_enqueue_script( 'sendgrid-stats', plugin_dir_url( __FILE__ ) . '../view/js/sendgrid.stats-v1.7.0.js', array('jquery') );
+    wp_enqueue_script( 'sendgrid-stats', plugin_dir_url( __FILE__ ) . '../view/js/sendgrid.stats-v1.7.3.js', array('jquery') );
     wp_enqueue_script( 'jquery-flot', plugin_dir_url( __FILE__ ) . '../view/js/jquery.flot.js', array('jquery') );
     wp_enqueue_script( 'jquery-flot-time', plugin_dir_url( __FILE__ ) . '../view/js/jquery.flot.time.js', array('jquery') );
     wp_enqueue_script( 'jquery-flot-tofflelegend', plugin_dir_url( __FILE__ ) . '../view/js/jquery.flot.togglelegend.js', array('jquery') );
