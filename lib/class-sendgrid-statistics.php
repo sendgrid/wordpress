@@ -90,7 +90,7 @@ class Sendgrid_Statistics
     $apikey = Sendgrid_Tools::get_api_key();
     if ( ( "apikey" == Sendgrid_Tools::get_auth_method() ) and isset( $apikey ) and ( $apikey != '' ) and ! Sendgrid_Tools::check_api_key_stats( $apikey, true ) )
     {
-      $message = 'Your Api key is not having statistics permissions';
+      $message = 'Your Api key does not have statistics permissions';
       $status  = 'error';
     }
 

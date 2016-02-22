@@ -3,8 +3,8 @@ Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
-Tested up to: 4.3
-Stable tag: 1.7.3
+Tested up to: 4.4
+Stable tag: 1.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,9 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Changelog ==
 
+= 1.7.4 =
+* Fixed some failing requests during API Key checks.
+* Fixed an error that appeared on fresh installs regarding invalid port setting.
 = 1.7.3 =
 * Add global config for content-type
 * Validate send_method and port set in config file
@@ -220,6 +223,9 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.7.4 =
+* Fixed some failing requests during API Key checks.
+* Fixed an error that appeared on fresh installs regarding invalid port setting.
 = 1.7.3 =
 * Add global config for content-type
 * Validate send_method and port set in config file

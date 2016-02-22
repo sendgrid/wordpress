@@ -60,6 +60,48 @@ class Sendgrid_Tools
   }
 
   /**
+   * Check apikey scopes
+   *
+   * @param   string  $apikey   sendgrid apikey
+   * @return  bool
+   */
+  public static function check_api_key_scopes( $apikey, $scopes )
+  {
+    if ( ! $apikey or ! is_array( $scopes ) ) 
+      return false;
+
+    $url = 'https://api.sendgrid.com/v3/scopes';
+
+    $args = array(
+      'headers' => array(
+        'Authorization' => 'Bearer ' . $apikey )
+    );
+
+    $response = wp_remote_get( $url, $args );
+
+    if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
+      wp_cache_set(self::CHECK_API_KEY_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60);
+
+      return false;
+    }
+
+    $response = json_decode( $response['body'], true );
+
+    if ( isset( $response['errors'] ) )
+      return false;
+
+    if( ! isset( $response['scopes'] ) )
+      return false;
+
+    foreach( $scopes as $scope ) {
+        if( !in_array( $scope, $response['scopes'] ) )
+          return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Check apikey
    *
    * @param   string  $apikey   sendgrid apikey
@@ -79,26 +121,7 @@ class Sendgrid_Tools
     elseif ( self::INVALID_CREDENTIALS_STATUS == $valid_apikey )
       return false;
 
-    $url = 'https://api.sendgrid.com/api/mail.send.json';
-
-    $args = array(
-      'headers' => array(
-        'Authorization' => 'Bearer ' . $apikey )
-    );
-
-    $response = wp_remote_get( $url, $args );
-
-    if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
-      wp_cache_set(self::CHECK_API_KEY_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60);
-
-      return false;
-    }
-
-    $response = json_decode( $response['body'], true );
-
-    if ( isset( $response['errors'] ) and 
-      ( ( 'Authenticated user is not authorized to send mail' == $response['errors'][0] ) or
-      ( 'The provided authorization grant is invalid, expired, or revoked' == $response['errors'][0] ) ) ) {
+    if( ! Sendgrid_Tools::check_api_key_scopes( $apikey, array( "mail.send" ) ) ) {
       wp_cache_set(self::CHECK_API_KEY_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60);
 
       return false;
@@ -333,7 +356,7 @@ class Sendgrid_Tools
     if ( defined('SENDGRID_PORT') ) {
       return SENDGRID_PORT;
     } else {
-      return get_option('sendgrid_port');
+      return get_option('sendgrid_port', Sendgrid_SMTP::TLS);
     }
   }
 
@@ -487,25 +510,8 @@ class Sendgrid_Tools
    */
   public static function check_api_key_stats( $apikey )
   {
-    $url = 'https://api.sendgrid.com/v3/stats';
+    $required_scopes = array( 'stats.read', 'categories.stats.read', 'categories.stats.sums.read' );
 
-    $args = array(
-      'headers' => array(
-        'Authorization' => 'Bearer ' . $apikey )
-    );
-
-    $response = wp_remote_get( $url, $args );
-
-    if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
-      return false;
-    }
-
-    $response = json_decode( $response['body'], true );
-
-    if ( isset( $response['errors'] ) and ( 'access forbidden' == $response['errors'][0]['message'] ) ) {
-      return false;
-    }
-
-    return true;
+    return Sendgrid_Tools::check_api_key_scopes( $apikey, $required_scopes );
   }
 }
