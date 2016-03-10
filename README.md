@@ -1,12 +1,12 @@
 # SendGrid
-Contributors: team-rs
-Donate link: http://sendgrid.com/
-Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
-Requires at least: 3.3
-Tested up to: 4.4
-Stable tag: 1.7.4
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+* Contributors: team-rs
+* Donate link: http://sendgrid.com/
+* Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
+* Requires at least: 3.3
+* Tested up to: 4.4
+* Stable tag: 1.7.4
+* License: GPLv2 or later
+* License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Send emails throught Sendgrid from your WordPress installation using SMTP or API integration.
 
@@ -122,16 +122,27 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 ## Screenshots
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
+![screenshot-1](/assets/screenshot-1.png)
 2. After activation "Settings" link will appear. 
+![screenshot-2](/assets/screenshot-2.png)
 3. Go to settings page and provide your SendGrid credentials by choosing the authentication method which default is Api Key. On this page you can set also the default "Name", "Sending Address" and "Reply Address". 
+![screenshot-3](/assets/screenshot-3.png)
 4. If you want to use your username and password for authentication, switch to Username&Password authentication method.
+![screenshot-4](/assets/screenshot-4.png)
 5. If you provide valid credentials, a form which can be used to send test emails will appear. Here you can test the plugin sending some emails. 
+![screenshot-5](/assets/screenshot-5.png)
 6. Header provided in the send test email form. 
+![screenshot-6](/assets/screenshot-6.png)
 7. If you click in the right corner from the top of the page on the "Help" button, a popup window with more information will appear. 
+![screenshot-7](/assets/screenshot-7.png)
 8. Select the time interval for which you want to see SendGrid statistics and charts.
+![screenshot-8](/assets/screenshot-8.png)
 9. Now you are able to configure port number when using SMTP method.
+![screenshot-9](/assets/screenshot-9.png)
 10. You are able to configure what template to use for sending emails.
+![screenshot-10](/assets/screenshot-10.png)
 11. You are able to configure categories for which you would like to see your stats.
+![screenshot-11](/assets/screenshot-11.png)
 
 ## Changelog
 
