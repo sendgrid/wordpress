@@ -94,14 +94,14 @@
         <tr valign="top">
           <th scope="row"><?php _e("Sending Address: "); ?></th>
           <td>
-            <input type="email" name="sendgrid_email" value="<?php echo $email; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_FROM_EMAIL') ); ?>>
+            <input type="text" name="sendgrid_email" value="<?php echo $email; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_FROM_EMAIL') ); ?>>
             <p class="description"><?php _e('Email address from which the message will be sent.') ?></p>
           </td>
         </tr>
         <tr valign="top">
           <th scope="row"><?php _e("Reply Address: "); ?></th>
           <td>
-            <input type="email" name="sendgrid_reply_to" value="<?php echo $reply_to; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_REPLY_TO') ); ?>>
+            <input type="text" name="sendgrid_reply_to" value="<?php echo $reply_to; ?>" size="20" class="regular-text" <?php disabled( defined('SENDGRID_REPLY_TO') ); ?>>
             <span><small><em><?php _e('Leave blank to use Sending Address.') ?></em></small></span>
             <p class="description"><?php _e('Email address where replies will be returned.') ?></p>
           </td>
@@ -171,7 +171,7 @@
           <tr valign="top">
             <th scope="row"><?php _e("To: "); ?></th>
             <td>
-              <input type="email" name="sendgrid_to" required="true" value="<?php echo isset($success) ? '' : isset($to) ? $to : '' ; ?>" size="20" class="regular-text">
+              <input type="text" name="sendgrid_to" required="true" value="<?php echo isset($success) ? '' : isset($to) ? $to : '' ; ?>" size="20" class="regular-text">
             </td>
           </tr>
           <tr valign="top">

@@ -178,6 +178,20 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
               $mail->addCategory( $category );
             }
             break;
+          case 'substitutions':
+            if ( false !== strpos( $content, ';' ) ) {
+              $substitutions = explode( ';', $content );
+            }
+            else {
+              $substitutions = (array) trim( $content );
+            }
+            foreach ( $substitutions as $substitution ) {
+              if ( false !== strpos( $content, '=' ) ) {
+                list( $key, $val ) = explode( '=', $substitution );
+                $mail->addSubstitution( '%' . trim( $key ) . '%', explode( ',', trim( $val ) ) );
+              } 
+            }
+            break;
           default:
             // Add it to our grand headers array
             $headers[trim( $name )] = trim( $content );
@@ -286,7 +300,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 
   // send HTML content
   if ( 'text/plain' !== $content_type ) {
-    $mail->setHtml( $message );
+    $mail->setHtml( Sendgrid_Tools::remove_all_tag_urls( $message ) );
   }
 
   // set from name

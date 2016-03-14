@@ -65,6 +65,7 @@ $headers[] = 'Bcc: address5@sendgrid.com';
 $headers[] = 'unique-args:customer=mycustomer;location=mylocation'
 $headers[] = 'categories: category1, category2'
 $headers[] = 'template: templateID'
+$headers[] = 'substitutions:name=name1,name2;subject=subject1,subject2'
  
 $attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
  
@@ -143,8 +144,16 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 ![screenshot-10](/assets/screenshot-10.png)
 11. You are able to configure categories for which you would like to see your stats.
 ![screenshot-11](/assets/screenshot-11.png)
+12. You can use substitutions for emails.
+![screenshot-12](/assets/screenshot-12.png)
 
 ## Changelog
+
+** 1.7.5 **
+* Fixed an issue with the reset password email from Wordpress
+* Updated validation for email addresses
+* Fixed an issue where some errors were not displayed on the settings page
+* Add substitutions functionality
 
 **1.7.4**
 * Fixed some failing requests during API Key checks
@@ -270,6 +279,12 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+** 1.7.5 **
+* Fixed an issue with the reset password email from Wordpress
+* Updated validation for email addresses
+* Fixed an issue where some errors were not displayed on the settings page
+* Add substitutions functionality
 
 **1.7.4**
 * Fixed some failing requests during API Key checks.
