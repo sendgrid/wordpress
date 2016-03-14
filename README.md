@@ -149,7 +149,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 ## Changelog
 
-** 1.7.5 **
+**1.7.5**
 * Fixed an issue with the reset password email from Wordpress
 * Updated validation for email addresses
 * Fixed an issue where some errors were not displayed on the settings page
@@ -280,7 +280,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 ## Upgrade notice
 
-** 1.7.5 **
+**1.7.5**
 * Fixed an issue with the reset password email from Wordpress
 * Updated validation for email addresses
 * Fixed an issue where some errors were not displayed on the settings page
