@@ -145,7 +145,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 11. You are able to configure categories for which you would like to see your stats.
 ![screenshot-11](/assets/screenshot-11.png)
 12. You can use substitutions for emails.
-![screenshot-12](/assets/screenshot-12.png)
+![screenshot-12](/assets/screenshot-12.png) 
 
 ## Changelog
 
