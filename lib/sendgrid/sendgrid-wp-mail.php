@@ -91,7 +91,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     if ( ! empty( $tempheaders ) ) {
       // Iterate through the raw headers
       foreach ( (array) $tempheaders as $header ) {
-        if ( false === strpos($header, ':') ) {
+        if ( false === strpos( $header, ':' ) ) {
           if ( false !== stripos( $header, 'boundary=' ) ) {
             $parts = preg_split( '/boundary=/i', trim( $header ) );
             $boundary = trim( str_replace( array( "'", '"' ), '', $parts[1] ) );
@@ -178,6 +178,12 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
               $mail->addCategory( $category );
             }
             break;
+          case 'x-smtpapi-to':
+            $xsmtpapi_tos = explode( ',', trim( $content ) );
+            foreach ( $xsmtpapi_tos as $xsmtpapi_to ) {
+              $mail->addSmtpapiTo( $xsmtpapi_to );
+            }
+            break;
           case 'substitutions':
             if ( false !== strpos( $content, ';' ) ) {
               $substitutions = explode( ';', $content );
@@ -204,7 +210,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
   // From email and name
   // If we don't have a name from the input headers
   if ( !isset( $from_name ) )
-    $from_name = Sendgrid_Tools::get_from_name();
+    $from_name = stripslashes( Sendgrid_Tools::get_from_name() );
 
   /* If we don't have an email from the input headers default to wordpress@$sitename
    * Some hosts will block outgoing mail from this address if it doesn't exist but

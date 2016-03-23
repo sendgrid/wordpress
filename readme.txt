@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 3.3
 Tested up to: 4.4
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,9 @@ To have the SendGrid plugin running after you have activated it, go to the plugi
 
 You can also set default values for the "Name", "Sending Address" and the "Reply Address", so that you don't need to set these headers every time you want to send an email from your application.
 
-You can set the template ID to be used in all your emails on the settings page or you can set it for each email in headers. 
+You can set the template ID to be used in all your emails on the settings page or you can set it for each email in headers.
+
+You can have an individual email sent to each recipient by setting x-smtpapi-to in headers: `'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'`. Note: when using SMTP method you need to have also the `to` address set(this may be dummy data since will be overwritten with the addresses from x-smtpapi-to) in order to be able to send emails. 
 
 Emails are tracked and automatically tagged for statistics within the SendGrid Dashboard. You can also add general tags to every email sent, as well as particular tags based on selected emails defined by your requirements. 
 
@@ -65,6 +67,7 @@ $headers[] = 'unique-args:customer=mycustomer;location=mylocation'
 $headers[] = 'categories: category1, category2'
 $headers[] = 'template: templateID'
 $headers[] = 'substitutions:name=name1,name2;subject=subject1,subject2'
+$headers[] = 'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'
  
 $attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
  
@@ -131,11 +134,14 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 8. Select the time interval for which you want to see SendGrid statistics and charts.
 9. Now you are able to configure port number when using SMTP method.
 10. You are able to configure what template to use for sending emails.
-11. You are able to configure categories for which you would like to see your stats.
+11. You are able to configure categories for which you would like to see your stats. 
 12. You can use substitutions for emails.
 
 == Changelog ==
 
+= 1.7.6 =
+* Updated validation for email addresses in the headers field of the send test email form
+* Add ability to have and individual email sent to each recipient by setting x-smtpapi-to in headers
 = 1.7.5 =
 * Fixed an issue with the reset password email from Wordpress
 * Updated validation for email addresses
@@ -230,6 +236,9 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 == Upgrade notice ==
 
+= 1.7.6 =
+* Updated validation for email addresses in the headers field of the send test email form
+* Add ability to have and individual email sent to each recipient by setting x-smtpapi-to in headers
 = 1.7.5 =
 * Fixed an issue with the reset password email from Wordpress
 * Updated validation for email addresses

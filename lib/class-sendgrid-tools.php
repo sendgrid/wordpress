@@ -544,6 +544,94 @@ class Sendgrid_Tools
   }
 
   /**
+   * Returns true if all the emails in the headers are valid, false otherwise
+   *
+   * @param   mixed  $headers   string or array of headers
+   * @return  bool
+   */
+  public static function valid_emails_in_headers( $headers )
+  {
+    if ( ! is_array( $headers ) ) {
+      // Explode the headers out, so this function can take both
+      // string headers and an array of headers.
+      $tempheaders = explode( "\n", str_replace( "\r\n", "\n", $headers ) );
+    } else {
+      $tempheaders = $headers;
+    }
+
+    // If it's actually got contents
+    if ( ! empty( $tempheaders ) ) {
+      // Iterate through the raw headers
+      foreach ( (array) $tempheaders as $header ) {
+        if ( false === strpos( $header, ':' ) ) {
+          continue;
+        }
+        // Explode them out
+        list( $name, $content ) = explode( ':', trim( $header ), 2 );
+
+        // Cleanup crew
+        $name    = trim( $name );
+        $content = trim( $content );
+
+        switch ( strtolower( $name ) ) {
+          // Mainly for legacy -- process a From: header if it's there
+          case 'from':
+            if ( false !== strpos( $content, '<' ) ) {
+              $from_email = substr( $content, strpos( $content, '<' ) + 1 );
+              $from_email = str_replace( '>', '', $from_email );
+              $from_email = trim( $from_email );
+            } else {
+              $from_email = trim( $content );
+            }
+
+            if( ! Sendgrid_Tools::is_valid_email( $from_email ) ) {
+              return false;
+            }
+
+            break;
+          case 'cc':
+            $cc = explode( ',', $content );
+            foreach ( $cc as $key => $recipient ) {
+              if( ! Sendgrid_Tools::is_valid_email( trim( $recipient ) ) ) {
+                return false;
+              }
+            }
+
+            break;
+          case 'bcc':
+            $bcc = explode( ',', $content );
+            foreach ( $bcc as $key => $recipient ) {
+              if( ! Sendgrid_Tools::is_valid_email( trim( $recipient ) ) ) {
+                return false;
+              }
+            }
+
+            break;
+          case 'reply-to':
+            if( ! Sendgrid_Tools::is_valid_email( $content ) ) {
+              return false;
+            }
+
+            break;
+          case 'x-smtpapi-to':
+            $xsmtpapi_tos = explode( ',', trim( $content ) );
+            foreach ( $xsmtpapi_tos as $xsmtpapi_to ) {
+              if( ! Sendgrid_Tools::is_valid_email( $xsmtpapi_to ) ) {
+                return false;
+              }
+            }
+
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /**
    * Returns the string content of the input with "<url>" replaced by "url"
    *
    * @return string

@@ -347,6 +347,13 @@ class Sendgrid_Settings {
     $subject = stripslashes( $params['sendgrid_subj'] );
     $body    = stripslashes( $params['sendgrid_body'] );
     $headers = $params['sendgrid_headers'];
+    if ( ! Sendgrid_Tools::valid_emails_in_headers( $headers ) ) {
+      return array(
+        'message' => 'One or more email addresses in field "headers" are not valid.',
+        'status' => 'error',
+        'error_type' => 'sending'
+      );
+    }
 
     if ( preg_match( '/content-type:\s*text\/html/i', $headers ) ) {
       $body_br = nl2br( $body );
