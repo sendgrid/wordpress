@@ -4,11 +4,11 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 3.3
 * Tested up to: 4.4
-* Stable tag: 1.7.6
+* Stable tag: 1.8.0
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Send emails throught Sendgrid from your WordPress installation using SMTP or API integration.
+Send emails throught SendGrid from your WordPress installation using SMTP or API integration.
 
 ## Description
 
@@ -24,7 +24,7 @@ You can also set default values for the "Name", "Sending Address" and the "Reply
 
 You can set the template ID to be used in all your emails on the settings page or you can set it for each email in headers. 
 
-You can have an individual email sent to each recipient by setting x-smtpapi-to in headers: `'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'`. Note: when using SMTP method you need to have also the `to` address set(this may be dummy data since will be overwritten with the addresses from x-smtpapi-to) in order to be able to send emails.
+You can have an individual email sent to each recipient by setting x-smtpapi-to in headers: `'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'`. Note: when using SMTP method you need to have also the `to` address set (this may be dummy data since will be overwritten with the addresses from x-smtpapi-to) in order to be able to send emails.
 
 Emails are tracked and automatically tagged for statistics within the SendGrid Dashboard. You can also add general tags to every email sent, as well as particular tags based on selected emails defined by your requirements. 
 
@@ -44,7 +44,7 @@ Where:
 * `$to` - Array or comma-separated list of email addresses to send message.
 * `$subject` - Email subject
 * `$message` - Message contents
-* `$headers` - Array or "\n" separated  list of additional headers. Optional.
+* `$headers` - Array or SendGrid\Email() object. Optional.
 * `$attachments` - Array or "\n"/"," separated list of files to attach. Optional.
 
 The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have to set the content type to 'text/html' running `add_filter('wp_mail_content_type', 'set_html_content_type');` function before to `wp_mail()` one.
@@ -53,22 +53,21 @@ After wp_mail function you need to run the `remove_filter('wp_mail_content_type'
 
 Example about how to send an HTML email using different headers:
 
+Using array for $headers:
+
 ```php
-$subject = 'test plugin';
+$subject = 'Test SendGrid plugin';
 $message = 'testing WordPress plugin';
-$to = 'address1@sendgrid.com, Address2 <address2@sendgrid.com@>, address3@sendgrid.com';
-or
 $to = array('address1@sendgrid.com', 'Address2 <address2@sendgrid.com>', 'address3@sendgrid.com');
  
 $headers = array();
 $headers[] = 'From: Me Myself <me@example.net>';
 $headers[] = 'Cc: address4@sendgrid.com';
 $headers[] = 'Bcc: address5@sendgrid.com';
-$headers[] = 'unique-args:customer=mycustomer;location=mylocation'
-$headers[] = 'categories: category1, category2'
-$headers[] = 'template: templateID'
-$headers[] = 'substitutions:name=name1,name2;subject=subject1,subject2'
-$headers[] = 'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'
+$headers[] = 'unique-args:customer=mycustomer;location=mylocation';
+$headers[] = 'categories: category1, category2';
+$headers[] = 'template: templateID';
+$headers[] = 'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com';
  
 $attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
  
@@ -77,6 +76,55 @@ $mail = wp_mail($to, $subject, $message, $headers, $attachments);
  
 remove_filter('wp_mail_content_type', 'set_html_content_type');`
 ```
+
+Using SendGrid\Email() for $headers:
+
+```php
+$subject = 'Test SendGrid plugin';
+$message = 'testing WordPress plugin';
+$to = array('address1@sendgrid.com', 'Address2 <address2@sendgrid.com>', 'address3@sendgrid.com');
+ 
+$headers = new SendGrid\Email();
+$headers->setFromName("Me Myself")
+        ->setFrom("me@example.net")
+        ->setCc("address4@sendgrid.com")
+        ->setBcc("address5@sendgrid.com")
+        ->setUniqueArgs(array('customer' => 'mycustomer', 'location' => 'mylocation'))
+        ->addCategory('category1')
+        ->addCategory('category2')
+        ->setTemplateId('templateID');
+ 
+$attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
+ 
+add_filter('wp_mail_content_type', 'set_html_content_type');
+$mail = wp_mail($to, $subject, $message, $headers, $attachments);
+ 
+remove_filter('wp_mail_content_type', 'set_html_content_type');`
+```
+
+How to use Substitution and Sections
+
+```php
+$subject = 'Hey %name%, you work at %place%';
+$message = 'testing WordPress plugin';
+$to = array('address1@sendgrid.com');
+
+$headers = new SendGrid\Email();
+$headers
+    ->addSmtpapiTo("john@somewhere.com")
+    ->addSmtpapiTo("harry@somewhere.com")
+    ->addSmtpapiTo("Bob@somewhere.com")
+    ->addSubstitution("%name%", array("John", "Harry", "Bob"))
+    ->addSubstitution("%place%", array("%office%", "%office%", "%home%"))
+    ->addSection("%office%", "an office")
+    ->addSection("%home%", "your house")
+;
+
+$mail = wp_mail($to, $subject, $message, $headers);`
+```
+
+More examples for using SendGrid SMTPAPI header: <https://github.com/sendgrid/sendgrid-php#smtpapi>
+
 ## Installation
 
 Requirements:
@@ -121,7 +169,7 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
 
 ### What credentials do I need to add on settings page
 
-Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a> and use these credentials.
+Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">https://sendgrid.com/partner/wordpress</a> and generate a new API key on <https://app.sendgrid.com/settings/api_keys>.
 
 ## Screenshots
 
@@ -151,6 +199,10 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 ![screenshot-12](/assets/screenshot-12.png) 
 
 ## Changelog
+
+**1.8.0**
+* Added SendGrid\Email() for $header
+* Fix Send Test form not being displayed issue
 
 **1.7.6**
 * Updated validation for email addresses in the headers field of the send test email form
@@ -286,6 +338,10 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.8.0**
+* Added SendGrid\Email() for $header
+* Fix Send Test form not being displayed issue
 
 **1.7.6**
 * Updated validation for email addresses in the headers field of the send test email form
