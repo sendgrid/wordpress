@@ -4,7 +4,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 3.3
 * Tested up to: 4.4
-* Stable tag: 1.8.0
+* Stable tag: 1.8.1
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,14 @@ $mail = wp_mail($to, $subject, $message, $headers);`
 
 More examples for using SendGrid SMTPAPI header: <https://github.com/sendgrid/sendgrid-php#smtpapi>
 
+Using categories
+
+Categories used for emails can be set:
+* globally, for all emails sent, by setting the 'Categories' field in the 'Mail settings' section
+* per email by adding the category in the headers array: `$headers[] = 'categories: category1, category2';`
+
+If you would like to configure categories for statistics, you can configure it by setting the 'Categories' field in the 'Statistics settings' section
+
 ## Installation
 
 Requirements:
@@ -132,6 +140,7 @@ Requirements:
 1. PHP version >= 5.3.0
 2. You need to have PHP-curl extension enabled in order to send attachments.
 3. To send emails through SMTP you need to install also the 'Swift Mailer' plugin.
+4. If wp_mail() function has been declared by another plugin that you have installed, you won't be able to use the SendGrid plugin
 
 To upload the SendGrid Plugin .ZIP file:
 
@@ -171,6 +180,34 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
 
 Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">https://sendgrid.com/partner/wordpress</a> and generate a new API key on <https://app.sendgrid.com/settings/api_keys>.
 
+### How can I define a plugin setting to be used for all sites
+
+Add it into your wp-config.php file. Example: `define('SENDGRID_API_KEY', 'your_api_key');`.
+
+### How to use SendGrid with WP Better Emails plugin =
+
+If you have WP Better Emails plugin installed and you want to use the template defined here instead of the SendGrid template you can add the following code in your functions.php file from your theme:
+
+```php
+function use_wpbe_template( $message, $content_type ) {
+    global $wp_better_emails;
+    if ( 'text/plain' == $content_type ) {
+      $message = $wp_better_emails->process_email_text( $message );
+    } else {
+      $message = $wp_better_emails->process_email_html( $message );
+    }
+
+    return $message;
+}
+add_filter( 'sendgrid_override_template', 'use_wpbe_template', 10, 2 );
+```
+
+Using the default templates from WP Better Emails will cause all emails to be sent as HTML (i.e. text/html content-type). In order to send emails as plain text (i.e. text/plain content-type) you should remove the HTML Template from WP Better Emails settings page. This is can be done by removing the '%content%' tag from the HTML template.
+
+### Why are my emails sent as HTML instead of plain text
+
+For a detailed explanation see this page: https://support.sendgrid.com/hc/en-us/articles/200181418-Plain-text-emails-converted-to-HTML
+
 ## Screenshots
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
@@ -199,6 +236,9 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 ![screenshot-12](/assets/screenshot-12.png) 
 
 ## Changelog
+
+**1.8.1**
+* Added possibility to override the email template
 
 **1.8.0**
 * Added SendGrid\Email() for $header
@@ -338,6 +378,9 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.8.1**
+* Added possibility to override the email template
 
 **1.8.0**
 * Added SendGrid\Email() for $header

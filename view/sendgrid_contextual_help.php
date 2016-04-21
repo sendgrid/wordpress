@@ -164,6 +164,14 @@
   More examples for using SendGrid SMTPAPI header: <a href="https://github.com/sendgrid/sendgrid-php#smtpapi" target="_blank">https://github.com/sendgrid/sendgrid-php#smtpapi</a>
   <br />
   <br />
+  <b>Categories used for emails can be set:</b>
+  <ul>
+    <li>globally, for all emails sent, by setting the 'Categories' field in the 'Mail settings' section</li>
+    <li>per email by adding the category in the headers array: <span class="code">$headers[] = 'categories: category1, category2';</span></li>
+  </ul>
+  If you would like to configure categories for statistics, you can configure it by setting the 'Categories' field in the 'Statistics settings' section
+  <br />
+  <br />
   <p><b>Define SendGrid settings as global variables (wp-config.php):</b></p>
   <p>
     <ol>

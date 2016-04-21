@@ -379,7 +379,7 @@ class Sendgrid_Settings {
 
     return array(
       'message' => 'Email wasn\'t sent.',
-      'status' => 'updated',
+      'status' => 'error',
       'error_type' => 'sending'
     );
   }

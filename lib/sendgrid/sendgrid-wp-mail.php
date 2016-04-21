@@ -78,11 +78,6 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     }
   }
 
-  $template = Sendgrid_Tools::get_template();
-  if ( $template) {
-    $mail->setTemplateId( $template );
-  }
-
   // Headers
   $cc  = array();
   $bcc = array();
@@ -256,6 +251,10 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     if (! $from_email) {
       // Get the site domain and get rid of www.
       $sitename = strtolower( $_SERVER['SERVER_NAME'] );
+      if ( ! $sitename and ( 'smtp' == $method ) ) {
+        return false;
+      }
+
       if ( 'www.' == substr( $sitename, 0, 4 ) ) {
         $sitename = substr( $sitename, 4 );
       }
@@ -317,6 +316,15 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     } else {
       $content_type = 'text/plain';
     }
+  }
+
+  if( ! array_key_exists( 'sendgrid_override_template' , $GLOBALS['wp_filter'] ) ) {
+    $template = Sendgrid_Tools::get_template();
+    if ( $template ) {
+      $mail->setTemplateId( $template );
+    }
+  } else {
+    $message = apply_filters( 'sendgrid_override_template', $message, $content_type );
   }
 
   $content_type = apply_filters( 'wp_mail_content_type', $content_type );
