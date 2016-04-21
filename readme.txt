@@ -123,6 +123,7 @@ More examples for using SendGrid SMTPAPI header: <https://github.com/sendgrid/se
 = Using categories =
 
 Categories used for emails can be set:
+
 * globally, for all emails sent, by setting the 'Categories' field in the 'Mail settings' section
 * per email by adding the category in the headers array: `$headers[] = 'categories: category1, category2';`
 
