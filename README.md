@@ -184,7 +184,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 Add it into your wp-config.php file. Example: `define('SENDGRID_API_KEY', 'your_api_key');`.
 
-### How to use SendGrid with WP Better Emails plugin =
+### How to use SendGrid with WP Better Emails plugin
 
 If you have WP Better Emails plugin installed and you want to use the template defined here instead of the SendGrid template you can add the following code in your functions.php file from your theme:
 
