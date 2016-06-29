@@ -3,8 +3,8 @@
 * Donate link: http://sendgrid.com/
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 3.3
-* Tested up to: 4.4
-* Stable tag: 1.8.1
+* Tested up to: 4.5
+* Stable tag: 1.8.2
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -237,6 +237,9 @@ For a detailed explanation see this page: https://support.sendgrid.com/hc/en-us/
 
 ## Changelog
 
+**1.8.2**
+* Update SendGrid logos
+
 **1.8.1**
 * Added possibility to override the email template
 
@@ -378,6 +381,9 @@ For a detailed explanation see this page: https://support.sendgrid.com/hc/en-us/
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.8.2**
+* Update SendGrid logos
 
 **1.8.1**
 * Added possibility to override the email template
