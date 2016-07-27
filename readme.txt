@@ -2,31 +2,31 @@
 Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
-Requires at least: 3.3
+Requires at least: 4.2
 Tested up to: 4.5
-Stable tag: 1.8.2
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Send emails throught SendGrid from your WordPress installation using SMTP or API integration.
+Send emails and upload contacts through SendGrid from your WordPress installation using SMTP or API integration.
 
 == Description ==
 
 SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
 
-The SendGrid plugin uses SMTP or API integration to send outgoing emails from your WordPress installation. It replaces the wp_mail function included with WordPress. 
+The SendGrid plugin uses SMTP or API integration to send outgoing emails from your WordPress installation. It replaces the wp_mail function included with WordPress. It also offers the possibility to upload contacts to your SendGrid account for marketing emails through a subscription widget.
 
-First, you need to have PHP-curl extension enabled. To send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
+In order to send emails through SMTP you need to install the 'Swift Mailer' plugin.
 
-To have the SendGrid plugin running after you have activated it, go to the plugin's settings page and set the SendGrid credentials, and how your email will be sent - either through SMTP or API.
+To get the SendGrid plugin running after you have activated it, go to the plugin's settings page and set the SendGrid credentials, then choose how your email will be sent - either through SMTP or API.
 
 You can also set default values for the "Name", "Sending Address" and the "Reply Address", so that you don't need to set these headers every time you want to send an email from your application.
 
-You can set the template ID to be used in all your emails on the settings page or you can set it for each email in headers.
+You can set the template ID to be used in all your emails on the settings page or you can set it for each email in the headers.
 
-You can have an individual email sent to each recipient by setting x-smtpapi-to in headers: `'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'`. Note: when using SMTP method you need to have also the `to` address set (this may be dummy data since will be overwritten with the addresses from x-smtpapi-to) in order to be able to send emails. 
+You can have an individual email sent to each recipient by setting x-smtpapi-to in headers: `'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'`. Note: when using SMTP method you need to have also the `to` address set (this may be dummy data since will be overwritten with the addresses from x-smtpapi-to) in order to be able to send emails.
 
-Emails are tracked and automatically tagged for statistics within the SendGrid Dashboard. You can also add general tags to every email sent, as well as particular tags based on selected emails defined by your requirements. 
+Emails are tracked and automatically tagged for statistics within the SendGrid Dashboard. You can also add general tags to every email sent, as well as particular tags based on selected emails defined by your requirements.
 
 There are a couple levels of integration between your WordPress installation and the SendGrid plugin:
 
@@ -129,6 +129,20 @@ Categories used for emails can be set:
 
 If you would like to configure categories for statistics, you can configure it by setting the 'Categories' field in the 'Statistics settings' section
 
+= The Subscription Widget =
+
+You can let your users subscribe to your marketing emails using the subscription widget. In order to set it up, go to the "Subscription Widget" tab on the plugin's settings page. You can use a separate API key for contact upload, other that what you set up for transactional emails. If you want to use the same credentials for contact upload as you do for sending emails just check the "Use same authentication as transactional" option.
+
+After you set up a valid API key you will be able to select the list where contacts will be uploaded. If you don't have a list set up, go to your SendGrid Dashboard -> Marketing -> Contacts and set one up.
+
+Once you have set up a valid authentication method and selected a valid list, a form to test the subscription will appear at the bottom of the page on the Subscription Widget settings tab. You can test the subscription process by entering an email address and clicking 'Test'.
+
+An email will be sent to that email address with a confirmation link. By clicking it, you will be redirected to your website and the email will be uploaded to your contacts on the SendGrid Dashboard. You can customize the subject and contents of the email in the settings page.
+
+In order to display the widget on your website, go to the widgets page and using drag and drop, add it to the section of your page where you want it displayed. You can configure the title and messages that are being displayed to the user. By default, only the email field is displayed and required. You can configure this in the plugin settings page, on the Subscription Widget tab, if you wish to also display the First Name and Last Name fields and whether they are required or not.
+
+You can also configure the page that will be displayed to the user by selecting it from the drop down menu on the settings page.
+
 == Installation ==
 
 Requirements:
@@ -155,7 +169,7 @@ To auto install the SendGrid Plugin from the WordPress admin:
 
 SendGrid settings can optionally be defined as global variables (wp-config.php):
 
-1. Set credentials (You can use credentials or Api key. If using credentials, both need to be set in order to get credentials from variables and not from the database. If using API key you need to make sure you set the Mail Send permissions to FULL ACCESS, Stats to READ ACCESS and Template Engine to READ or FULL ACCESS when you created the api key on SendGrid side, so you can send emails and see statistics on wordpress):
+1. Set credentials (You can use credentials or API key. If using credentials, both need to be set in order to get credentials from variables and not from the database. If using API key you need to make sure you set the Mail Send permissions to FULL ACCESS, Stats to READ ACCESS and Template Engine to READ or FULL ACCESS when you created the api key on SendGrid side, so you can send emails and see statistics on wordpress):
     * Auth method ('apikey' or 'credentials'): define('SENDGRID_AUTH_METHOD', 'apikey');
     * Username: define('SENDGRID_USERNAME', 'sendgrid_username');
     * Password: define('SENDGRID_PASSWORD', 'sendgrid_password');
@@ -170,9 +184,19 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
     * Template: define('SENDGRID_TEMPLATE', 'templateID');
     * Content-type: define('SENDGRID_CONTENT_TYPE', 'html');
 
+3. Set widget related settings:
+    * Marketing Campaigns API key: define('SENDGRID_MC_API_KEY', 'sendgrid_mc_api_key');
+    * Use the same authentication as for sending emails ('true' or 'false'): define('SENDGRID_MC_OPT_USE_TRANSACTIONAL', 'false');
+    * The contact list ID: define('SENDGRID_MC_LIST_ID', 'listID');
+    * Display the first and last name fields ('true' or 'false'): define('SENDGRID_MC_OPT_INCL_FNAME_LNAME', 'true');
+    * First and last name fields are required ('true' or 'false'): define('SENDGRID_MC_OPT_REQ_FNAME_LNAME', 'true');
+    * Signup confirmation email subject: define('SENDGRID_MC_SIGNUP_EMAIL_SUBJECT', 'Confirm subscription');
+    * Signup confirmation email content: define('SENDGRID_MC_SIGNUP_EMAIL_CONTENT', '&lt;a href="%confirmation_link%"&gt;click here&lt;/a&gt;');
+    * Signup confirmation page ID: define('SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE', 'page_id');
+
 == Frequently asked questions ==
 
-= What credentials do I need to add on settings page =
+= What credentials do I need to add on settings page ? =
 
 Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">https://sendgrid.com/partner/wordpress</a> and generate a new API key on <https://app.sendgrid.com/settings/api_keys>.
 
@@ -180,7 +204,7 @@ Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" tar
 
 Add it into your wp-config.php file. Example: `define('SENDGRID_API_KEY', 'your_api_key');`.
 
-= How to use SendGrid with WP Better Emails plugin =
+= How to use SendGrid with WP Better Emails plugin ? =
 
 If you have WP Better Emails plugin installed and you want to use the template defined here instead of the SendGrid template you can add the following code in your functions.php file from your theme:
 
@@ -202,6 +226,19 @@ Using the default templates from WP Better Emails will cause all emails to be se
 
 For a detailed explanation see this page: https://support.sendgrid.com/hc/en-us/articles/200181418-Plain-text-emails-converted-to-HTML
 
+= Will contacts from the widget be uploaded to Marketing Campaigns or Legacy Newsletter ? =
+
+The contacts will only be uploaded to Marketing Campaigns.
+
+= What permissions should my API keys have ? =
+
+For the API Key used for sending emails, that is entered on the General tab, the key needs to have Full Access to Mail Send and Read Access to Stats.
+For the API Key used for contact upload, that is entered on the Subscription Widget tab, the key needs to have Full Access to Marketings Campaigns.
+
+= Can I disable the opt-in email? =
+
+No. SendGrid’s Email Policy requires all email addressing being sent to by SendGrid customers be confirmed opt-in addresses.
+
 == Screenshots ==
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
@@ -219,6 +256,11 @@ For a detailed explanation see this page: https://support.sendgrid.com/hc/en-us/
 
 == Changelog ==
 
+= 1.9.0 =
+* Added the SendGrid Subscription Widget
+* The settings page now has tabs to separate the configuration of general settings from the widget settings
+* Fixed an issue where a 'gzinflate()' warning was displayed in Query Monitor for each plugin request
+* Fixed an issue where the API Key would be deleted from the db if it was set in wp-config
 = 1.8.2 =
 * Update SendGrid logos
 = 1.8.1 =
@@ -323,6 +365,11 @@ For a detailed explanation see this page: https://support.sendgrid.com/hc/en-us/
 
 == Upgrade notice ==
 
+= 1.9.0 =
+* Added the SendGrid Subscription Widget
+* The settings page now has tabs to separate the configuration of general settings from the widget settings
+* Fixed an issue where a 'gzinflate()' warning was displayed in Query Monitor for each plugin request
+* Fixed an issue where the API Key would be deleted from the db if it was set in wp-config
 = 1.8.2 =
 * Update SendGrid logos
 = 1.8.1 =
