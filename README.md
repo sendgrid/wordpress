@@ -274,7 +274,7 @@ No. SendGrid’s Email Policy requires all email addressing being sent to by Sen
 
 ## Changelog
 
-** 1.9.0 **
+**1.9.0**
 * Added the SendGrid Subscription Widget
 * The settings page now has tabs to separate the configuration of general settings from the widget settings
 * Fixed an issue where a 'gzinflate()' warning was displayed in Query Monitor for each plugin request
@@ -425,7 +425,7 @@ No. SendGrid’s Email Policy requires all email addressing being sent to by Sen
 
 ## Upgrade notice
 
-** 1.9.0 **
+**1.9.0**
 * Added the SendGrid Subscription Widget
 * The settings page now has tabs to separate the configuration of general settings from the widget settings
 * Fixed an issue where a 'gzinflate()' warning was displayed in Query Monitor for each plugin request
