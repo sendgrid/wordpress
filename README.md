@@ -4,7 +4,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.2
 * Tested up to: 4.5
-* Stable tag: 1.9.0
+* Stable tag: 1.9.1
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,9 +33,8 @@ For more details, consult the official documentation for the Subscription Widget
 Requirements:
 
 1. PHP version >= 5.3.0
-2. You need to have PHP-curl extension enabled in order to send attachments.
-3. To send emails through SMTP you need to install also the 'Swift Mailer' plugin.
-4. If wp_mail() function has been declared by another plugin that you have installed, you won't be able to use the SendGrid plugin
+2. To send emails through SMTP you need to install also the 'Swift Mailer' plugin.
+3. If wp_mail() function has been declared by another plugin that you have installed, you won't be able to use the SendGrid plugin
 
 To upload the SendGrid Plugin .ZIP file:
 
@@ -85,15 +84,18 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
 
 Use HTML content type for a single email:
 
-`add_filter('wp_mail_content_type', 'set_html_content_type');
+```
+add_filter('wp_mail_content_type', 'set_html_content_type');
 
 // Send the email 
 
-remove_filter('wp_mail_content_type', 'set_html_content_type');`
+remove_filter('wp_mail_content_type', 'set_html_content_type');
+```
 
 Change the email contents for all emails before they are sent:
 
-`function change_content( $message, $content_type ) {   
+```
+function change_content( $message, $content_type ) {   
     if ( 'text/plain' == $content_type ) {
       $message = $message . ' will be sent as text ' ;
     } else {
@@ -103,23 +105,28 @@ Change the email contents for all emails before they are sent:
     return $message;
 }
 
-add_filter( 'sendgrid_override_template', 'change_content' );`
+add_filter( 'sendgrid_override_template', 'change_content' );
+```
 
 Changing the text content of all emails before they are sent:
 
-`function change_sendgrid_text_email( $message ) {
+```
+function change_sendgrid_text_email( $message ) {
     return $message . ' changed by way of text filter ';
 }
 
-add_filter( 'sendgrid_mail_text', 'change_sendgrid_text_email' );`
+add_filter( 'sendgrid_mail_text', 'change_sendgrid_text_email' );
+```
 
 Changing the HTML content of all emails before they are sent:
 
-`function change_sendgrid_html_email( $message ) {
+```
+function change_sendgrid_html_email( $message ) {
     return $message . ' changed by way of html filter ';
 }
 
-add_filter( 'sendgrid_mail_html', 'change_sendgrid_html_email' );`
+add_filter( 'sendgrid_mail_html', 'change_sendgrid_html_email' );
+```
 
 Note that all HTML emails sent through our plugin also contain the HTML body in the text part and that content will pass through the "sendgrid_mail_text" filter as well.
 
