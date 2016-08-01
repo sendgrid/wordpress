@@ -12,140 +12,21 @@ Send emails and upload contacts through SendGrid from your WordPress installatio
 
 ## Description
 
-SendGrid's cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable delivery, scalability and real-time analytics along with flexible APIs that make custom integration a breeze.
+What is the SendGrid WordPress Plugin?
 
-The SendGrid plugin uses SMTP or API integration to send outgoing emails from your WordPress installation. It replaces the wp_mail function included with WordPress. It also offers the possibility to upload contacts to your SendGrid account for marketing emails through a subscription widget.
+SendGrid’s cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable deliverability, scalability, and real-time analytics along with flexible APIs that make custom integration with your application a breeze.
 
-In order to send emails through SMTP you need to install the 'Swift Mailer' plugin.
+SendGrid’s WordPress plugin replaces WordPress’s default wp_mail() function by using either an SMTP or API integration with SendGrid to send outgoing email from your WordPress installation. It also allows you to upload contacts directly to your SendGrid Marketing Campaigns account via a subscription widget.
 
-To get the SendGrid plugin running after you have activated it, go to the plugin's settings page and set the SendGrid credentials, then choose how your email will be sent - either through SMTP or API.
+By using the SendGrid plugin, you will be able to take advantage of improved deliverability and an expanded feature set, including tracking and analytics, to enhance user engagement on your WordPress installation. SendGrid also provides world class customer support, should you run into any issues.
 
-You can also set default values for the "Name", "Sending Address" and the "Reply Address", so that you don't need to set these headers every time you want to send an email from your application.
-
-You can set the template ID to be used in all your emails on the settings page or you can set it for each email in the headers.
-
-You can have an individual email sent to each recipient by setting x-smtpapi-to in headers: `'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com'`. Note: when using SMTP method you need to have also the `to` address set (this may be dummy data since will be overwritten with the addresses from x-smtpapi-to) in order to be able to send emails.
-
-Emails are tracked and automatically tagged for statistics within the SendGrid Dashboard. You can also add general tags to every email sent, as well as particular tags based on selected emails defined by your requirements.
-
-There are a couple levels of integration between your WordPress installation and the SendGrid plugin:
-
-* The simplest option is to Install it, Configure it, and the SendGrid plugin for WordPress will start sending your emails through SendGrid.
-* We amended wp_mail() function so all email sends from WordPress should go through SendGrid. The wp_mail function is sending text emails as default, but you have an option of sending an email with HTML content.
-
-How to use `wp_mail()` function:
-
-We amended `wp_mail()` function so all email sends from WordPress should go through SendGrid.
-
-You can send emails using the following function: `wp_mail($to, $subject, $message, $headers = '', $attachments = array())`
-
-Where:
-
-* `$to` - Array or comma-separated list of email addresses to send message.
-* `$subject` - Email subject
-* `$message` - Message contents
-* `$headers` - Array or SendGrid\Email() object. Optional.
-* `$attachments` - Array or "\n"/"," separated list of files to attach. Optional.
-
-The wp_mail function is sending text emails as default. If you want to send an email with HTML content you have to set the content type to 'text/html' running `add_filter('wp_mail_content_type', 'set_html_content_type');` function before to `wp_mail()` one.
-
-After wp_mail function you need to run the `remove_filter('wp_mail_content_type', 'set_html_content_type');` to remove the 'text/html' filter to avoid conflicts --http://core.trac.wordpress.org/ticket/23578
-
-Example about how to send an HTML email using different headers:
-
-Using array for $headers:
-
-```php
-$subject = 'Test SendGrid plugin';
-$message = 'testing WordPress plugin';
-$to = array('address1@sendgrid.com', 'Address2 <address2@sendgrid.com>', 'address3@sendgrid.com');
- 
-$headers = array();
-$headers[] = 'From: Me Myself <me@example.net>';
-$headers[] = 'Cc: address4@sendgrid.com';
-$headers[] = 'Bcc: address5@sendgrid.com';
-$headers[] = 'unique-args:customer=mycustomer;location=mylocation';
-$headers[] = 'categories: category1, category2';
-$headers[] = 'template: templateID';
-$headers[] = 'x-smtpapi-to: address1@sendgrid.com,address2@sendgrid.com';
- 
-$attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
- 
-add_filter('wp_mail_content_type', 'set_html_content_type');
-$mail = wp_mail($to, $subject, $message, $headers, $attachments);
- 
-remove_filter('wp_mail_content_type', 'set_html_content_type');`
-```
-
-Using SendGrid\Email() for $headers:
-
-```php
-$subject = 'Test SendGrid plugin';
-$message = 'testing WordPress plugin';
-$to = array('address1@sendgrid.com', 'Address2 <address2@sendgrid.com>', 'address3@sendgrid.com');
- 
-$headers = new SendGrid\Email();
-$headers->setFromName("Me Myself")
-        ->setFrom("me@example.net")
-        ->setCc("address4@sendgrid.com")
-        ->setBcc("address5@sendgrid.com")
-        ->setUniqueArgs(array('customer' => 'mycustomer', 'location' => 'mylocation'))
-        ->addCategory('category1')
-        ->addCategory('category2')
-        ->setTemplateId('templateID');
- 
-$attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
- 
-add_filter('wp_mail_content_type', 'set_html_content_type');
-$mail = wp_mail($to, $subject, $message, $headers, $attachments);
- 
-remove_filter('wp_mail_content_type', 'set_html_content_type');`
-```
-
-How to use Substitution and Sections
-
-```php
-$subject = 'Hey %name%, you work at %place%';
-$message = 'testing WordPress plugin';
-$to = array('address1@sendgrid.com');
-
-$headers = new SendGrid\Email();
-$headers
-    ->addSmtpapiTo("john@somewhere.com")
-    ->addSmtpapiTo("harry@somewhere.com")
-    ->addSmtpapiTo("Bob@somewhere.com")
-    ->addSubstitution("%name%", array("John", "Harry", "Bob"))
-    ->addSubstitution("%place%", array("%office%", "%office%", "%home%"))
-    ->addSection("%office%", "an office")
-    ->addSection("%home%", "your house")
-;
-
-$mail = wp_mail($to, $subject, $message, $headers);`
-```
-
-More examples for using SendGrid SMTPAPI header: <https://github.com/sendgrid/sendgrid-php#smtpapi>
-
-###Using categories
-
-Categories used for emails can be set:
-* globally, for all emails sent, by setting the 'Categories' field in the 'Mail settings' section
-* per email by adding the category in the headers array: `$headers[] = 'categories: category1, category2';`
-
-If you would like to configure categories for statistics, you can configure it by setting the 'Categories' field in the 'Statistics settings' section
+For more details, consult our official documentation here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html
 
 ### The Subscription Widget
 
-You can let your users subscribe to your marketing emails using the subscription widget. In order to set it up, go to the "Subscription Widget" tab on the plugin's settings page. You can use a separate API key for contact upload, other that what you set up for transactional emails. If you want to use the same credentials for contact upload as you do for sending emails just check the "Use same authentication as transactional" option.
+SendGrid’s WordPress Subscription Widget makes it easy for people visiting your WordPress site to subscribe to your marketing emails, such as any newsletters, announcements, or promotional offers you may send. Upon signup, they’ll automatically receive an opt-in email allowing them to confirm their desire to begin receiving your emails. This confirmation constitutes “double opt-in,” a deliverability best practice.
 
-After you set up a valid API key you will be able to select the list where contacts will be uploaded. If you don't have a list set up, go to your SendGrid Dashboard -> Marketing -> Contacts and set one up.
-
-Once you have set up a valid authentication method and selected a valid list, a form to test the subscription will appear at the bottom of the page on the Subscription Widget settings tab. You can test the subscription process by entering an email address and clicking 'Test'.
-
-An email will be sent to that email address with a confirmation link. By clicking it, you will be redirected to your website and the email will be uploaded to your contacts on the SendGrid Dashboard. You can customize the subject and contents of the email in the settings page.
-
-In order to display the widget on your website, go to the widgets page and using drag and drop, add it to the section of your page where you want it displayed. You can configure the title and messages that are being displayed to the user. By default, only the email field is displayed and required. You can configure this in the plugin settings page, on the Subscription Widget tab, if you wish to also display the First Name and Last Name fields and whether they are required or not.
-
-You can also configure the page that will be displayed to the user by selecting it from the drop down menu on the settings page.
+For more details, consult the official documentation for the Subscription Widget here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/subscription_widget.html
 
 ## Installation
 
@@ -170,6 +51,8 @@ To auto install the SendGrid Plugin from the WordPress admin:
 3. Activate the plugin from the "Plugins" menu in WordPress, or from the plugin installation screen.
 4. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
 5. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
+
+### Global settings
 
 SendGrid settings can optionally be defined as global variables (wp-config.php):
 
@@ -198,7 +81,53 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
     * Signup confirmation email content: define('SENDGRID_MC_SIGNUP_EMAIL_CONTENT', '&lt;a href="%confirmation_link%"&gt;click here&lt;/a&gt;');
     * Signup confirmation page ID: define('SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE', 'page_id');
 
+### Filters
+
+Use HTML content type for a single email:
+
+`add_filter('wp_mail_content_type', 'set_html_content_type');
+
+// Send the email 
+
+remove_filter('wp_mail_content_type', 'set_html_content_type');`
+
+Change the email contents for all emails before they are sent:
+
+`function change_content( $message, $content_type ) {   
+    if ( 'text/plain' == $content_type ) {
+      $message = $message . ' will be sent as text ' ;
+    } else {
+      $message = $message . ' will be sent as text and HTML ';
+    }
+
+    return $message;
+}
+
+add_filter( 'sendgrid_override_template', 'change_content' );`
+
+Changing the text content of all emails before they are sent:
+
+`function change_sendgrid_text_email( $message ) {
+    return $message . ' changed by way of text filter ';
+}
+
+add_filter( 'sendgrid_mail_text', 'change_sendgrid_text_email' );`
+
+Changing the HTML content of all emails before they are sent:
+
+`function change_sendgrid_html_email( $message ) {
+    return $message . ' changed by way of html filter ';
+}
+
+add_filter( 'sendgrid_mail_html', 'change_sendgrid_html_email' );`
+
+Note that all HTML emails sent through our plugin also contain the HTML body in the text part and that content will pass through the "sendgrid_mail_text" filter as well.
+
 ## Frequently asked questions
+
+### Is there any official documentation for this plugin ?
+
+Yes. You can find it here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html
 
 ### What credentials do I need to add on settings page ?
 
@@ -265,14 +194,18 @@ No. SendGrid’s Email Policy requires all email addressing being sent to by Sen
 ![screenshot-8](/assets/screenshot-8.png)
 9. Now you are able to configure port number when using SMTP method.
 ![screenshot-9](/assets/screenshot-9.png)
-10. You are able to configure what template to use for sending emails.
+10. You can configure categories for which you would like to see your stats. 
 ![screenshot-10](/assets/screenshot-10.png)
-11. You are able to configure categories for which you would like to see your stats.
+11. You can use substitutions for emails using X-SMTPAPI headers.
 ![screenshot-11](/assets/screenshot-11.png)
-12. You can use substitutions for emails.
+12. You can configure the subscription widget.
 ![screenshot-12](/assets/screenshot-12.png) 
 
 ## Changelog
+
+**1.9.1**
+* Added filters that allow the change of text or HTML content of all emails before they are sent
+* Fixed an issue with the widget admin notice
 
 **1.9.0**
 * Added the SendGrid Subscription Widget
@@ -424,6 +357,10 @@ No. SendGrid’s Email Policy requires all email addressing being sent to by Sen
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.9.1**
+* Added filters that allow the change of text or HTML content of all emails before they are sent
+* Fixed an issue with the widget admin notice
 
 **1.9.0**
 * Added the SendGrid Subscription Widget

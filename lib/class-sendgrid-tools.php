@@ -970,6 +970,10 @@ function unregister_sendgrid_widgets() {
  * @return void
  */
 function sg_subscription_widget_admin_notice() {
+  if( ! current_user_can('manage_options') ) {
+    return;
+  }
+
   echo '<div class="notice notice-success">';
   echo '<p>';
   echo _e( 'Check out the new SendGrid Subscription Widget! See the SendGrid Plugin settings page in order to configure it.' );
