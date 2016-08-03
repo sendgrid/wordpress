@@ -6,7 +6,6 @@ class Sendgrid_Tools
   const CHECK_CREDENTIALS_CACHE_KEY = "sendgrid_credentials_check";
   const CHECK_API_KEY_CACHE_KEY = "sendgrid_api_key_check";
   const VALID_CREDENTIALS_STATUS = "valid";
-  const INVALID_CREDENTIALS_STATUS = "invalid";
 
   // used static variable because php 5.3 doesn't support array as constant
   public static $allowed_ports = array( Sendgrid_SMTP::TLS, Sendgrid_SMTP::TLS_ALTERNATIVE, Sendgrid_SMTP::SSL );
@@ -23,43 +22,45 @@ class Sendgrid_Tools
    */
   public static function check_username_password( $username, $password, $clear_cache = false )
   {
-    if ( !$username or !$password ) {
+    if ( ! $username or ! $password ) {
       return false;
     }
 
-    if ( $clear_cache ) {
-      wp_cache_delete( self::CHECK_CREDENTIALS_CACHE_KEY, self::CACHE_GROUP );
+    if ( $clear_cache and is_multisite() ) {
+      set_site_transient( self::CHECK_CREDENTIALS_CACHE_KEY, null );
+    } elseif ( $clear_cache ) {
+      set_transient( self::CHECK_CREDENTIALS_CACHE_KEY, null );
     }
 
-    $valid_username_password = wp_cache_get( self::CHECK_CREDENTIALS_CACHE_KEY, self::CACHE_GROUP );
+    $valid_username_password = get_transient( self::CHECK_CREDENTIALS_CACHE_KEY );
+    if ( is_multisite() ) {
+      $valid_username_password = get_site_transient( self::CHECK_CREDENTIALS_CACHE_KEY );
+    }
+
     if ( self::VALID_CREDENTIALS_STATUS == $valid_username_password ) {
       return true;
-    } elseif ( self::INVALID_CREDENTIALS_STATUS == $valid_username_password ) {
-      return false;
     }
 
     $url = 'https://api.sendgrid.com/api/profile.get.json?';
-    $url .= "api_user=" . urlencode($username) . "&api_key=" . urlencode($password);
+    $url .= "api_user=" . urlencode( $username ) . "&api_key=" . urlencode( $password );
 
     $response = wp_remote_get( $url, array( 'decompress' => false ) );
     
-    if ( ! is_array( $response ) or ! isset( $response['body'] ) )
-    {
-      wp_cache_set( self::CHECK_CREDENTIALS_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60 );
-
+    if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
       return false;
     }
 
     $response = json_decode( $response['body'], true );
 
-    if ( isset( $response['error'] ) )
-    {
-      wp_cache_set( self::CHECK_CREDENTIALS_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60 );
-
+    if ( isset( $response['error'] ) ) {
       return false;
     }
 
-    wp_cache_set( self::CHECK_CREDENTIALS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 1800 );
+    if ( is_multisite() ) {
+      set_site_transient( self::CHECK_CREDENTIALS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
+    } else {
+      set_transient( self::CHECK_CREDENTIALS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
+    }
 
     return true;
   }
@@ -88,8 +89,6 @@ class Sendgrid_Tools
     $response = wp_remote_get( $url, $args );
 
     if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
-      wp_cache_set( self::CHECK_API_KEY_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60 );
-
       return false;
     }
 
@@ -125,24 +124,30 @@ class Sendgrid_Tools
       return false;
     }
 
-    if ( $clear_cache ) {
-      wp_cache_delete( self::CHECK_API_KEY_CACHE_KEY, self::CACHE_GROUP );
+    if ( $clear_cache and is_multisite() ) {
+      set_site_transient( self::CHECK_API_KEY_CACHE_KEY, null );
+    } elseif ( $clear_cache ) {
+      set_transient( self::CHECK_API_KEY_CACHE_KEY, null );
     }
 
-    $valid_apikey = wp_cache_get( self::CHECK_API_KEY_CACHE_KEY, self::CACHE_GROUP );
+    $valid_apikey = get_transient( self::CHECK_API_KEY_CACHE_KEY );
+    if ( is_multisite() ) {
+      $valid_apikey = get_site_transient( self::CHECK_API_KEY_CACHE_KEY );
+    }
+
     if ( self::VALID_CREDENTIALS_STATUS == $valid_apikey ) {
       return true;
-    } elseif ( self::INVALID_CREDENTIALS_STATUS == $valid_apikey ) {
-      return false;
     }
 
     if( ! Sendgrid_Tools::check_api_key_scopes( $apikey, array( "mail.send" ) ) ) {
-      wp_cache_set( self::CHECK_API_KEY_CACHE_KEY, self::INVALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 60 );
-
       return false;
     }
 
-    wp_cache_set( self::CHECK_API_KEY_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, self::CACHE_GROUP, 1800 );
+    if ( is_multisite() ) {
+      set_site_transient( self::CHECK_API_KEY_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
+    } else {
+      set_transient( self::CHECK_API_KEY_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
+    }
 
     return true;
   }

@@ -4,7 +4,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.2
 * Tested up to: 4.5
-* Stable tag: 1.9.1
+* Stable tag: 1.9.2
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -210,6 +210,9 @@ No. SendGrid’s Email Policy requires all email addressing being sent to by Sen
 
 ## Changelog
 
+**1.9.2**
+* Improved response time on admin dashboard
+
 **1.9.1**
 * Added filters that allow the change of text or HTML content of all emails before they are sent
 * Fixed an issue with the widget admin notice
@@ -364,6 +367,9 @@ No. SendGrid’s Email Policy requires all email addressing being sent to by Sen
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.9.2**
+* Improved response time on admin dashboard
 
 **1.9.1**
 * Added filters that allow the change of text or HTML content of all emails before they are sent
