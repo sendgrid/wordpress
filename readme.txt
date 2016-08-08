@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.2
 Tested up to: 4.5
-Stable tag: 1.9.2
+Stable tag: 1.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -195,6 +195,22 @@ Note that what is changed depends of the content-type that you have set in the s
 
 The code snippets above are usually added in the functions.php file of your theme.
 
+= Can I use this plugin with BuddyPress ? =
+
+Yes. Our plugin required special integration with BuddyPress and it's regularly tested to ensure it behaves as expected. If you have noticed issues caused by installing this plugin along with BuddyPress, you can add the following line to your wp-config.php to disable it :
+
+`define('SENDGRID_DISABLE_BUDDYPRESS', '1');`
+
+= Can I use shortcodes to customize the subscription confirmation page ? =
+
+Yes. You need to create custom page and select it from the settings page. You can place any of these shortcodes in the body of that page. Here's an example :
+
+`Hi [sendgridSubscriptionFirstName] [sendgridSubscriptionLastName],
+Your email address : [sendgridSubscriptionEmail] has been successfully added.
+You'll hear from us soon!`
+
+You need to enable the use of the First Name and Last Name fields from the settings page in order to use the shortcodes for them.
+
 == Screenshots ==
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
@@ -212,6 +228,11 @@ The code snippets above are usually added in the functions.php file of your them
 
 == Changelog ==
 
+= 1.9.3 =
+* Added BuddyPress integration
+* MC API Key is now saved on focusout
+* Added posibility of using plain text template for subscription confirmation email
+* Added posibility of adding shortcodes to subscription confirmation pages
 = 1.9.2 =
 * Improved response time on admin dashboard
 = 1.9.1 =
@@ -326,6 +347,11 @@ The code snippets above are usually added in the functions.php file of your them
 
 == Upgrade notice ==
 
+= 1.9.3 =
+* Added BuddyPress integration
+* MC API Key is now saved on focusout
+* Added posibility of using plain text template for subscription confirmation email
+* Added posibility of adding shortcodes to subscription confirmation pages
 = 1.9.2 =
 * Improved response time on admin dashboard
 = 1.9.1 =

@@ -424,6 +424,20 @@ class Sendgrid_Tools
   }
 
   /**
+   * Return the value for the signup email contents (plain text) from the database or global variable
+   *
+   * @return  mixed   signup email contents - plain text, false if the value is not found
+   */
+  public static function get_mc_signup_email_content_text()
+  {
+    if ( defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT_TEXT' ) ) {
+      return SENDGRID_MC_SIGNUP_EMAIL_CONTENT_TEXT;
+    } else {
+      return get_option( 'sendgrid_mc_signup_email_content_text' );
+    }
+  }
+
+  /**
    * Return the value for the signup confirmation page from the database or global variable
    *
    * @return  mixed   signup confirmation page, false if the value is not found
@@ -573,6 +587,18 @@ class Sendgrid_Tools
   public static function set_mc_signup_email_content( $email_content )
   {
     return update_option( 'sendgrid_mc_signup_email_content', $email_content );
+  }
+
+  /**
+   * Sets the signup email contents (plain text) in the database
+   *
+   * @param   type  string  $email_content
+   *
+   * @return  bool
+   */
+  public static function set_mc_signup_email_content_text( $email_content )
+  {
+    return update_option( 'sendgrid_mc_signup_email_content_text', $email_content );
   }
 
   /**

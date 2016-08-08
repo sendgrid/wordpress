@@ -1,5 +1,5 @@
 <?php if ( $active_tab == 'marketing' ): ?>
-  <form class="form-table" name="sendgrid_form" method="POST" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ); ?>">
+  <form class="form-table" name="sendgrid_form" id="sendgrid_form_mc" method="POST" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ); ?>">
     <table class="form-table">
       <tbody>
         <tr valign="top">
@@ -72,10 +72,18 @@
         </tr>
 
         <tr valign="top" class="signup_email_content">
-          <th scope="row"> <?php _e("Signup email content:"); ?></th>
+          <th scope="row"> <?php _e("Signup email content (HTML):"); ?></th>
           <td>
             <textarea rows="8" cols="48"  id="signup_email_content" name="sendgrid_mc_email_content" class="regular-text"  <?php disabled( $is_env_mc_signup_email_content ); ?>><?php echo $mc_signup_email_content; ?></textarea>
             <p class="description"><?php _e('Confirmation emails must contain a verification link to confirm the email address being added.') ?> <br/> <?php _e(' You can control the placement of this link by inserting a <b>&lt;a href="%confirmation_link%"&gt; &lt;/a&gt;</b> tag in your email content. This tag is required.') ?></p>
+          </td>
+        </tr>
+
+        <tr valign="top" class="signup_email_content_text">
+          <th scope="row"> <?php _e("Signup email content (Plain Text):"); ?></th>
+          <td>
+            <textarea rows="8" cols="48" id="signup_email_content_text" name="sendgrid_mc_email_content_text" class="regular-text"  <?php disabled( $is_env_mc_signup_email_content_text ); ?>><?php echo $mc_signup_email_content_text; ?></textarea>
+            <p class="description"><?php _e('Confirmation emails must contain a verification link to confirm the email address being added.') ?> <br/> <?php _e(' You can control the placement of this link by inserting a <b>%confirmation_link%</b> tag in your email content. This tag is required.') ?></p>
           </td>
         </tr>
 

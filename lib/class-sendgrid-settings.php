@@ -9,6 +9,7 @@ require_once plugin_dir_path( __FILE__ ) . 'class-sendgrid-nlvx-widget.php';
 class Sendgrid_Settings {
   const DEFAULT_SIGNUP_EMAIL_SUBJECT = 'Confirm your subscription to ';
   const DEFAULT_SIGNUP_EMAIL_CONTENT = '&lt;p&gt;Greetings!&lt;/p&gt;&#13;&#10;&#13;&#10;&lt;p&gt;Please click &lt;a href=&quot;%confirmation_link%&quot;&gt;here&lt;/a&gt; in order to subscribe to our newsletter!&lt;/p&gt;&#13;&#10;&#13;&#10;&lt;p&gt;Thank you,&lt;/p&gt;&#13;&#10;&lt;p&gt;';
+  const DEFAULT_SIGNUP_EMAIL_CONTENT_TEXT = 'Greetings!&#13;&#10;&#13;&#10;Please open %confirmation_link% in order to subscribe to our newsletter!&#13;&#10;&#13;&#10;Thank you,&#13;&#10;';
 
   /**
    * Settings class constructor
@@ -146,6 +147,12 @@ class Sendgrid_Settings {
     }
     $mc_signup_email_content = stripslashes( $mc_signup_email_content );
 
+    $mc_signup_email_content_text = Sendgrid_Tools::get_mc_signup_email_content_text();
+    if ( false == $mc_signup_email_content_text ) {
+      $mc_signup_email_content_text = self::DEFAULT_SIGNUP_EMAIL_CONTENT_TEXT . get_bloginfo('name');
+    }
+    $mc_signup_email_content_text = stripslashes( $mc_signup_email_content_text );
+
     $confirmation_pages = get_pages( array( 'parent' => 0 ) );
 
     $checked_use_transactional = '';
@@ -258,21 +265,22 @@ class Sendgrid_Settings {
       }
     }
 
-    $is_env_auth_method                 = defined( 'SENDGRID_AUTH_METHOD' );
-    $is_env_send_method                 = defined( 'SENDGRID_SEND_METHOD' );
-    $is_env_username                    = defined( 'SENDGRID_USERNAME' );
-    $is_env_password                    = defined( 'SENDGRID_PASSWORD' );
-    $is_env_api_key                     = defined( 'SENDGRID_API_KEY' );
-    $is_env_port                        = defined( 'SENDGRID_PORT' );
-    $is_env_content_type                = defined( 'SENDGRID_CONTENT_TYPE' );
-    $is_env_mc_api_key                  = defined( 'SENDGRID_MC_API_KEY' );
-    $is_env_mc_list_id                  = defined( 'SENDGRID_MC_LIST_ID' );
-    $is_env_mc_opt_use_transactional    = defined( 'SENDGRID_MC_OPT_USE_TRANSACTIONAL' );
-    $is_env_mc_opt_incl_fname_lname     = defined( 'SENDGRID_MC_OPT_INCL_FNAME_LNAME' );
-    $is_env_mc_opt_req_fname_lname      = defined( 'SENDGRID_MC_OPT_REQ_FNAME_LNAME' );
-    $is_env_mc_signup_email_subject     = defined( 'SENDGRID_MC_SIGNUP_EMAIL_SUBJECT' );
-    $is_env_mc_signup_email_content     = defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT' );
-    $is_env_mc_signup_confirmation_page = defined( 'SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE' );
+    $is_env_auth_method                  = defined( 'SENDGRID_AUTH_METHOD' );
+    $is_env_send_method                  = defined( 'SENDGRID_SEND_METHOD' );
+    $is_env_username                     = defined( 'SENDGRID_USERNAME' );
+    $is_env_password                     = defined( 'SENDGRID_PASSWORD' );
+    $is_env_api_key                      = defined( 'SENDGRID_API_KEY' );
+    $is_env_port                         = defined( 'SENDGRID_PORT' );
+    $is_env_content_type                 = defined( 'SENDGRID_CONTENT_TYPE' );
+    $is_env_mc_api_key                   = defined( 'SENDGRID_MC_API_KEY' );
+    $is_env_mc_list_id                   = defined( 'SENDGRID_MC_LIST_ID' );
+    $is_env_mc_opt_use_transactional     = defined( 'SENDGRID_MC_OPT_USE_TRANSACTIONAL' );
+    $is_env_mc_opt_incl_fname_lname      = defined( 'SENDGRID_MC_OPT_INCL_FNAME_LNAME' );
+    $is_env_mc_opt_req_fname_lname       = defined( 'SENDGRID_MC_OPT_REQ_FNAME_LNAME' );
+    $is_env_mc_signup_email_subject      = defined( 'SENDGRID_MC_SIGNUP_EMAIL_SUBJECT' );
+    $is_env_mc_signup_email_content      = defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT' );
+    $is_env_mc_signup_email_content_text = defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT_TEXT' );
+    $is_env_mc_signup_confirmation_page  = defined( 'SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE' );
 
     if ( $response and $status != 'error' ) {
       $message  = $response['message'];
@@ -415,6 +423,17 @@ class Sendgrid_Settings {
         );
       } else {
         Sendgrid_Tools::set_mc_signup_email_content( $params['sendgrid_mc_email_content'] );
+      }
+    }
+
+    if ( ! defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT_TEXT' ) ) {
+      if ( ! isset( $params['sendgrid_mc_email_content_text'] ) or empty( $params['sendgrid_mc_email_content_text'] ) ) {
+        $response = array(
+          'message' => 'Signup email content plain/text cannot be empty.',
+          'status' => 'error'
+        );
+      } else {
+        Sendgrid_Tools::set_mc_signup_email_content_text( $params['sendgrid_mc_email_content_text'] );
       }
     }
 
