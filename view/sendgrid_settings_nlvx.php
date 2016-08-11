@@ -8,7 +8,7 @@
           </td>
         </tr>
         <tr valign="top" class="mc_apikey">
-          <th scope="row"><?php _e("API key: "); ?></th>
+          <th scope="row"><?php _e("API Key: "); ?></th>
           <td>
             <input type="password" id="mc_apikey" name="sendgrid_mc_apikey" value="<?php echo ( $is_env_mc_api_key ? "************" : $mc_api_key );  ?>" size="50" <?php disabled( $is_env_mc_api_key ); ?>>
             <p class="description"><?php _e('An API Key to use for uploading contacts to SendGrid. This API Key needs to have full Marketing Campaigns permissions.') ?></p>

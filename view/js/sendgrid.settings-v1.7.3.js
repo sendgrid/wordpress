@@ -121,4 +121,32 @@ jQuery(document).ready(function($) {
       $("#sendgrid_form_mc").submit();
     }
   });
+
+  // save form on unfocus general apikey
+  if ( typeof old_general_api_key == 'undefined' ) {
+    old_general_api_key = $("#sendgrid_general_apikey").val();
+  }
+  $("#sendgrid_general_apikey").focusout(function() {
+    var new_general_api_key = $("#sendgrid_general_apikey").val();
+    if ( old_general_api_key != new_general_api_key ) {
+      $("#sendgrid_general_settings_form").submit();
+    }
+  });
+  
+
+  $('#select_unsubscribe_group').select2({
+    minimumResultsForSearch: 20
+  });
+
+  $('#content_type').select2({
+    minimumResultsForSearch: Infinity
+  });
+
+  $('#auth_method').select2({
+    minimumResultsForSearch: Infinity
+  });
+
+  $('#send_method').select2({
+    minimumResultsForSearch: Infinity
+  });
 });

@@ -98,14 +98,14 @@ class Sendgrid_Tools
       return false;
     }
 
-    if( ! isset( $response['scopes'] ) ) {
+    if ( ! isset( $response['scopes'] ) ) {
       return false;
     }
 
-    foreach( $scopes as $scope ) {
-        if( !in_array( $scope, $response['scopes'] ) ) {
-          return false;
-        }
+    foreach ( $scopes as $scope ) {
+      if ( ! in_array( $scope, $response['scopes'] ) ) {
+        return false;
+      }
     }
 
     return true;
@@ -139,7 +139,14 @@ class Sendgrid_Tools
       return true;
     }
 
-    if( ! Sendgrid_Tools::check_api_key_scopes( $apikey, array( "mail.send" ) ) ) {
+    // check unsubscribe group permission
+    if ( Sendgrid_Tools::check_api_key_scopes( $apikey, array( "asm.groups.read" ) ) ) {
+      update_option( 'sendgrid_asm_permission', 'true' );
+    } else {
+      update_option( 'sendgrid_asm_permission', 'false' ); 
+    }
+
+    if ( ! Sendgrid_Tools::check_api_key_scopes( $apikey, array( "mail.send" ) ) ) {
       return false;
     }
 
@@ -801,8 +808,76 @@ class Sendgrid_Tools
     if ( defined( 'SENDGRID_CONTENT_TYPE' ) ) {
       return SENDGRID_CONTENT_TYPE;
     } else {
-      return get_option('sendgrid_content_type');
+      return get_option( 'sendgrid_content_type' );
     }
+  }
+
+  /**
+   * Sets the unsubscribe group in the database
+   *
+   * @param   type  string  $unsubscribe_group
+   *
+   * @return  bool
+   */
+  public static function set_unsubscribe_group( $unsubscribe_group )
+  {
+    return update_option( 'sendgrid_unsubscribe_group', $unsubscribe_group );
+  }
+
+  /**
+   * Return unsubscribe group from the database or global variable
+   *
+   * @return  mixed  unsubscribe group string, false if the value is not found
+   */
+  public static function get_unsubscribe_group()
+  {
+    if ( defined( 'SENDGRID_UNSUBSCRIBE_GROUP' ) ) {
+      return SENDGRID_UNSUBSCRIBE_GROUP;
+    } else {
+      return get_option( 'sendgrid_unsubscribe_group' );
+    }
+  }
+
+  /**
+   * Get asm_permission value from db
+   *
+   * @return  mixed  asm_permission value
+   */
+  public static function get_asm_permission()
+  {
+    return get_option( 'sendgrid_asm_permission' );
+  }
+
+  /**
+   * Returns the unsubscribe groups from SendGrid
+   *
+   * @return  mixed   an array of groups if the request is successful, false otherwise.
+   */
+  public static function get_all_unsubscribe_groups()
+  {
+    $url = 'v3/asm/groups';
+
+    $parameters['auth_method']    = Sendgrid_Tools::get_auth_method();
+    $parameters['api_username']   = Sendgrid_Tools::get_username();
+    $parameters['api_password']   = Sendgrid_Tools::get_password();
+    $parameters['apikey']         = Sendgrid_Tools::get_api_key();
+
+    if ( ( 'apikey' == $parameters['auth_method'] ) and ( 'true' != self::get_asm_permission() ) ) {
+      return false;  
+    }
+
+    $response = Sendgrid_Tools::do_request( $url, $parameters );
+
+    if ( ! $response ) {
+      return false;
+    }
+
+    $response = json_decode( $response, true );
+    if ( isset( $response['error'] ) or ( isset( $response['errors'] ) and isset( $response['errors'][0]['message'] ) ) ) {
+      return false;
+    }
+
+    return $response;
   }
 
   /**
@@ -874,7 +949,11 @@ class Sendgrid_Tools
    */
   public static function is_valid_email( $email )
   {
-    return filter_var( $email, FILTER_VALIDATE_EMAIL );
+    if ( filter_var( $email, FILTER_VALIDATE_EMAIL ) and ( SendGrid_ThirdParty::is_email( $email ) ) ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**

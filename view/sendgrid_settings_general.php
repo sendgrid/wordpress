@@ -1,5 +1,5 @@
 <?php if ( $active_tab == 'general' ): ?>
-  <form class="form-table" name="sendgrid_form" method="POST" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ); ?>">
+  <form class="form-table" name="sendgrid_form" id="sendgrid_general_settings_form" method="POST" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ); ?>">
     <table class="form-table">
       <tbody>
         <tr valign="top">
@@ -10,7 +10,7 @@
         <tr valign="top">
           <th scope="row"><?php _e("Authentication method: "); ?></th>
           <td>
-            <select name="auth_method" id="auth_method" <?php disabled( $is_env_auth_method ); ?> >
+            <select name="auth_method" class="sendgrid-settings-select" id="auth_method" <?php disabled( $is_env_auth_method ); ?> >
               <option value="apikey" id="apikey" <?php echo ( 'apikey' == $auth_method ) ? 'selected' : '' ?>><?php _e('Api Key') ?></option>
               <option value="credentials" id="credentials" <?php echo ( 'credentials' == $auth_method ) ? 'selected' : '' ?>><?php _e('Username&Password') ?></option>
               <?php if ( ! in_array( $auth_method, Sendgrid_Tools::$allowed_auth_methods ) ) { ?>
@@ -20,9 +20,9 @@
           </td>
         </tr>
         <tr valign="top" class="apikey" style="display: none;">
-          <th scope="row"><?php _e("API key: "); ?></th>
+          <th scope="row"><?php _e("API Key: "); ?></th>
           <td>
-            <input type="password" name="sendgrid_apikey" value="<?php echo ( $is_env_api_key ? "************" : $api_key );  ?>" size="50" <?php disabled( $is_env_api_key ); ?>>
+            <input type="password" id="sendgrid_general_apikey" name="sendgrid_apikey" class="sendgrid-settings-key" value="<?php echo ( $is_env_api_key ? "************" : $api_key );  ?>" <?php disabled( $is_env_api_key ); ?>>
           </td>
         </tr>
         <tr valign="top" class="credentials" style="display: none;">
@@ -40,7 +40,7 @@
         <tr valign="top" class="send_method" style="display: none;">
           <th scope="row"><?php _e("Send Mail with: "); ?></th>
           <td>
-            <select name="send_method" id="send_method" <?php disabled( defined('SENDGRID_SEND_METHOD') ); ?>>
+            <select name="send_method" class="sendgrid-settings-select" id="send_method" <?php disabled( defined('SENDGRID_SEND_METHOD') ); ?>>
               <?php foreach ( $allowed_send_methods as $method ): ?>
                 <option value="<?php echo strtolower( $method ); ?>" <?php echo ( strtolower( $method ) == $send_method ) ? 'selected' : '' ?>><?php _e( $method ) ?></option>
               <?php endforeach; ?>
@@ -124,10 +124,30 @@
         <tr valign="top">
           <th scope="row"><?php _e("Content-type: "); ?></th>
           <td>
-            <select name="content_type" id="content_type" <?php disabled( $is_env_content_type ); ?> >
+            <select name="content_type" class="sendgrid-settings-select" id="content_type" <?php disabled( $is_env_content_type ); ?> >
               <option value="plaintext" id="plaintext" <?php echo ( 'plaintext' == $content_type ) ? 'selected' : '' ?>><?php _e('text/plain') ?></option>
               <option value="html" id="html" <?php echo ( 'html' == $content_type ) ? 'selected' : '' ?>><?php _e('text/html') ?></option>
             </select>
+          </td>
+        </tr>
+        <tr valign="top">
+          <th scope="row"><?php _e("Unsubscribe Group: "); ?></th>
+          <td>
+            <select id="select_unsubscribe_group" class="sendgrid-settings-select" name="unsubscribe_group" <?php disabled( $is_env_unsubscribe_group ); ?> <?php disabled( $no_permission_on_unsubscribe_groups ); ?>>
+              <option value="0"><?php _e("Global Unsubscribe"); ?></option>
+              <?php
+                if ( false != $unsubscribe_groups ) {
+                  foreach ( $unsubscribe_groups as $key => $group ) {
+                    if ( $unsubscribe_group_id == $group['id'] ) {
+                      echo '<option value="' . $group['id'] . '" selected="selected">' . $group['name'] . '</option>';
+                    } else {
+                      echo '<option value="' . $group['id'] . '">' . $group['name'] . '</option>';
+                    }           
+                  }
+                }
+              ?>
+            </select>
+            <p class="description"><?php _e("User will have the option to unsubscribe from the selected group. <br /> The API Key needs to have 'Unsubscribe Groups' permissions to be able to select a group.") ?></p>
           </td>
         </tr>
       </tbody>

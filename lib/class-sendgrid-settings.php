@@ -127,6 +127,7 @@ class Sendgrid_Settings {
     $template             = stripslashes( Sendgrid_Tools::get_template() );
     $port                 = Sendgrid_Tools::get_port();
     $content_type         = Sendgrid_Tools::get_content_type();
+    $unsubscribe_group_id = Sendgrid_Tools::get_unsubscribe_group();
     $stats_categories     = stripslashes( Sendgrid_Tools::get_stats_categories() );
 
     $mc_api_key                   = Sendgrid_Tools::get_mc_api_key();
@@ -265,6 +266,13 @@ class Sendgrid_Settings {
       }
     }
 
+    // get unsubscribe groups
+    $unsubscribe_groups = Sendgrid_Tools::get_all_unsubscribe_groups();
+    $no_permission_on_unsubscribe_groups = false;
+    if ( ( 'apikey' == $auth_method ) and ( 'true' != Sendgrid_Tools::get_asm_permission() ) ) {
+      $no_permission_on_unsubscribe_groups = true;  
+    }
+
     $is_env_auth_method                  = defined( 'SENDGRID_AUTH_METHOD' );
     $is_env_send_method                  = defined( 'SENDGRID_SEND_METHOD' );
     $is_env_username                     = defined( 'SENDGRID_USERNAME' );
@@ -272,6 +280,7 @@ class Sendgrid_Settings {
     $is_env_api_key                      = defined( 'SENDGRID_API_KEY' );
     $is_env_port                         = defined( 'SENDGRID_PORT' );
     $is_env_content_type                 = defined( 'SENDGRID_CONTENT_TYPE' );
+    $is_env_unsubscribe_group            = defined( 'SENDGRID_UNSUBSCRIBE_GROUP' );
     $is_env_mc_api_key                   = defined( 'SENDGRID_MC_API_KEY' );
     $is_env_mc_list_id                   = defined( 'SENDGRID_MC_LIST_ID' );
     $is_env_mc_opt_use_transactional     = defined( 'SENDGRID_MC_OPT_USE_TRANSACTIONAL' );
@@ -599,6 +608,10 @@ class Sendgrid_Settings {
 
     if ( isset( $params['content_type'] ) ) {
       update_option( 'sendgrid_content_type', $params['content_type'] );
+    }
+
+    if ( isset( $params['unsubscribe_group'] ) ) {
+      Sendgrid_Tools::set_unsubscribe_group( $params['unsubscribe_group'] );
     }
 
     if( isset( $response ) and $response['status'] == 'error') {

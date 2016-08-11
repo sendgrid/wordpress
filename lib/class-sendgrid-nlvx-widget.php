@@ -2,12 +2,19 @@
 
 require_once plugin_dir_path( __FILE__ ) . 'class-sendgrid-tools.php';
 require_once plugin_dir_path( __FILE__ ) . 'class-sendgrid-nlvx.php';
+require_once plugin_dir_path( __FILE__ ) . '../vendor/punycode/Punycode.php';
+
+use SendGridTrueBV\Punycode;
 
 class SendGrid_NLVX_Widget extends WP_Widget {
-    const DEFAULT_TITLE             = 'Newsletter Subscription';
-    const DEFAULT_MESSAGE           = 'If you want to subscribe to our monthly newsletter, please submit the form below.';
-    const DEFAULT_ERROR_MESSAGE     = 'An error occured when processing your details. Please try again.';
-    const DEFAULT_SUBSCRIBE_MESSAGE = 'An email has been sent to your address. Please check your inbox in order to confirm your subscription.';
+    const DEFAULT_TITLE                 = 'Newsletter Subscription';
+    const DEFAULT_MESSAGE               = 'If you want to subscribe to our monthly newsletter, please submit the form below.';
+    const DEFAULT_ERROR_MESSAGE         = 'An error occured when processing your details. Please try again.';
+    const DEFAULT_ERROR_EMAIL_MESSAGE   = 'Invalid email address.';
+    const DEFAULT_SUBSCRIBE_MESSAGE     = 'An email has been sent to your address. Please check your inbox in order to confirm your subscription.';
+    const INVALID_EMAIL_ERROR           = 'email_invalid';
+    const SUCCESS_EMAIL_SEND            = 'email_sent';
+    const ERROR_EMAIL_SEND              = 'email_error_send';
     
     /**
      * Widget class constructor
@@ -50,6 +57,12 @@ class SendGrid_NLVX_Widget extends WP_Widget {
         $error_text = self::DEFAULT_ERROR_MESSAGE;
       }
 
+      if ( isset( $instance['error_email_text'] ) ) {
+        $error_email_text = $instance['error_email_text'];
+      } else {
+        $error_email_text = self::DEFAULT_ERROR_EMAIL_MESSAGE;
+      }
+
       if ( isset( $instance['success_text'] ) ) {
         $success_text = $instance['success_text'];
       } else {
@@ -74,6 +87,12 @@ class SendGrid_NLVX_Widget extends WP_Widget {
       echo '<input class="widefat" id="' . $this->get_field_id( 'error_text' ) . '" name="' . $this->get_field_name( 'error_text' ). '" type="text" value="' . esc_attr( $error_text ) . '" />';
       echo '</p>';
 
+      // Widget email error text input
+      echo '<p>';
+      echo '<label for="' . $this->get_field_id( 'error_email_text' ) . '">' . _e( 'Message to display for invalid email address:' ) . '</label>'; 
+      echo '<input class="widefat" id="' . $this->get_field_id( 'error_email_text' ) . '" name="' . $this->get_field_name( 'error_email_text' ). '" type="text" value="' . esc_attr( $error_email_text ) . '" />';
+      echo '</p>';
+
       // Widget success text input
       echo '<p>';
       echo '<label for="' . $this->get_field_id( 'success_text' ) . '">' . _e( 'Message to display for success:' ) . '</label>'; 
@@ -91,10 +110,11 @@ class SendGrid_NLVX_Widget extends WP_Widget {
      */
     public function update( $new_instance, $old_instance ) {
       $instance = array();
-      $instance['title']        = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-      $instance['text']         = ( ! empty( $new_instance['text'] ) ) ? $new_instance['text'] : '';
-      $instance['error_text']   = ( ! empty( $new_instance['error_text'] ) ) ? $new_instance['error_text'] : '';
-      $instance['success_text'] = ( ! empty( $new_instance['success_text'] ) ) ? $new_instance['success_text'] : '';
+      $instance['title']            = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+      $instance['text']             = ( ! empty( $new_instance['text'] ) ) ? $new_instance['text'] : '';
+      $instance['error_text']       = ( ! empty( $new_instance['error_text'] ) ) ? $new_instance['error_text'] : '';
+      $instance['error_email_text'] = ( ! empty( $new_instance['error_email_text'] ) ) ? $new_instance['error_email_text'] : '';
+      $instance['success_text']     = ( ! empty( $new_instance['success_text'] ) ) ? $new_instance['success_text'] : '';
 
       return $instance;
     }
@@ -123,6 +143,11 @@ class SendGrid_NLVX_Widget extends WP_Widget {
         $error_text = apply_filters( 'widget_text', $instance['error_text'] );
       }
 
+      $error_email_text = self::DEFAULT_ERROR_EMAIL_MESSAGE;
+      if ( isset( $instance['error_email_text'] ) ) {
+        $error_email_text = apply_filters( 'widget_text', $instance['error_email_text'] );
+      }
+
       $success_text = self::DEFAULT_SUBSCRIBE_MESSAGE;
       if ( isset( $instance['success_text'] ) ) {
         $success_text = apply_filters( 'widget_text', $instance['success_text'] );
@@ -137,8 +162,12 @@ class SendGrid_NLVX_Widget extends WP_Widget {
 
       // Form was submitted
       if ( isset( $_POST['sendgrid_mc_email'] ) ) {
-        if ( $this->process_subscription( $_POST ) ) {
+        $process_form_reponse = $this->process_subscription( $_POST );
+        if ( self::SUCCESS_EMAIL_SEND == $process_form_reponse ) {
           echo '<p class="sendgrid_widget_text"> ' . $success_text . ' </p>';
+        } elseif ( self::INVALID_EMAIL_ERROR == $process_form_reponse ) {
+          echo '<p class="sendgrid_widget_text"> ' . $error_email_text . ' </p>';
+          $this->display_form();
         } else {
           echo '<p class="sendgrid_widget_text"> ' . $error_text . ' </p>';
           $this->display_form();
@@ -164,27 +193,44 @@ class SendGrid_NLVX_Widget extends WP_Widget {
      * @return  void
      */
     private function process_subscription( $params ) {  
+      $email_split = explode( "@", $_POST['sendgrid_mc_email'] );
+
+      if ( isset( $email_split[1] ) ) {
+        $email_domain = $email_split[1];
+        
+        try {
+          $Punycode = new Punycode();
+          $email_domain = $Punycode->decode( $email_split[1] );
+        }
+        catch ( Exception $e ) { 
+        }
+
+        $email = $email_split[0] . '@' . $email_domain;
+      } else {
+        $email = $_POST['sendgrid_mc_email'];
+      }
+
       // Bad call
-      if ( ! isset( $_POST['sendgrid_mc_email'] ) or ! Sendgrid_Tools::is_valid_email( $_POST['sendgrid_mc_email'] ) ) {
-        return false;
+      if ( ! isset( $email ) or ! Sendgrid_Tools::is_valid_email( $email ) ) {
+        return self::INVALID_EMAIL_ERROR;
       }
 
       if ( 'true' == Sendgrid_Tools::get_mc_opt_req_fname_lname() and 'true' == Sendgrid_Tools::get_mc_opt_incl_fname_lname() ) {
         if ( ! isset( $_POST['sendgrid_mc_first_name'] ) or empty( $_POST['sendgrid_mc_first_name'] ) ) {
-          return false;
+          return self::ERROR_EMAIL_SEND;
         }
         if ( ! isset( $_POST['sendgrid_mc_last_name'] ) or empty( $_POST['sendgrid_mc_last_name'] ) ) {
-          return false;
+          return self::ERROR_EMAIL_SEND;
         }
       }
 
       if ( isset( $_POST['sendgrid_mc_first_name'] ) and isset( $_POST['sendgrid_mc_last_name'] ) ) {
-        Sendgrid_OptIn_API_Endpoint::send_confirmation_email( $_POST['sendgrid_mc_email'], $_POST['sendgrid_mc_first_name'], $_POST['sendgrid_mc_last_name'] );
+        Sendgrid_OptIn_API_Endpoint::send_confirmation_email( $email, $_POST['sendgrid_mc_first_name'], $_POST['sendgrid_mc_last_name'] );
       } else {
-        Sendgrid_OptIn_API_Endpoint::send_confirmation_email( $_POST['sendgrid_mc_email'] );
+        Sendgrid_OptIn_API_Endpoint::send_confirmation_email( $email );
       }
 
-      return true;
+      return self::SUCCESS_EMAIL_SEND;
     }
 
     /**
@@ -219,7 +265,7 @@ class SendGrid_NLVX_Widget extends WP_Widget {
 
       echo '<div class="sendgrid-mc-field">';
       echo '<label for="sendgrid_mc_email">Email<sup>*</sup> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>';
-      echo '<input id="sendgrid_mc_email" name="sendgrid_mc_email" type="email" value="" required/>';
+      echo '<input id="sendgrid_mc_email" name="sendgrid_mc_email"  value="" required/>';
       echo '</div>';
 
       echo '<div class="sendgrid-mc-button">';      

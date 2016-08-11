@@ -392,6 +392,12 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     $mail->setAttachments( $attached_files );
   }
 
+  // set unsubscribe group
+  $unsubscribe_group_id = Sendgrid_Tools::get_unsubscribe_group();
+  if ( $unsubscribe_group_id and $unsubscribe_group_id != 0 ) {
+    $mail->setAsmGroupId( $unsubscribe_group_id );
+  }
+
   $sendgrid = Sendgrid_WP::get_instance();
 
   if ( ! $sendgrid ) {

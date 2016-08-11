@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.2
 Tested up to: 4.5
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,8 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
     * Categories: define('SENDGRID_CATEGORIES', 'category_1,category_2');
     * Template: define('SENDGRID_TEMPLATE', 'templateID');
     * Content-type: define('SENDGRID_CONTENT_TYPE', 'html');
+    * Unsubscribe Group: define('SENDGRID_UNSUBSCRIBE_GROUP', 'unsubscribeGroupId');
+
 
 3. Set widget related settings:
     * Marketing Campaigns API key: define('SENDGRID_MC_API_KEY', 'sendgrid_mc_api_key');
@@ -228,6 +230,9 @@ You need to enable the use of the First Name and Last Name fields from the setti
 
 == Changelog ==
 
+= 1.9.4 =
+* Added Unsubscribe Group option
+* Improved email validation
 = 1.9.3 =
 * Added BuddyPress integration
 * MC API Key is now saved on focusout
@@ -347,6 +352,9 @@ You need to enable the use of the First Name and Last Name fields from the setti
 
 == Upgrade notice ==
 
+= 1.9.4 =
+* Added Unsubscribe Group option
+* Improved email validation
 = 1.9.3 =
 * Added BuddyPress integration
 * MC API Key is now saved on focusout
