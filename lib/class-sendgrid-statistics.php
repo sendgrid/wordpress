@@ -66,7 +66,7 @@ class Sendgrid_Statistics
     {
       case "apikey":
         $apikey = Sendgrid_Tools::get_api_key();
-        if ( ! Sendgrid_Tools::check_api_key( $apikey ) )
+        if ( ! Sendgrid_Tools::check_api_key_stats( $apikey ) )
           return;
       break;
 
