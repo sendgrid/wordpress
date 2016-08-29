@@ -376,7 +376,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     $mail->setBccs( $bcc );
   }
 
-  if ( ! isset( $replyto ) ) {
+  if ( ! isset( $replyto ) or false == $replyto ) {
     $replyto = trim( Sendgrid_Tools::get_reply_to() );
   }
 
