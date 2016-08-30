@@ -196,6 +196,16 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
                 $mail->addSmtpapiTo( $xsmtpapi_to );
               }
               break;
+            /* x-smtpapi-filters: filter_name:param_name=param_value,filter_name:param_name=param_value */
+            case 'x-smtpapi-filters':
+              $xsmtpapi_filters = explode( ',', trim($content) );
+              foreach ( $xsmtpapi_filters as $filter ) {
+                    list( $filter_name, $params ) = explode( ':', $filter );
+                    list( $param_name, $param_value ) = explode( '=', $params );
+
+                    $mail->smtpapi->addFilter($filter_name, $param_name, $param_value);
+              }
+              break;
             case 'substitutions':
               if ( false !== strpos( $content, ';' ) ) {
                 $substitutions = explode( ';', $content );
