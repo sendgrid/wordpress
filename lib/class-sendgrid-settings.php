@@ -20,17 +20,33 @@ class Sendgrid_Settings {
    */
   public function __construct( $plugin_directory )
   {
-    // Add SendGrid settings page in the menu
-    add_action( 'admin_menu', array( __CLASS__, 'add_settings_menu' ) );
+    add_action( 'init', array( __CLASS__, 'set_up_menu' ) );
+  }
 
-    // Add SendGrid settings page in the plugin list
-    add_filter( 'plugin_action_links_' . $plugin_directory, array( __CLASS__, 'add_settings_link' ) );
-
-    // Add SendGrid Help contextual menu in the settings page
-    add_filter( 'contextual_help', array( __CLASS__, 'show_contextual_help' ), 10, 3 );
-
-    // Add SendGrid javascripts in header
-    add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_headers' ) );
+  /**
+   * Method that is called to set up the settings menu
+   *
+   * @return void
+   */
+  public static function set_up_menu()
+  {
+    if ( ! is_multisite() and current_user_can('manage_options') ) {
+      // Add SendGrid settings page in the menu
+      add_action( 'admin_menu', array( __CLASS__, 'add_settings_menu' ) );
+      // Add SendGrid settings page in the plugin list
+      add_filter( 'plugin_action_links_' . $plugin_directory, array( __CLASS__, 'add_settings_link' ) );
+      // Add SendGrid Help contextual menu in the settings page
+      add_filter( 'contextual_help', array( __CLASS__, 'show_contextual_help' ), 10, 3 );
+      // Add SendGrid javascripts in header
+      add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_headers' ) );
+    } elseif ( is_multisite() and is_super_admin() ) {
+      // Add SendGrid settings page in the network admin menu
+      add_action( 'network_admin_menu', array( __CLASS__, 'add_network_settings_menu' ) );
+      // Add SendGrid Help contextual menu in the settings page
+      add_filter( 'contextual_help', array( __CLASS__, 'show_contextual_help' ), 10, 3 );
+      // Add SendGrid javascripts in header
+      add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_headers' ) );
+    }
   }
 
   /**
@@ -40,6 +56,16 @@ class Sendgrid_Settings {
    */
   public static function add_settings_menu() {
     add_options_page( __( 'SendGrid' ), __( 'SendGrid' ), 'manage_options', 'sendgrid-settings',
+      array( __CLASS__, 'show_settings_page' ));
+  }
+
+  /**
+   * Add SendGrid settings page in the network menu
+   *
+   * @return void
+   */
+  public static function add_network_settings_menu() {
+    add_menu_page( __( 'SendGrid Settings' ), __( 'SendGrid Settings' ), 'manage_options', 'sendgrid-settings',
       array( __CLASS__, 'show_settings_page' ));
   }
 
@@ -84,7 +110,7 @@ class Sendgrid_Settings {
    */
   public static function add_headers( $hook )
   {
-    if ( SENDGRID_PLUGIN_SETTINGS != $hook ) {
+    if ( strpos( $hook, 'sendgrid-settings' ) === false ) {
       return;
     }
 
@@ -107,7 +133,7 @@ class Sendgrid_Settings {
 
     if ( 'POST' == $_SERVER['REQUEST_METHOD'] and ! isset( $_POST['sg_dismiss_widget_notice'] ) ) {
       $response = self::do_post( $_POST );
-      if( isset( $response['status'] ) and $response['status'] == 'error' ) {
+      if ( isset( $response['status'] ) and $response['status'] == 'error' ) {
         $error_from_update = true;
       }
     }
@@ -251,14 +277,14 @@ class Sendgrid_Settings {
         }
       }
 
-      if( defined( 'SENDGRID_FROM_EMAIL' ) ) {
+      if ( defined( 'SENDGRID_FROM_EMAIL' ) ) {
         if ( ! Sendgrid_Tools::is_valid_email( SENDGRID_FROM_EMAIL ) ) {
           $message = 'Sending email address is not valid in config file.';
           $status = 'error';
         }
       }
 
-      if( defined( 'SENDGRID_REPLY_TO' ) ) {
+      if ( defined( 'SENDGRID_REPLY_TO' ) ) {
         if ( ! Sendgrid_Tools::is_valid_email( SENDGRID_REPLY_TO ) ) {
           $message = 'Reply email address is not valid in config file.';
           $status = 'error';
@@ -550,7 +576,7 @@ class Sendgrid_Settings {
     }
 
     if ( isset( $params['sendgrid_name'] ) ) {
-      update_option( 'sendgrid_from_name', $params['sendgrid_name'] );
+      Sendgrid_Tools::set_from_name( $params['sendgrid_name'] );
     }
 
     if ( isset( $params['sendgrid_email'] ) ) {
@@ -560,7 +586,7 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        update_option( 'sendgrid_from_email', $params['sendgrid_email'] );
+        Sendgrid_Tools::set_from_email( $params['sendgrid_email'] );
       }
     }
 
@@ -571,16 +597,16 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        update_option( 'sendgrid_reply_to', $params['sendgrid_reply_to'] );
+        Sendgrid_Tools::set_reply_to( $params['sendgrid_reply_to'] );
       }
     }
 
     if ( isset( $params['sendgrid_categories'] ) ) {
-      update_option( 'sendgrid_categories', $params['sendgrid_categories'] );
+      Sendgrid_Tools::set_categories( $params['sendgrid_categories'] );
     }
 
     if ( isset( $params['sendgrid_stats_categories'] ) ) {
-      update_option( 'sendgrid_stats_categories', $params['sendgrid_stats_categories'] );
+      Sendgrid_Tools::set_stats_categories( $params['sendgrid_stats_categories'] );
     }
 
     if ( isset( $params['sendgrid_template'] ) ) {
@@ -590,24 +616,24 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        update_option( 'sendgrid_template', $params['sendgrid_template'] );
+        Sendgrid_Tools::set_template( $params['sendgrid_template'] );
       }
     }
 
     if ( isset( $params['send_method'] ) ) {
-      update_option( 'sendgrid_api', $params['send_method'] );
+      Sendgrid_Tools::set_send_method( $params['send_method'] );
     }
 
-    if ( isset( $params['auth_method'] ) && in_array( $params['auth_method'], Sendgrid_Tools::$allowed_auth_methods ) ) {
-      update_option( 'sendgrid_auth_method', $params['auth_method'] );
+    if ( isset( $params['auth_method'] ) and in_array( $params['auth_method'], Sendgrid_Tools::$allowed_auth_methods ) ) {
+      Sendgrid_Tools::set_auth_method( $params['auth_method'] );
     }
 
     if ( isset( $params['sendgrid_port'] ) ) {
-      update_option( 'sendgrid_port', $params['sendgrid_port'] );
+      Sendgrid_Tools::set_port( $params['sendgrid_port'] );
     }
 
     if ( isset( $params['content_type'] ) ) {
-      update_option( 'sendgrid_content_type', $params['content_type'] );
+      Sendgrid_Tools::set_content_type( $params['content_type'] );
     }
 
     if ( isset( $params['unsubscribe_group'] ) ) {
