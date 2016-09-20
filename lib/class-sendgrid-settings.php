@@ -11,6 +11,8 @@ class Sendgrid_Settings {
   const DEFAULT_SIGNUP_EMAIL_CONTENT = '&lt;p&gt;Greetings!&lt;/p&gt;&#13;&#10;&#13;&#10;&lt;p&gt;Please click &lt;a href=&quot;%confirmation_link%&quot;&gt;here&lt;/a&gt; in order to subscribe to our newsletter!&lt;/p&gt;&#13;&#10;&#13;&#10;&lt;p&gt;Thank you,&lt;/p&gt;&#13;&#10;&lt;p&gt;';
   const DEFAULT_SIGNUP_EMAIL_CONTENT_TEXT = 'Greetings!&#13;&#10;&#13;&#10;Please open %confirmation_link% in order to subscribe to our newsletter!&#13;&#10;&#13;&#10;Thank you,&#13;&#10;';
 
+  public static $plugin_directory;
+
   /**
    * Settings class constructor
    *
@@ -20,6 +22,7 @@ class Sendgrid_Settings {
    */
   public function __construct( $plugin_directory )
   {
+    self::$plugin_directory = $plugin_directory;
     add_action( 'init', array( __CLASS__, 'set_up_menu' ) );
   }
 
@@ -34,7 +37,7 @@ class Sendgrid_Settings {
       // Add SendGrid settings page in the menu
       add_action( 'admin_menu', array( __CLASS__, 'add_settings_menu' ) );
       // Add SendGrid settings page in the plugin list
-      add_filter( 'plugin_action_links_' . $plugin_directory, array( __CLASS__, 'add_settings_link' ) );
+      add_filter( 'plugin_action_links_' . self::$plugin_directory, array( __CLASS__, 'add_settings_link' ) );
       // Add SendGrid Help contextual menu in the settings page
       add_filter( 'contextual_help', array( __CLASS__, 'show_contextual_help' ), 10, 3 );
       // Add SendGrid javascripts in header
