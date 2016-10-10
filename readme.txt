@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.2
 Tested up to: 4.6
-Stable tag: 1.10.1
+Stable tag: 1.10.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -255,6 +255,8 @@ The settings for all sites in the network can be configured only by the Network 
 
 == Changelog ==
 
+= 1.10.2 =
+* Add options to configure subscription widget form (labels, padding)
 = 1.10.1 =
 * Fixed a javascript error and a PHP warning
 = 1.10.0 =
@@ -385,6 +387,8 @@ The settings for all sites in the network can be configured only by the Network 
 
 == Upgrade notice ==
 
+= 1.10.2 =
+* Add options to configure subscription widget form (labels, padding)
 = 1.10.1 =
 * Fixed a javascript error and a PHP warning
 = 1.10.0 =

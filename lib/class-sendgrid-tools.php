@@ -1179,6 +1179,288 @@ class Sendgrid_Tools
   }
 
   /**
+   * Sets email label in the database
+   *
+   * @param   type  string  $email_label
+   *
+   * @return  bool
+   */
+  public static function set_mc_email_label( $email_label )
+  {
+    if ( is_multisite() ) {
+      return update_site_option( 'sendgrid_mc_email_label', $email_label );
+    } else {
+      return update_option( 'sendgrid_mc_email_label', $email_label );
+    }
+  }
+
+  /**
+   * Return email label from the database or global variable
+   *
+   * @return  mixed   email, false if the value is not found
+   */
+  public static function get_mc_email_label()
+  {
+    if ( defined( 'SENDGRID_MC_EMAIL_LABEL' ) ) {
+      return SENDGRID_MC_EMAIL_LABEL;
+    } elseif ( is_multisite() ) {
+      return get_site_option( 'sendgrid_mc_email_label' );
+    } else {
+      return get_option( 'sendgrid_mc_email_label' );
+    }
+  }
+
+  /**
+   * Sets first name label in the database
+   *
+   * @param   type  string  $first_name_label
+   *
+   * @return  bool
+   */
+  public static function set_mc_first_name_label( $first_name_label )
+  {
+    if ( is_multisite() ) {
+      return update_site_option( 'sendgrid_mc_first_name_label', $first_name_label );
+    } else {
+      return update_option( 'sendgrid_mc_first_name_label', $first_name_label );
+    }
+  }
+
+  /**
+   * Return first name label from the database or global variable
+   *
+   * @return  mixed   label, false if the value is not found
+   */
+  public static function get_mc_first_name_label()
+  {
+    if ( defined( 'SENDGRID_MC_FIRST_NAME_LABEL' ) ) {
+      return SENDGRID_MC_FIRST_NAME_LABEL;
+    } elseif ( is_multisite() ) {
+      return get_site_option( 'sendgrid_mc_first_name_label' );
+    } else {
+      return get_option( 'sendgrid_mc_first_name_label' );
+    }
+  }
+
+  /**
+   * Sets last name label in the database
+   *
+   * @param   type  string  $last_name_label
+   *
+   * @return  bool
+   */
+  public static function set_mc_last_name_label( $last_name_label )
+  {
+    if ( is_multisite() ) {
+      return update_site_option( 'sendgrid_mc_last_name_label', $last_name_label );
+    } else {
+      return update_option( 'sendgrid_mc_last_name_label', $last_name_label );
+    }
+  }
+
+  /**
+   * Return last name label from the database or global variable
+   *
+   * @return  mixed   label, false if the value is not found
+   */
+  public static function get_mc_last_name_label()
+  {
+    if ( defined( 'SENDGRID_MC_LAST_NAME_LABEL' ) ) {
+      return SENDGRID_MC_LAST_NAME_LABEL;
+    } elseif ( is_multisite() ) {
+      return get_site_option( 'sendgrid_mc_last_name_label' );
+    } else {
+      return get_option( 'sendgrid_mc_last_name_label' );
+    }
+  }
+
+  /**
+   * Sets subscribe label in the database
+   *
+   * @param   type  string  $subscribe_label
+   *
+   * @return  bool
+   */
+  public static function set_mc_subscribe_label( $subscribe_label )
+  {
+    if ( is_multisite() ) {
+      return update_site_option( 'sendgrid_mc_subscribe_label', $subscribe_label );
+    } else {
+      return update_option( 'sendgrid_mc_subscribe_label', $subscribe_label );
+    }
+  }
+
+  /**
+   * Return subscribe label from the database or global variable
+   *
+   * @return  mixed   label, false if the value is not found
+   */
+  public static function get_mc_subscribe_label()
+  {
+    if ( defined( 'SENDGRID_MC_SUBSCRIBE_LABEL' ) ) {
+      return SENDGRID_MC_SUBSCRIBE_LABEL;
+    } elseif ( is_multisite() ) {
+      return get_site_option( 'sendgrid_mc_subscribe_label' );
+    } else {
+      return get_option( 'sendgrid_mc_subscribe_label' );
+    }
+  }
+
+  /**
+   * Sets input padding in the database
+   *
+   * @param   type  string  $position
+   * @param   type  int     $value
+   *
+   * @return  bool
+   */
+  public static function set_mc_input_padding( $position, $value = 0 )
+  {
+    if ( "" == $value ) {
+      $value = 0;
+    }
+    $values = json_decode( self::get_mc_input_padding(), true ) ;
+    if ( !isset( $values ) or !is_array($values) ) {
+      $values = array(
+        'top'     => 10,
+        'right'   => 0,
+        'bottom'  => 0,
+        'left'    => 0
+      );
+    }
+
+    // set the new value
+    $values[$position] = $value;
+
+    if ( is_multisite() ) {
+      return update_site_option( 'sendgrid_mc_input_padding', json_encode( $values ) );
+    } else {
+      return update_option( 'sendgrid_mc_input_padding', json_encode( $values ) );
+    }
+  }
+
+  /**
+   * Return input padding by from the database
+   *
+   * @return  mixed   json with the padding value, false if the value is not found
+   */
+  public static function get_mc_input_padding()
+  {
+    if ( is_multisite() ) {
+      return get_site_option( 'sendgrid_mc_input_padding' );
+    } else {
+      return get_option( 'sendgrid_mc_input_padding' );
+    }
+  }
+
+  /**
+   * Return input padding by position from the database
+   *
+   * @param   string    $position       position   
+   * @return  integer                   padding value
+   */
+  public static function get_mc_input_padding_by_position( $position )
+  {
+    if ( is_multisite() ) {
+      $padding = get_site_option( 'sendgrid_mc_input_padding' );
+    } else {
+      $padding = get_option( 'sendgrid_mc_input_padding' );
+    }
+
+    if ( false == $padding ) {
+      if ( $position == "top" )
+      {
+        return 10;
+      }
+
+      return 0;
+    }
+    $padding = json_decode( $padding, true );
+    if ( !isset( $padding[$position] ) ) {
+      return 0;
+    }
+
+    return $padding[$position];
+  }
+
+  /**
+   * Sets button padding in the database
+   *
+   * @param   type  string  $position
+   * @param   type  int     $value
+   *
+   * @return  bool
+   */
+  public static function set_mc_button_padding( $position, $value = 0 )
+  {
+    if ( "" == $value ) {
+      $value = 0;
+    }
+    $values = json_decode( self::get_mc_button_padding(), true );
+    if ( !isset( $values ) or !is_array($values) ) {
+      $values = array(
+        'top'     => 10,
+        'right'   => 0,
+        'bottom'  => 0,
+        'left'    => 0
+      );
+    }
+
+    // set the new value
+    $values[$position] = $value;
+
+    if ( is_multisite() ) {
+      return update_site_option( 'sendgrid_mc_button_padding', json_encode( $values ) );
+    } else {
+      return update_option( 'sendgrid_mc_button_padding', json_encode( $values ) );
+    }
+  }
+
+  /**
+   * Return button padding by from the database
+   *
+   * @return  mixed   json with the padding value, false if the value is not found
+   */
+  public static function get_mc_button_padding()
+  {
+    if ( is_multisite() ) {
+      return get_site_option( 'sendgrid_mc_button_padding' );
+    } else {
+      return get_option( 'sendgrid_mc_button_padding' );
+    }
+  }
+
+  /**
+   * Return button padding by position from the database
+   *
+   * @param   string    $position   position   
+   * @return  integer               padding value
+   */
+  public static function get_mc_button_padding_by_position( $position )
+  {
+    if ( is_multisite() ) {
+      $padding = get_site_option( 'sendgrid_mc_button_padding' );
+    } else {
+      $padding = get_option( 'sendgrid_mc_button_padding' );
+    }
+
+    if ( false == $padding ) {
+      if ( $position == "top" )
+      {
+        return 10;
+      }
+
+      return 0;
+    }
+    $padding = json_decode( $padding, true );
+    if ( !isset( $padding[$position] ) ) {
+      return 0;
+    }
+
+    return $padding[$position];
+  }
+
+  /**
    * Returns decrypted string using the key or empty string in case of error
    *
    * @return  string

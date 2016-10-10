@@ -10,6 +10,10 @@ class Sendgrid_Settings {
   const DEFAULT_SIGNUP_EMAIL_SUBJECT = 'Confirm your subscription to ';
   const DEFAULT_SIGNUP_EMAIL_CONTENT = '&lt;p&gt;Greetings!&lt;/p&gt;&#13;&#10;&#13;&#10;&lt;p&gt;Please click &lt;a href=&quot;%confirmation_link%&quot;&gt;here&lt;/a&gt; in order to subscribe to our newsletter!&lt;/p&gt;&#13;&#10;&#13;&#10;&lt;p&gt;Thank you,&lt;/p&gt;&#13;&#10;&lt;p&gt;';
   const DEFAULT_SIGNUP_EMAIL_CONTENT_TEXT = 'Greetings!&#13;&#10;&#13;&#10;Please open %confirmation_link% in order to subscribe to our newsletter!&#13;&#10;&#13;&#10;Thank you,&#13;&#10;';
+  const DEFAULT_EMAIL_LABEL = 'Email';
+  const DEFAULT_FIRST_NAME_LABEL = 'First Name';
+  const DEFAULT_LAST_NAME_LABEL = 'Last Name';
+  const DEFAULT_SUBSCRIBE_LABEL = 'SUBSCRIBE';
 
   public static $plugin_directory;
 
@@ -166,6 +170,17 @@ class Sendgrid_Settings {
     $mc_opt_req_fname_lname       = Sendgrid_Tools::get_mc_opt_req_fname_lname();
     $mc_signup_confirmation_page  = Sendgrid_Tools::get_mc_signup_confirmation_page();
 
+    // input padding
+    $mc_signup_input_padding_top      = Sendgrid_Tools::get_mc_input_padding_by_position( 'top' );
+    $mc_signup_input_padding_right    = Sendgrid_Tools::get_mc_input_padding_by_position( 'right' );
+    $mc_signup_input_padding_bottom   = Sendgrid_Tools::get_mc_input_padding_by_position( 'bottom' );
+    $mc_signup_input_padding_left     = Sendgrid_Tools::get_mc_input_padding_by_position( 'left' );
+    // button padding
+    $mc_signup_button_padding_top     = Sendgrid_Tools::get_mc_button_padding_by_position( 'top' );
+    $mc_signup_button_padding_right   = Sendgrid_Tools::get_mc_button_padding_by_position( 'right' );
+    $mc_signup_button_padding_bottom  = Sendgrid_Tools::get_mc_button_padding_by_position( 'bottom' );
+    $mc_signup_button_padding_left    = Sendgrid_Tools::get_mc_button_padding_by_position( 'left' );
+
     $mc_signup_email_subject = Sendgrid_Tools::get_mc_signup_email_subject();
     if ( false == $mc_signup_email_subject ) {
       $mc_signup_email_subject = self::DEFAULT_SIGNUP_EMAIL_SUBJECT . get_bloginfo('name');
@@ -302,6 +317,24 @@ class Sendgrid_Settings {
       $no_permission_on_unsubscribe_groups = true;  
     }
 
+    // get form configuration
+    $mc_signup_email_label = Sendgrid_Tools::get_mc_email_label();
+    if ( false == $mc_signup_email_label ) {
+      $mc_signup_email_label = self::DEFAULT_EMAIL_LABEL;
+    }
+    $mc_signup_first_name_label = Sendgrid_Tools::get_mc_first_name_label();
+    if ( false == $mc_signup_first_name_label ) {
+      $mc_signup_first_name_label = self::DEFAULT_FIRST_NAME_LABEL;
+    }
+    $mc_signup_last_name_label = Sendgrid_Tools::get_mc_last_name_label();
+    if ( false == $mc_signup_last_name_label ) {
+      $mc_signup_last_name_label = self::DEFAULT_LAST_NAME_LABEL;
+    }
+    $mc_signup_subscribe_label = Sendgrid_Tools::get_mc_subscribe_label();
+    if ( false == $mc_signup_subscribe_label ) {
+      $mc_signup_subscribe_label = self::DEFAULT_SUBSCRIBE_LABEL;
+    }
+
     $is_env_auth_method                  = defined( 'SENDGRID_AUTH_METHOD' );
     $is_env_send_method                  = defined( 'SENDGRID_SEND_METHOD' );
     $is_env_username                     = defined( 'SENDGRID_USERNAME' );
@@ -319,6 +352,10 @@ class Sendgrid_Settings {
     $is_env_mc_signup_email_content      = defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT' );
     $is_env_mc_signup_email_content_text = defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT_TEXT' );
     $is_env_mc_signup_confirmation_page  = defined( 'SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE' );
+    $is_env_mc_email_label               = defined( 'SENDGRID_MC_EMAIL_LABEL' );
+    $is_env_mc_first_name_label          = defined( 'SENDGRID_MC_FIRST_NAME_LABEL' );
+    $is_env_mc_last_name_label           = defined( 'SENDGRID_MC_LAST_NAME_LABEL' );
+    $is_env_mc_subscribe_label           = defined( 'SENDGRID_MC_SUBSCRIBE_LABEL' );
 
     if ( $response and $status != 'error' ) {
       $message  = $response['message'];
@@ -477,6 +514,47 @@ class Sendgrid_Settings {
 
     if ( isset( $params['sendgrid_mc_signup_page'] ) and ! defined( 'SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE' ) ) {
       Sendgrid_Tools::set_mc_signup_confirmation_page( $params['sendgrid_mc_signup_page'] );
+    }
+
+    // form configuration
+    // labels
+    if ( isset( $params['sendgrid_mc_email_label'] ) and ! defined( 'SENDGRID_MC_EMAIL_LABEL' ) ) {
+      Sendgrid_Tools::set_mc_email_label( $params['sendgrid_mc_email_label'] );
+    }
+    if ( isset( $params['sendgrid_mc_first_name_label'] ) and ! defined( 'SENDGRID_MC_FIRST_NAME_LABEL' ) ) {
+      Sendgrid_Tools::set_mc_first_name_label( $params['sendgrid_mc_first_name_label'] );
+    }
+    if ( isset( $params['sendgrid_mc_last_name_label'] ) and ! defined( 'SENDGRID_MC_LAST_NAME_LABEL' ) ) {
+      Sendgrid_Tools::set_mc_last_name_label( $params['sendgrid_mc_last_name_label'] );
+    }
+    if ( isset( $params['sendgrid_mc_subscribe_label'] ) and ! defined( 'SENDGRID_MC_SUBSCRIBE_LABEL' ) ) {
+      Sendgrid_Tools::set_mc_subscribe_label( $params['sendgrid_mc_subscribe_label'] );
+    }
+    // input padding
+    if ( isset( $params['sendgrid_mc_input_padding_top'] ) ) {
+      Sendgrid_Tools::set_mc_input_padding( 'top', $params['sendgrid_mc_input_padding_top'] );
+    }
+    if ( isset( $params['sendgrid_mc_input_padding_right'] ) ) {
+      Sendgrid_Tools::set_mc_input_padding( 'right', $params['sendgrid_mc_input_padding_right'] );
+    }
+    if ( isset( $params['sendgrid_mc_input_padding_bottom'] ) ) {
+      Sendgrid_Tools::set_mc_input_padding( 'bottom', $params['sendgrid_mc_input_padding_bottom'] );
+    }
+    if ( isset( $params['sendgrid_mc_input_padding_left'] ) ) {
+      Sendgrid_Tools::set_mc_input_padding( 'left', $params['sendgrid_mc_input_padding_left'] );
+    }
+    // button padding
+    if ( isset( $params['sendgrid_mc_button_padding_top'] ) ) {
+      Sendgrid_Tools::set_mc_button_padding( 'top', $params['sendgrid_mc_button_padding_top'] );
+    }
+    if ( isset( $params['sendgrid_mc_button_padding_right'] ) ) {
+      Sendgrid_Tools::set_mc_button_padding( 'right', $params['sendgrid_mc_button_padding_right'] );
+    }
+    if ( isset( $params['sendgrid_mc_button_padding_bottom'] ) ) {
+      Sendgrid_Tools::set_mc_button_padding( 'bottom', $params['sendgrid_mc_button_padding_bottom'] );
+    }
+    if ( isset( $params['sendgrid_mc_button_padding_left'] ) ) {
+      Sendgrid_Tools::set_mc_button_padding( 'left', $params['sendgrid_mc_button_padding_left'] );
     }
 
     if ( isset( $response ) and $response['status'] == 'error' ) {
