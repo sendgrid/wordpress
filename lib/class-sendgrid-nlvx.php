@@ -11,7 +11,7 @@ class Sendgrid_NLVX
    *
    * @return  mixed   string of the header value if successful, false otherwise.
    */
-  private static function get_auth_header_value()
+  protected static function get_auth_header_value()
   {
     if ( "false" == Sendgrid_Tools::get_mc_opt_use_transactional() ) {
       $mc_api_key = Sendgrid_Tools::get_mc_api_key();
