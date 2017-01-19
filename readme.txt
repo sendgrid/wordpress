@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.2
 Tested up to: 4.7
-Stable tag: 1.10.3
+Stable tag: 1.10.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -255,6 +255,10 @@ The settings for all sites in the network can be configured only by the Network 
 
 == Changelog ==
 
+= 1.10.5 =
+* Added settings page on multisite to give access to self manage SendGrid plugin to each subsite
+= 1.10.4 =
+* Set transient token for Marketing Campaign in database
 = 1.10.3 =
 * Add option to configure text version using setText() function from the header
 * Tested up to 4.7
@@ -390,6 +394,10 @@ The settings for all sites in the network can be configured only by the Network 
 
 == Upgrade notice ==
 
+= 1.10.5 =
+* Added settings page on multisite to give access to self manage SendGrid plugin to each subsite
+= 1.10.4 =
+* Set transient token for Marketing Campaign in database
 = 1.10.3 =
 * Add option to configure text version using setText() function from the header
 * Tested up to 4.7
