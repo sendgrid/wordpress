@@ -58,6 +58,7 @@
             <select name="sendgrid_port" id="sendgrid_port" <?php disabled( $is_env_port ); ?>>
               <option value="<?php echo SendGrid_SMTP::TLS ?>" id="tls" <?php echo ( ( SendGrid_SMTP::TLS == $port ) or (! $port ) ) ? 'selected' : '' ?>><?php _e( SendGrid_SMTP::TLS ) ?></option>
               <option value="<?php echo SendGrid_SMTP::TLS_ALTERNATIVE ?>" id="tls_alt" <?php echo ( SendGrid_SMTP::TLS_ALTERNATIVE == $port ) ? 'selected' : '' ?>><?php _e( SendGrid_SMTP::TLS_ALTERNATIVE ) ?></option>
+              <option value="<?php echo SendGrid_SMTP::TLS_ALTERNATIVE_2 ?>" id="tls_alt_2" <?php echo ( SendGrid_SMTP::TLS_ALTERNATIVE_2 == $port ) ? 'selected' : '' ?>><?php _e( SendGrid_SMTP::TLS_ALTERNATIVE_2 ) ?></option>
               <option value="<?php echo SendGrid_SMTP::SSL ?>" id="ssl" <?php echo ( SendGrid_SMTP::SSL == $port ) ? 'selected' : '' ?>><?php _e( SendGrid_SMTP::SSL ) ?></option>
             </select>
           </td>

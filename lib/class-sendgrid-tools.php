@@ -5,10 +5,11 @@ class Sendgrid_Tools
   const CACHE_GROUP = "sendgrid";
   const CHECK_CREDENTIALS_CACHE_KEY = "sendgrid_credentials_check";
   const CHECK_API_KEY_CACHE_KEY = "sendgrid_api_key_check";
+  const CHECK_API_KEY_STATS_CACHE_KEY = "sendgrid_api_key_stats_check";
   const VALID_CREDENTIALS_STATUS = "valid";
 
   // used static variable because php 5.3 doesn't support array as constant
-  public static $allowed_ports = array( Sendgrid_SMTP::TLS, Sendgrid_SMTP::TLS_ALTERNATIVE, Sendgrid_SMTP::SSL );
+  public static $allowed_ports = array( Sendgrid_SMTP::TLS, Sendgrid_SMTP::TLS_ALTERNATIVE, Sendgrid_SMTP::SSL, Sendgrid_SMTP::TLS_ALTERNATIVE_2 );
   public static $allowed_auth_methods = array( 'apikey', 'credentials' );
   public static $allowed_content_type = array( 'plaintext', 'html' );
 
@@ -65,16 +66,11 @@ class Sendgrid_Tools
       return false;
     }
 
-    if ( $clear_cache and is_multisite() ) {
-      set_site_transient( self::CHECK_CREDENTIALS_CACHE_KEY, null );
-    } elseif ( $clear_cache ) {
-      set_transient( self::CHECK_CREDENTIALS_CACHE_KEY, null );
+    if ( $clear_cache ) {
+      self::set_transient_sendgrid( self::CHECK_CREDENTIALS_CACHE_KEY, null );
     }
 
-    $valid_username_password = get_transient( self::CHECK_CREDENTIALS_CACHE_KEY );
-    if ( is_multisite() ) {
-      $valid_username_password = get_site_transient( self::CHECK_CREDENTIALS_CACHE_KEY );
-    }
+    $valid_username_password = self::get_transient_sendgrid( self::CHECK_CREDENTIALS_CACHE_KEY );
 
     if ( self::VALID_CREDENTIALS_STATUS == $valid_username_password ) {
       return true;
@@ -95,11 +91,7 @@ class Sendgrid_Tools
       return false;
     }
 
-    if ( is_multisite() ) {
-      set_site_transient( self::CHECK_CREDENTIALS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
-    } else {
-      set_transient( self::CHECK_CREDENTIALS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
-    }
+    self::set_transient_sendgrid( self::CHECK_CREDENTIALS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
 
     return true;
   }
@@ -163,16 +155,11 @@ class Sendgrid_Tools
       return false;
     }
 
-    if ( $clear_cache and is_multisite() ) {
-      set_site_transient( self::CHECK_API_KEY_CACHE_KEY, null );
-    } elseif ( $clear_cache ) {
-      set_transient( self::CHECK_API_KEY_CACHE_KEY, null );
+    if ( $clear_cache ) {
+      self::set_transient_sendgrid( self::CHECK_API_KEY_CACHE_KEY, null );
     }
 
-    $valid_apikey = get_transient( self::CHECK_API_KEY_CACHE_KEY );
-    if ( is_multisite() ) {
-      $valid_apikey = get_site_transient( self::CHECK_API_KEY_CACHE_KEY );
-    }
+    $valid_apikey = self::get_transient_sendgrid( self::CHECK_API_KEY_CACHE_KEY );
 
     if ( self::VALID_CREDENTIALS_STATUS == $valid_apikey ) {
       return true;
@@ -189,11 +176,7 @@ class Sendgrid_Tools
       return false;
     }
 
-    if ( is_multisite() ) {
-      set_site_transient( self::CHECK_API_KEY_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
-    } else {
-      set_transient( self::CHECK_API_KEY_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
-    }
+    self::set_transient_sendgrid( self::CHECK_API_KEY_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
 
     return true;
   }
@@ -1320,15 +1303,35 @@ class Sendgrid_Tools
   /**
    * Check apikey stats permissions
    *
-   * @param   string  $apikey   sendgrid apikey
+   * @param   string  $apikey        sendgrid apikey
+   * @param   bool    $clear_cache   true to not use cache
    *
    * @return  bool
    */
-  public static function check_api_key_stats( $apikey )
+  public static function check_api_key_stats( $apikey, $clear_cache = false )
   {
+    // clear cache
+    if ( $clear_cache ) {
+      self::set_transient_sendgrid( self::CHECK_API_KEY_STATS_CACHE_KEY, null );
+    }
+
+    // get info from cache
+    $valid_apikey_stats = self::get_transient_sendgrid( self::CHECK_API_KEY_STATS_CACHE_KEY );
+
+    if ( self::VALID_CREDENTIALS_STATUS == $valid_apikey_stats ) {
+      return true;
+    }
+
     $required_scopes = array( 'stats.read', 'categories.stats.read', 'categories.stats.sums.read' );
 
-    return Sendgrid_Tools::check_api_key_scopes( $apikey, $required_scopes );
+    $check_scopes = Sendgrid_Tools::check_api_key_scopes( $apikey, $required_scopes );
+
+    // set cache
+    if ( $check_scopes ) {
+      self::set_transient_sendgrid( self::CHECK_API_KEY_STATS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
+    }
+
+    return $check_scopes;
   }
 
   /**
@@ -1471,26 +1474,13 @@ class Sendgrid_Tools
   public static function set_transient_sendgrid( $transient, $value, $expiration = 0 ) {
     $old_cache_value = wp_using_ext_object_cache();
     wp_using_ext_object_cache( false );
-    $set_transient_result = set_transient( $transient, $value, $expiration );
-    wp_using_ext_object_cache( $old_cache_value );
 
-    return $set_transient_result;
-  }
+    if ( ! is_multisite() || ( is_multisite() and ! is_main_site() and get_option( 'sendgrid_can_manage_subsite' ) ) ) {
+      $set_transient_result = set_transient( $transient, $value, $expiration );
+    } else {
+      $set_transient_result = set_site_transient( $transient, $value, $expiration );
+    }
 
-  /**
-   * Set/update the value of a site transient using database.
-   *
-   * @param string $transient  Transient name. Expected to not be SQL-escaped. Must be
-   *                           172 characters or fewer in length.
-   * @param mixed  $value      Transient value. Must be serializable if non-scalar.
-   *                           Expected to not be SQL-escaped.
-   * @param int    $expiration Optional. Time until expiration in seconds. Default 0 (no expiration).
-   * @return bool False if value was not set and true if value was set.
-   */
-  public static function set_site_transient_sendgrid( $transient, $value, $expiration = 0 ) {
-    $old_cache_value = wp_using_ext_object_cache();
-    wp_using_ext_object_cache( false );
-    $set_transient_result = set_site_transient( $transient, $value, $expiration );
     wp_using_ext_object_cache( $old_cache_value );
 
     return $set_transient_result;
@@ -1505,28 +1495,16 @@ class Sendgrid_Tools
    * @param string $transient Transient name. Expected to not be SQL-escaped.
    * @return mixed Value of transient.
    */
-  function get_transient_sendgrid( $transient ) {
+  public static function get_transient_sendgrid( $transient ) {
     $old_cache_value = wp_using_ext_object_cache();
     wp_using_ext_object_cache( false );
-    $value = get_transient( $transient );
-    wp_using_ext_object_cache( $old_cache_value );
+    
+    if ( ! is_multisite() || ( is_multisite() and ! is_main_site() and get_option( 'sendgrid_can_manage_subsite' ) ) ) {
+      $value = get_transient( $transient );
+    } else {
+      $value = get_site_transient( $transient );
+    }
 
-    return $value;
-  }
-
-  /**
-   * Get the value of a site transient from database.
-   *
-   * If the transient does not exist, does not have a value, or has expired,
-   * then the return value will be false.
-   *
-   * @param string $transient Transient name. Expected to not be SQL-escaped.
-   * @return mixed Value of transient.
-   */
-  function get_site_transient_sendgrid( $transient ) {
-    $old_cache_value = wp_using_ext_object_cache();
-    wp_using_ext_object_cache( false );
-    $value = get_site_transient( $transient );
     wp_using_ext_object_cache( $old_cache_value );
 
     return $value;

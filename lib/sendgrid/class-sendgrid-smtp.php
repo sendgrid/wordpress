@@ -7,6 +7,7 @@ class Sendgrid_SMTP implements Sendgrid_Send {
   //the available ports
   const TLS = 587;
   const TLS_ALTERNATIVE = 25;
+  const TLS_ALTERNATIVE_2 = 2525;
   const SSL = 465;
 
   //the list of port instances, to be recycled
