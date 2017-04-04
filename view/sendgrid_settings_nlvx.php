@@ -1,5 +1,5 @@
 <?php if ( $active_tab == 'marketing' ): ?>
-  <form class="form-table" name="sendgrid_form" id="sendgrid_form_mc" method="POST" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ); ?>">
+  <form class="form-table" name="sendgrid_form" id="sendgrid_form_mc" method="POST" action="<?php echo Sendgrid_Tools::get_form_action(); ?>">
     <table class="form-table">
       <tbody>
         <tr valign="top">

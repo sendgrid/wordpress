@@ -143,43 +143,45 @@ class Sendgrid_Settings {
     $status = '';
     $message = '';
 
-    $user                 = Sendgrid_Tools::get_username();
-    $password             = Sendgrid_Tools::get_password();
-    $api_key              = Sendgrid_Tools::get_api_key();
-    $send_method          = Sendgrid_Tools::get_send_method();
-    $auth_method          = Sendgrid_Tools::get_auth_method();
+    $user                 = stripslashes( Sendgrid_Tools::get_username() );
+    $password             = stripslashes( Sendgrid_Tools::get_password() );
+    $api_key              = stripslashes( Sendgrid_Tools::get_api_key() );
+    $send_method          = stripslashes( Sendgrid_Tools::get_send_method() );
+    $auth_method          = stripslashes( Sendgrid_Tools::get_auth_method() );
     $name                 = stripslashes( Sendgrid_Tools::get_from_name() );
-    $email                = Sendgrid_Tools::get_from_email();
-    $reply_to             = Sendgrid_Tools::get_reply_to();
+    $email                = stripslashes( Sendgrid_Tools::get_from_email() );
+    $reply_to             = stripslashes( Sendgrid_Tools::get_reply_to() );
     $categories           = stripslashes( Sendgrid_Tools::get_categories() );
     $template             = stripslashes( Sendgrid_Tools::get_template() );
-    $port                 = Sendgrid_Tools::get_port();
-    $content_type         = Sendgrid_Tools::get_content_type();
-    $unsubscribe_group_id = Sendgrid_Tools::get_unsubscribe_group();
+    $port                 = stripslashes( Sendgrid_Tools::get_port() );
+    $content_type         = stripslashes( Sendgrid_Tools::get_content_type() );
+    $unsubscribe_group_id = stripslashes( Sendgrid_Tools::get_unsubscribe_group() );
     $stats_categories     = stripslashes( Sendgrid_Tools::get_stats_categories() );
 
-    $mc_api_key                   = Sendgrid_Tools::get_mc_api_key();
-    $mc_list_id                   = Sendgrid_Tools::get_mc_list_id();
-    $mc_opt_use_transactional     = Sendgrid_Tools::get_mc_opt_use_transactional();
-    $mc_opt_incl_fname_lname      = Sendgrid_Tools::get_mc_opt_incl_fname_lname();
-    $mc_opt_req_fname_lname       = Sendgrid_Tools::get_mc_opt_req_fname_lname();
-    $mc_signup_confirmation_page  = Sendgrid_Tools::get_mc_signup_confirmation_page();
+    $mc_api_key                   = stripslashes( Sendgrid_Tools::get_mc_api_key() );
+    $mc_list_id                   = stripslashes( Sendgrid_Tools::get_mc_list_id() );
+    $mc_opt_use_transactional     = stripslashes( Sendgrid_Tools::get_mc_opt_use_transactional() );
+    $mc_opt_incl_fname_lname      = stripslashes( Sendgrid_Tools::get_mc_opt_incl_fname_lname() );
+    $mc_opt_req_fname_lname       = stripslashes( Sendgrid_Tools::get_mc_opt_req_fname_lname() );
+    $mc_signup_confirmation_page  = stripslashes( Sendgrid_Tools::get_mc_signup_confirmation_page() );
 
     // input padding
-    $mc_signup_input_padding_top      = Sendgrid_Tools::get_mc_input_padding_by_position( 'top' );
-    $mc_signup_input_padding_right    = Sendgrid_Tools::get_mc_input_padding_by_position( 'right' );
-    $mc_signup_input_padding_bottom   = Sendgrid_Tools::get_mc_input_padding_by_position( 'bottom' );
-    $mc_signup_input_padding_left     = Sendgrid_Tools::get_mc_input_padding_by_position( 'left' );
+    $mc_signup_input_padding_top      = stripslashes( Sendgrid_Tools::get_mc_input_padding_by_position( 'top' ) );
+    $mc_signup_input_padding_right    = stripslashes( Sendgrid_Tools::get_mc_input_padding_by_position( 'right' ) );
+    $mc_signup_input_padding_bottom   = stripslashes( Sendgrid_Tools::get_mc_input_padding_by_position( 'bottom' ) );
+    $mc_signup_input_padding_left     = stripslashes( Sendgrid_Tools::get_mc_input_padding_by_position( 'left' ) );
+
     // button padding
-    $mc_signup_button_padding_top     = Sendgrid_Tools::get_mc_button_padding_by_position( 'top' );
-    $mc_signup_button_padding_right   = Sendgrid_Tools::get_mc_button_padding_by_position( 'right' );
-    $mc_signup_button_padding_bottom  = Sendgrid_Tools::get_mc_button_padding_by_position( 'bottom' );
-    $mc_signup_button_padding_left    = Sendgrid_Tools::get_mc_button_padding_by_position( 'left' );
+    $mc_signup_button_padding_top     = stripslashes( Sendgrid_Tools::get_mc_button_padding_by_position( 'top' ) );
+    $mc_signup_button_padding_right   = stripslashes( Sendgrid_Tools::get_mc_button_padding_by_position( 'right' ) );
+    $mc_signup_button_padding_bottom  = stripslashes( Sendgrid_Tools::get_mc_button_padding_by_position( 'bottom' ) );
+    $mc_signup_button_padding_left    = stripslashes( Sendgrid_Tools::get_mc_button_padding_by_position( 'left' ) );
 
     $mc_signup_email_subject = Sendgrid_Tools::get_mc_signup_email_subject();
     if ( false == $mc_signup_email_subject ) {
       $mc_signup_email_subject = self::DEFAULT_SIGNUP_EMAIL_SUBJECT . get_bloginfo('name');
     }
+    $mc_signup_email_subject = stripslashes( $mc_signup_email_subject );
 
     $mc_signup_email_content = Sendgrid_Tools::get_mc_signup_email_content();
     if ( false == $mc_signup_email_content ) {
@@ -317,18 +319,25 @@ class Sendgrid_Settings {
     if ( false == $mc_signup_email_label ) {
       $mc_signup_email_label = self::DEFAULT_EMAIL_LABEL;
     }
+    $mc_signup_email_label = stripslashes( $mc_signup_email_label );
+
     $mc_signup_first_name_label = Sendgrid_Tools::get_mc_first_name_label();
     if ( false == $mc_signup_first_name_label ) {
       $mc_signup_first_name_label = self::DEFAULT_FIRST_NAME_LABEL;
     }
+    $mc_signup_first_name_label = stripslashes( $mc_signup_first_name_label );
+
     $mc_signup_last_name_label = Sendgrid_Tools::get_mc_last_name_label();
     if ( false == $mc_signup_last_name_label ) {
       $mc_signup_last_name_label = self::DEFAULT_LAST_NAME_LABEL;
     }
+    $mc_signup_last_name_label = stripslashes( $mc_signup_last_name_label );
+
     $mc_signup_subscribe_label = Sendgrid_Tools::get_mc_subscribe_label();
     if ( false == $mc_signup_subscribe_label ) {
       $mc_signup_subscribe_label = self::DEFAULT_SUBSCRIBE_LABEL;
     }
+    $mc_signup_subscribe_label = stripslashes( $mc_signup_subscribe_label );
 
     $is_env_auth_method                  = defined( 'SENDGRID_AUTH_METHOD' );
     $is_env_send_method                  = defined( 'SENDGRID_SEND_METHOD' );
@@ -400,7 +409,8 @@ class Sendgrid_Settings {
   private static function save_subsite_settings( $params ) {
     $sites = get_sites();
     foreach( $sites as $site ) {
-      if ( isset( $params['checked_sites'][$site->blog_id] ) and 'on' == $params['checked_sites'][$site->blog_id] ) {
+      if ( isset( $params['checked_sites'][$site->blog_id] ) and 
+        'on' == $params['checked_sites'][$site->blog_id] ) {
         update_blog_option( $site->blog_id, 'sendgrid_can_manage_subsite', 1 );
       } else {
         update_blog_option( $site->blog_id, 'sendgrid_can_manage_subsite', 0 );
@@ -463,7 +473,7 @@ class Sendgrid_Settings {
         Sendgrid_Tools::set_mc_api_key( '' );
       } else {
         // MC API Key was set, check scopes and save if correct
-        $apikey = $params['sendgrid_mc_apikey'];
+        $apikey = htmlspecialchars( $params['sendgrid_mc_apikey'], ENT_QUOTES, 'UTF-8' );
 
         if ( ! Sendgrid_Tools::check_api_key_mc( $apikey ) ) {
           $response = array(
@@ -493,7 +503,8 @@ class Sendgrid_Settings {
     }
 
     if ( isset( $params['sendgrid_mc_contact_list'] ) and ! defined( 'SENDGRID_MC_LIST_ID' ) ) {
-      Sendgrid_Tools::set_mc_list_id( $params['sendgrid_mc_contact_list'] );
+      $mc_list_id = htmlspecialchars( $params['sendgrid_mc_contact_list'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_list_id( $mc_list_id );
     }
 
     if ( ! defined( 'SENDGRID_MC_SIGNUP_EMAIL_SUBJECT' ) ) {
@@ -503,7 +514,8 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        Sendgrid_Tools::set_mc_signup_email_subject( $params['sendgrid_mc_email_subject'] );
+        $email_subject = htmlspecialchars( $params['sendgrid_mc_email_subject'] , ENT_QUOTES, 'UTF-8' );
+        Sendgrid_Tools::set_mc_signup_email_subject( $email_subject );
       }
     }
 
@@ -514,6 +526,8 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
+        // Textarea values are automatically escaping HTML characters.
+        // The user needs to be able to enter any content.
         Sendgrid_Tools::set_mc_signup_email_content( $params['sendgrid_mc_email_content'] );
       }
     }
@@ -525,53 +539,68 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
+        // Textarea values are automatically escaping HTML characters.
+        // The user needs to be able to enter any content.
         Sendgrid_Tools::set_mc_signup_email_content_text( $params['sendgrid_mc_email_content_text'] );
       }
     }
 
     if ( isset( $params['sendgrid_mc_signup_page'] ) and ! defined( 'SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE' ) ) {
-      Sendgrid_Tools::set_mc_signup_confirmation_page( $params['sendgrid_mc_signup_page'] );
+      $signup_page = htmlspecialchars( $params['sendgrid_mc_signup_page'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_signup_confirmation_page( $signup_page );
     }
 
     // form configuration
     // labels
     if ( isset( $params['sendgrid_mc_email_label'] ) and ! defined( 'SENDGRID_MC_EMAIL_LABEL' ) ) {
-      Sendgrid_Tools::set_mc_email_label( $params['sendgrid_mc_email_label'] );
+      $email_label = htmlspecialchars( $params['sendgrid_mc_email_label'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_email_label( $email_label );
     }
     if ( isset( $params['sendgrid_mc_first_name_label'] ) and ! defined( 'SENDGRID_MC_FIRST_NAME_LABEL' ) ) {
-      Sendgrid_Tools::set_mc_first_name_label( $params['sendgrid_mc_first_name_label'] );
+      $first_name_label = htmlspecialchars( $params['sendgrid_mc_first_name_label'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_first_name_label( $first_name_label );
     }
     if ( isset( $params['sendgrid_mc_last_name_label'] ) and ! defined( 'SENDGRID_MC_LAST_NAME_LABEL' ) ) {
-      Sendgrid_Tools::set_mc_last_name_label( $params['sendgrid_mc_last_name_label'] );
+      $last_name_label = htmlspecialchars( $params['sendgrid_mc_last_name_label'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_last_name_label( $last_name_label );
     }
     if ( isset( $params['sendgrid_mc_subscribe_label'] ) and ! defined( 'SENDGRID_MC_SUBSCRIBE_LABEL' ) ) {
-      Sendgrid_Tools::set_mc_subscribe_label( $params['sendgrid_mc_subscribe_label'] );
+      $subscribe_label = htmlspecialchars( $params['sendgrid_mc_subscribe_label'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_subscribe_label( $subscribe_label );
     }
     // input padding
     if ( isset( $params['sendgrid_mc_input_padding_top'] ) ) {
-      Sendgrid_Tools::set_mc_input_padding( 'top', $params['sendgrid_mc_input_padding_top'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_input_padding_top'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_input_padding( 'top', $padding );
     }
     if ( isset( $params['sendgrid_mc_input_padding_right'] ) ) {
-      Sendgrid_Tools::set_mc_input_padding( 'right', $params['sendgrid_mc_input_padding_right'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_input_padding_right'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_input_padding( 'right', $padding );
     }
     if ( isset( $params['sendgrid_mc_input_padding_bottom'] ) ) {
-      Sendgrid_Tools::set_mc_input_padding( 'bottom', $params['sendgrid_mc_input_padding_bottom'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_input_padding_bottom'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_input_padding( 'bottom', $padding );
     }
     if ( isset( $params['sendgrid_mc_input_padding_left'] ) ) {
-      Sendgrid_Tools::set_mc_input_padding( 'left', $params['sendgrid_mc_input_padding_left'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_input_padding_left'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_input_padding( 'left', $padding );
     }
     // button padding
     if ( isset( $params['sendgrid_mc_button_padding_top'] ) ) {
-      Sendgrid_Tools::set_mc_button_padding( 'top', $params['sendgrid_mc_button_padding_top'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_button_padding_top'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_button_padding( 'top', $padding );
     }
     if ( isset( $params['sendgrid_mc_button_padding_right'] ) ) {
-      Sendgrid_Tools::set_mc_button_padding( 'right', $params['sendgrid_mc_button_padding_right'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_button_padding_right'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_button_padding( 'right', $padding );
     }
     if ( isset( $params['sendgrid_mc_button_padding_bottom'] ) ) {
-      Sendgrid_Tools::set_mc_button_padding( 'bottom', $params['sendgrid_mc_button_padding_bottom'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_button_padding_bottom'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_button_padding( 'bottom', $padding );
     }
     if ( isset( $params['sendgrid_mc_button_padding_left'] ) ) {
-      Sendgrid_Tools::set_mc_button_padding( 'left', $params['sendgrid_mc_button_padding_left'] );
+      $padding = htmlspecialchars( $params['sendgrid_mc_button_padding_left'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_mc_button_padding( 'left', $padding );
     }
 
     if ( isset( $response ) and $response['status'] == 'error' ) {
@@ -610,7 +639,9 @@ class Sendgrid_Settings {
             break;
           }
 
-          if ( ! Sendgrid_Tools::check_api_key( $params['sendgrid_apikey'], true ) ) {
+          $apikey = htmlspecialchars( $params['sendgrid_apikey'], ENT_QUOTES, 'UTF-8' );
+
+          if ( ! Sendgrid_Tools::check_api_key( $apikey, true ) ) {
             $response = array(
               'message' => 'API Key is invalid or without permissions.',
               'status' => 'error'
@@ -619,21 +650,22 @@ class Sendgrid_Settings {
             break;
           }
 
-          if ( 'true' == Sendgrid_Tools::get_mc_opt_use_transactional() and ! Sendgrid_Tools::check_api_key_mc( $params['sendgrid_apikey'] ) ) {
+          if ( 'true' == Sendgrid_Tools::get_mc_opt_use_transactional() and ! Sendgrid_Tools::check_api_key_mc( $apikey ) ) {
             $response = array(
               'message' => 'This API key is also used for the Subscription Widget but does not have Marketing Campaigns permissions.',
               'status' => 'error'
             );
           }
 
-          Sendgrid_Tools::set_api_key( $params['sendgrid_apikey'] );
+          Sendgrid_Tools::set_api_key( $apikey );
         }
        
         break;
       
       case 'credentials':
-        if ( ! isset( $params['sendgrid_username'] ) and ! isset( $params['sendgrid_password'] ) )
+        if ( ! isset( $params['sendgrid_username'] ) and ! isset( $params['sendgrid_password'] ) ) {
           break;
+        }  
 
         $save_username = true;
         $save_password = true;
@@ -648,12 +680,15 @@ class Sendgrid_Settings {
           $params['sendgrid_password'] = Sendgrid_Tools::get_username();
         }
 
+        $username = htmlspecialchars( $params['sendgrid_username'], ENT_QUOTES, 'UTF-8' );
+        $password = htmlspecialchars( $params['sendgrid_password'], ENT_QUOTES, 'UTF-8' );
+
         if ( ( isset( $params['sendgrid_username'] ) and ! $params['sendgrid_username'] ) or ( isset( $params['sendgrid_password'] ) and ! $params['sendgrid_password'] ) ) {
           $response = array(
             'message' => 'Username or password is empty.',
             'status' => 'error'
           );
-        } elseif ( ! Sendgrid_Tools::check_username_password( $params['sendgrid_username'], $params['sendgrid_password'], true ) ) {
+        } elseif ( ! Sendgrid_Tools::check_username_password( $username, $password, true ) ) {
           $response = array(
             'message' => 'Username and password are invalid.',
             'status' => 'error'
@@ -663,18 +698,19 @@ class Sendgrid_Settings {
         }
 
         if ( $save_username ) {
-          Sendgrid_Tools::set_username( $params['sendgrid_username'] );
+          Sendgrid_Tools::set_username( $username );
         }
         
         if ( $save_password ) {
-          Sendgrid_Tools::set_password( $params['sendgrid_password'] );
+          Sendgrid_Tools::set_password( $password );
         }
 
         break;
     }
 
     if ( isset( $params['sendgrid_name'] ) ) {
-      Sendgrid_Tools::set_from_name( $params['sendgrid_name'] );
+      $from_name = htmlspecialchars( $params['sendgrid_name'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_from_name( $from_name );
     }
 
     if ( isset( $params['sendgrid_email'] ) ) {
@@ -684,7 +720,9 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        Sendgrid_Tools::set_from_email( $params['sendgrid_email'] );
+        // Although it should be rejected by email validity, just to be extra safe
+        $from_email = htmlspecialchars( $params['sendgrid_email'], ENT_QUOTES, 'UTF-8' );
+        Sendgrid_Tools::set_from_email( $from_email );
       }
     }
 
@@ -695,47 +733,58 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        Sendgrid_Tools::set_reply_to( $params['sendgrid_reply_to'] );
+        // Although it should be rejected by email validity, just to be extra safe
+        $reply_to_email = htmlspecialchars( $params['sendgrid_reply_to'], ENT_QUOTES, 'UTF-8' );
+        Sendgrid_Tools::set_reply_to( $reply_to_email );
       }
     }
 
     if ( isset( $params['sendgrid_categories'] ) ) {
-      Sendgrid_Tools::set_categories( $params['sendgrid_categories'] );
+      $categories = htmlspecialchars( $params['sendgrid_categories'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_categories( $categories );
     }
 
     if ( isset( $params['sendgrid_stats_categories'] ) ) {
-      Sendgrid_Tools::set_stats_categories( $params['sendgrid_stats_categories'] );
+      $stats_categories = htmlspecialchars( $params['sendgrid_stats_categories'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_stats_categories( $stats_categories );
     }
 
     if ( isset( $params['sendgrid_template'] ) ) {
-      if ( ! Sendgrid_Tools::check_template( $params['sendgrid_template'] ) ) {
+      $template_id = htmlspecialchars( $params['sendgrid_template'], ENT_QUOTES, 'UTF-8' );
+      if ( ! Sendgrid_Tools::check_template( $template_id ) ) {
         $response = array(
           'message' => 'Template not found.',
           'status' => 'error'
         );
       } else {
-        Sendgrid_Tools::set_template( $params['sendgrid_template'] );
+        Sendgrid_Tools::set_template( $template_id );
       }
     }
 
     if ( isset( $params['send_method'] ) ) {
-      Sendgrid_Tools::set_send_method( $params['send_method'] );
+      $send_method = htmlspecialchars( $params['send_method'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_send_method( $send_method );
     }
 
     if ( isset( $params['auth_method'] ) and in_array( $params['auth_method'], Sendgrid_Tools::$allowed_auth_methods ) ) {
-      Sendgrid_Tools::set_auth_method( $params['auth_method'] );
+      // Should be rejected by allowed auth method check, but just to be extra safe
+      $auth_method = htmlspecialchars( $params['auth_method'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_auth_method( $auth_method );
     }
 
     if ( isset( $params['sendgrid_port'] ) ) {
-      Sendgrid_Tools::set_port( $params['sendgrid_port'] );
+      $port = htmlspecialchars( $params['sendgrid_port'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_port( $port );
     }
 
     if ( isset( $params['content_type'] ) ) {
-      Sendgrid_Tools::set_content_type( $params['content_type'] );
+      $content_type = htmlspecialchars( $params['content_type'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_content_type( $content_type );
     }
 
     if ( isset( $params['unsubscribe_group'] ) ) {
-      Sendgrid_Tools::set_unsubscribe_group( $params['unsubscribe_group'] );
+      $unsubscribe_group = htmlspecialchars( $params['unsubscribe_group'], ENT_QUOTES, 'UTF-8' );
+      Sendgrid_Tools::set_unsubscribe_group( $unsubscribe_group );
     }
 
     if( isset( $response ) and $response['status'] == 'error') {

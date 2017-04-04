@@ -162,7 +162,7 @@ class SendGrid_NLVX_Widget extends WP_Widget {
 
       // Form was submitted
       if ( isset( $_POST['sendgrid_mc_email'] ) ) {
-        $process_form_reponse = $this->process_subscription( $_POST );
+        $process_form_reponse = $this->process_subscription();
         if ( self::SUCCESS_EMAIL_SEND == $process_form_reponse ) {
           echo '<p class="sendgrid_widget_text"> ' . $success_text . ' </p>';
         } elseif ( self::INVALID_EMAIL_ERROR == $process_form_reponse ) {
@@ -188,12 +188,10 @@ class SendGrid_NLVX_Widget extends WP_Widget {
     /**
      * Method that processes the subscription params
      *
-     * @param   mixed   $params   array of parameters from $_POST
-     *
      * @return  void
      */
-    private function process_subscription( $params ) {  
-      $email_split = explode( "@", $_POST['sendgrid_mc_email'] );
+    private function process_subscription() {  
+      $email_split = explode( "@", htmlspecialchars($_POST['sendgrid_mc_email'], ENT_QUOTES, 'UTF-8') );
 
       if ( isset( $email_split[1] ) ) {
         $email_domain = $email_split[1];
@@ -207,7 +205,7 @@ class SendGrid_NLVX_Widget extends WP_Widget {
 
         $email = $email_split[0] . '@' . $email_domain;
       } else {
-        $email = $_POST['sendgrid_mc_email'];
+        $email = htmlspecialchars( $_POST['sendgrid_mc_email'], ENT_QUOTES, 'UTF-8 ');
       }
 
       // Bad call
@@ -225,7 +223,11 @@ class SendGrid_NLVX_Widget extends WP_Widget {
       }
 
       if ( isset( $_POST['sendgrid_mc_first_name'] ) and isset( $_POST['sendgrid_mc_last_name'] ) ) {
-        Sendgrid_OptIn_API_Endpoint::send_confirmation_email( $email, $_POST['sendgrid_mc_first_name'], $_POST['sendgrid_mc_last_name'] );
+        Sendgrid_OptIn_API_Endpoint::send_confirmation_email( 
+          $email, 
+          htmlspecialchars( $_POST['sendgrid_mc_first_name'], ENT_QUOTES, 'UTF-8' ),
+          htmlspecialchars( $_POST['sendgrid_mc_last_name'], ENT_QUOTES, 'UTF-8' )
+        );
       } else {
         Sendgrid_OptIn_API_Endpoint::send_confirmation_email( $email );
       }
@@ -239,22 +241,22 @@ class SendGrid_NLVX_Widget extends WP_Widget {
      * @return  void
      */
     private function display_form() {
-      $email_label = htmlspecialchars( Sendgrid_Tools::get_mc_email_label() );
+      $email_label = stripslashes( Sendgrid_Tools::get_mc_email_label() );
       if ( false == $email_label ) {
         $email_label = Sendgrid_Settings::DEFAULT_EMAIL_LABEL;
       }
 
-      $first_name_label = htmlspecialchars( Sendgrid_Tools::get_mc_first_name_label() );
+      $first_name_label = stripslashes( Sendgrid_Tools::get_mc_first_name_label() );
       if ( false == $first_name_label ) {
         $first_name_label = Sendgrid_Settings::DEFAULT_FIRST_NAME_LABEL;
       }
 
-      $last_name_label = htmlspecialchars( Sendgrid_Tools::get_mc_last_name_label() );
+      $last_name_label = stripslashes( Sendgrid_Tools::get_mc_last_name_label() );
       if ( false == $last_name_label ) {
         $last_name_label = Sendgrid_Settings::DEFAULT_LAST_NAME_LABEL;
       }
 
-      $subscribe_label = htmlspecialchars( Sendgrid_Tools::get_mc_subscribe_label() );
+      $subscribe_label = stripslashes( Sendgrid_Tools::get_mc_subscribe_label() );
       if ( false == $subscribe_label ) {
         $subscribe_label = Sendgrid_Settings::DEFAULT_SUBSCRIBE_LABEL;
       }

@@ -4,7 +4,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.2
 * Tested up to: 4.7
-* Stable tag: 1.10.7
+* Stable tag: 1.10.8
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -254,6 +254,9 @@ The settings for all sites in the network can be configured only by the Network 
 
 ## Changelog
 
+**1.10.8**
+* Fixed an XSS vulnerability in the settings forms that would allow other admins to inject scripts
+
 **1.10.7**
 * Add port 2525 for SMTP
 * Use cache for stats widget on dashboard
@@ -452,6 +455,9 @@ The settings for all sites in the network can be configured only by the Network 
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.10.8**
+* Fixed an XSS vulnerability in the settings forms that would allow other admins to inject scripts
 
 **1.10.7**
 * Add port 2525 for SMTP

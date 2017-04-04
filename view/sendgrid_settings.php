@@ -19,8 +19,8 @@
     }
 
     $active_tab = current( array_keys( $tabs ) );
-    if ( isset( $_GET[ 'tab' ] ) ) {
-      $selected_tab = $_GET[ 'tab' ];
+    if ( isset( $_GET['tab'] ) ) {
+      $selected_tab = $_GET['tab'];
       if ( array_key_exists( $selected_tab, $tabs ) ) {
         $active_tab = $selected_tab;
       }

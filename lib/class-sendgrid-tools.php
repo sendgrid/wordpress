@@ -447,7 +447,8 @@ class Sendgrid_Tools
     if ( defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT' ) ) {
       return SENDGRID_MC_SIGNUP_EMAIL_CONTENT;
     } else {
-      return Sendgrid_Tools::get_sendgrid_option( 'mc_signup_email_content' );
+      $signup_email_content = Sendgrid_Tools::get_sendgrid_option( 'mc_signup_email_content' );
+      return htmlspecialchars_decode( $signup_email_content, ENT_QUOTES );
     }
   }
 
@@ -461,7 +462,8 @@ class Sendgrid_Tools
     if ( defined( 'SENDGRID_MC_SIGNUP_EMAIL_CONTENT_TEXT' ) ) {
       return SENDGRID_MC_SIGNUP_EMAIL_CONTENT_TEXT;
     } else {
-      return Sendgrid_Tools::get_sendgrid_option( 'mc_signup_email_content_text' );
+      $signup_email_text = Sendgrid_Tools::get_sendgrid_option( 'mc_signup_email_content_text' );
+      return htmlspecialchars_decode( $signup_email_text, ENT_QUOTES );
     }
   }
 
@@ -614,6 +616,7 @@ class Sendgrid_Tools
    */
   public static function set_mc_signup_email_content( $email_content )
   {
+    $email_content = htmlspecialchars( $email_content, ENT_QUOTES, 'UTF-8' );
     return Sendgrid_Tools::update_sendgrid_option( 'mc_signup_email_content', $email_content );
   }
 
@@ -626,6 +629,7 @@ class Sendgrid_Tools
    */
   public static function set_mc_signup_email_content_text( $email_content )
   {
+    $email_content = htmlspecialchars( $email_content, ENT_QUOTES, 'UTF-8' );
     return Sendgrid_Tools::update_sendgrid_option( 'mc_signup_email_content_text', $email_content );
   }
 
@@ -1068,7 +1072,7 @@ class Sendgrid_Tools
    */
   public static function set_mc_first_name_label( $first_name_label )
   {
-      return update_option( 'mc_first_name_label', $first_name_label );
+      return Sendgrid_Tools::update_sendgrid_option( 'mc_first_name_label', $first_name_label );
   }
 
   /**
@@ -1508,6 +1512,45 @@ class Sendgrid_Tools
     wp_using_ext_object_cache( $old_cache_value );
 
     return $value;
+  }
+
+  /**
+   * Function that outputs the XSS sanitized string of the current request URI,
+   *  this is used in all plugin settings forms.
+   *
+   * @return string XSS sanitized form action attribute
+   */
+  public static function get_form_action() {
+    // Get the original query string
+    $original_query_string = $_SERVER['QUERY_STRING'];
+    parse_str( $original_query_string, $get_params );
+    $count_of_parameters = count( $get_params );
+
+    // No get parameters are set
+    if ( ! count( $get_params ) ) {
+      return $_SERVER['REQUEST_URI'];
+    }
+
+    // Perform sanitization for XSS
+    $sanitized_query_string = '';
+    $current_parameter_count = 0;
+
+    foreach ( $get_params as $key => $value ) {
+      $value = urldecode( $value );
+      $value = htmlspecialchars( $value );
+      $value = urlencode( $value );
+      $sanitized_query_string .= $key . '=' . $value;
+
+      // Append & if it's not the last element
+      if ( ++$current_parameter_count !== $count_of_parameters ) {
+        $sanitized_query_string .= '&';
+      }
+    }
+
+    $request_uri = str_replace( $original_query_string, $sanitized_query_string, $_SERVER['REQUEST_URI'] );
+    // This might be redundant, but certain online url encoders omit the ~ character when encoding
+    $request_uri = str_replace( '%7E', '~', $request_uri );
+    return $request_uri;
   }
 }
 

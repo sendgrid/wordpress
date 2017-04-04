@@ -1,6 +1,6 @@
 <?php if ( $active_tab == 'marketing' ): ?>
   <?php if ( ( $is_mc_api_key_valid and $contact_list_id_is_valid ) or ( 'error' == $status and isset( $error_type ) and 'upload' == $error_type ) ): ?>
-    <form class="form-table" name="sendgrid_form" method="POST" action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI'] ); ?>">
+    <form class="form-table" name="sendgrid_form" method="POST" action="<?php echo Sendgrid_Tools::get_form_action(); ?>">
       <table class="form-table">
         <tbody>
           <tr valign="top">
