@@ -143,7 +143,7 @@
                       echo '<option value="' . $group['id'] . '" selected="selected">' . $group['name'] . '</option>';
                     } else {
                       echo '<option value="' . $group['id'] . '">' . $group['name'] . '</option>';
-                    }           
+                    }
                   }
                 }
               ?>
@@ -183,6 +183,6 @@
     <input class="button button-primary" type="submit" name="Submit" value="<?php _e('Update Settings') ?>" />
   </p>
   <input type="hidden" name="general_settings" value="true"/>
-</form>  
+</form>
 <br />
 <?php endif; ?>

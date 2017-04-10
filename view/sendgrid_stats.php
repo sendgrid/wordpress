@@ -31,7 +31,7 @@
       <?php endif; ?>
     </select>
   </div>
-  
+
   <div id="dashboard-widgets-wrap" class="full-width">
     <div id="dashboard-widgets" class="metabox-holder columns-1">
       <div class="postbox-container">
@@ -43,9 +43,9 @@
         </div>
 
         <?php
-        require plugin_dir_path( __FILE__ ) . '../view/partials/sendgrid_stats_deliveries.php';
-        require plugin_dir_path( __FILE__ ) . '../view/partials/sendgrid_stats_compliance.php';
-        require plugin_dir_path( __FILE__ ) . '../view/partials/sendgrid_stats_engagement.php';
+          require plugin_dir_path( __FILE__ ) . '../view/partials/sendgrid_stats_deliveries.php';
+          require plugin_dir_path( __FILE__ ) . '../view/partials/sendgrid_stats_compliance.php';
+          require plugin_dir_path( __FILE__ ) . '../view/partials/sendgrid_stats_engagement.php';
         ?>
       </div>
     </div>

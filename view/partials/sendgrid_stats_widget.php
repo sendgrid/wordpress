@@ -14,10 +14,10 @@
   <div class="loading"><img src="<?php echo plugin_dir_url( __FILE__ ); ?>../images/loader.gif" style="width: 15px; height: 15px;" /></div>
 </div>
 <br class="clearfix-clear"/>
-<div class="sendgrid-container 
+<div class="sendgrid-container
   <?php echo ( ( version_compare( get_bloginfo( "version" ), '3.7.10', '>' ) and ! isset( $_GET['page'] ) ) ? "wordpress-dashboard-new" : "" ); ?>
   <?php echo ( version_compare( get_bloginfo( "version" ), '3.7.10', '>' ) ? "wordpress-new" : ""); ?>" style="position:relative;">
-  <div class="widget others" id="deliveries">	
+  <div class="widget others" id="deliveries">
     <div class="widget-top">
       <div class="widget-title"><h4>Deliveries</h4></div>
     </div>
@@ -42,8 +42,8 @@
       </div>
     </div>
   </div>
-  
-  <div class="widget others" id="compliance">	
+
+  <div class="widget others" id="compliance">
     <div class="widget-top">
       <div class="widget-title"><h4>Compliance</h4></div>
     </div>
@@ -68,8 +68,8 @@
       </div>
     </div>
   </div>
-  
-  <div class="widget others" id="engagement">	
+
+  <div class="widget others" id="engagement">
     <div class="widget-top">
       <div class="widget-title"><h4>Engagement</h4></div>
     </div>
@@ -101,7 +101,7 @@
     </div>
   </div>
   <br class="clearfix-clear"/>
-  
+
   <?php if ( ! isset ($_GET['page'] ) or "sendgrid-statistics" != sanitize_text_field( $_GET['page'] ) ) { ?>
     <a href="index.php?page=sendgrid-statistics" class="more-statistics">See charts</a>
     <br class="clearfix-clear"/>

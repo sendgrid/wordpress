@@ -80,7 +80,7 @@ class Sendgrid_Tools
     $url .= "api_user=" . urlencode( $username ) . "&api_key=" . urlencode( $password );
 
     $response = wp_remote_get( $url, array( 'decompress' => false ) );
-    
+
     if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
       return false;
     }
@@ -169,7 +169,7 @@ class Sendgrid_Tools
     if ( Sendgrid_Tools::check_api_key_scopes( $apikey, array( "asm.groups.read" ) ) ) {
       Sendgrid_Tools::set_asm_permission( 'true' );
     } else {
-      Sendgrid_Tools::set_asm_permission( 'false' ); 
+      Sendgrid_Tools::set_asm_permission( 'false' );
     }
 
     if ( ! Sendgrid_Tools::check_api_key_scopes( $apikey, array( "mail.send" ) ) ) {
@@ -231,7 +231,7 @@ class Sendgrid_Tools
 
       $args = array(
         'headers' => array(
-          'Authorization' => 'Basic ' . $creds 
+          'Authorization' => 'Basic ' . $creds
         ),
         'decompress' => false
       );
@@ -239,7 +239,7 @@ class Sendgrid_Tools
     } else {
       $args = array(
         'headers' => array(
-          'Authorization' => 'Bearer ' . $parameters['apikey'] 
+          'Authorization' => 'Bearer ' . $parameters['apikey']
         ),
         'decompress' => false
       );
@@ -1008,7 +1008,7 @@ class Sendgrid_Tools
     $parameters['apikey']         = Sendgrid_Tools::get_api_key();
 
     if ( ( 'apikey' == $parameters['auth_method'] ) and ( 'true' != self::get_asm_permission() ) ) {
-      return false;  
+      return false;
     }
 
     $response = Sendgrid_Tools::do_request( $url, $parameters );
@@ -1183,7 +1183,7 @@ class Sendgrid_Tools
   /**
    * Return input padding by position from the database
    *
-   * @param   string    $position       position   
+   * @param   string    $position       position
    * @return  integer                   padding value
    */
   public static function get_mc_input_padding_by_position( $position )
@@ -1247,7 +1247,7 @@ class Sendgrid_Tools
   /**
    * Return button padding by position from the database
    *
-   * @param   string    $position   position   
+   * @param   string    $position   position
    * @return  integer               padding value
    */
   public static function get_mc_button_padding_by_position( $position )
@@ -1502,7 +1502,7 @@ class Sendgrid_Tools
   public static function get_transient_sendgrid( $transient ) {
     $old_cache_value = wp_using_ext_object_cache();
     wp_using_ext_object_cache( false );
-    
+
     if ( ! is_multisite() || ( is_multisite() and ! is_main_site() and get_option( 'sendgrid_can_manage_subsite' ) ) ) {
       $value = get_transient( $transient );
     } else {
@@ -1551,6 +1551,56 @@ class Sendgrid_Tools
     // This might be redundant, but certain online url encoders omit the ~ character when encoding
     $request_uri = str_replace( '%7E', '~', $request_uri );
     return $request_uri;
+  }
+
+   /**
+   * Function that returns an array of data used on the multisite pagination,
+   *  The array will contain the total number of pages, the current page and
+   *  HTML for the previous and next buttons.
+   *
+   * @param   type  int     $offset
+   * @param   type  int     $limit
+   *
+   * @return array  data used by the multisite view
+   */
+  public static function get_multisite_pagination( $offset, $limit ) {
+    $pagination = array();
+
+    // Fetch sites based on pagination
+    $total_site_count = get_blog_count();
+    $sites_remaining  = $total_site_count - $offset - $limit;
+
+    $total_page_count = 1;
+    $current_page     = 1;
+
+    if ( $limit != 0 ) {
+        $total_page_count = ceil( $total_site_count / $limit );
+        $current_page     = ceil( $offset / $limit ) + 1;
+    }
+
+    // Create previous button HTML code
+    $previous_button = '';
+    if ( $offset != 0 and $limit != 0 ) {
+        $previous_offset = ( $offset - $limit < 0 ? 0 : $offset - $limit );
+        $previous_button .= '<a href="?page=sendgrid-settings&tab=multisite&offset=' . $previous_offset;
+        $previous_button .= '&limit=' . $limit . '" class="sendgrid-multisite-button button button-secondary">';
+        $previous_button .= translate( 'Previous' ) . '</a>';
+    }
+
+    $next_button = '';
+    if ( $sites_remaining > 0 and $limit != 0 ) {
+        $next_offset = $offset + $limit;
+        $next_button .= '<a href="?page=sendgrid-settings&tab=multisite&offset=' . $next_offset;
+        $next_button .= '&limit=' . $limit . '" class="sendgrid-multisite-button button button-secondary">';
+        $next_button .= translate( 'Next' ) . '</a>';
+    }
+
+    $pagination['total_pages']      = $total_page_count;
+    $pagination['current_page']     = $current_page;
+    $pagination['previous_button']  = $previous_button;
+    $pagination['next_button']      = $next_button;
+
+    return $pagination;
   }
 }
 

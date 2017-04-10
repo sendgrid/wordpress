@@ -57,7 +57,7 @@
   Filters
 */
 .sendgrid-filters-container {
-  float:right; 
+  float:right;
   margin-right: 2.4%;
   margin-left: 2.3%;
 }
@@ -106,7 +106,7 @@
   Statistics
 */
 .sendgrid-container {
-  width: 100%; 
+  width: 100%;
   position: relative;
 }
 
@@ -115,7 +115,7 @@
   width: 48px;
   height: 48px;
   left: 50%;
-  top: 50%; 
+  top: 50%;
   margin-left: -24px;
   margin-top: -24px;
 }
@@ -127,7 +127,7 @@
 
 .sendgrid-container .widget {
   float: left;
-  width: 189px; 
+  width: 189px;
   margin-top: 15px;
   cursor: default;
 }
@@ -142,7 +142,7 @@
 }
 
 .sendgrid-container .widget .widget-inside {
-  display: block; 
+  display: block;
   text-align: center;
   min-height: 70px;
   border-top: none!important;
@@ -215,8 +215,8 @@
 }
 
 .sendgrid-statistics-legend {
-  width: 100%; 
-  height: 22px; 
+  width: 100%;
+  height: 22px;
   margin-top: 15px;
 }
 
@@ -249,12 +249,12 @@
   .columns-4 .sendgrid-container .widget.others {
     width: 46%;
   }
-  
+
   .wordpress-dashboard-new.sendgrid-container .widget.others {
     width: 46.55%;
   }
-  
-  .columns-4 .sendgrid-container .widget.others:last-of-type, 
+
+  .columns-4 .sendgrid-container .widget.others:last-of-type,
   .wordpress-dashboard-new.sendgrid-container .widget.others:last-of-type {
     display: block;
     padding: 0px;
@@ -269,7 +269,7 @@
   .columns-3 .sendgrid-container .widget.others {
     width: 46%;
   }
-  
+
   .columns-3 .sendgrid-container .widget.others:last-of-type {
     display: block;
     padding: 0px;
@@ -284,7 +284,7 @@
   .columns-4 .sendgrid-container .widget.others:first-of-type {
     margin-top: 10px;
   }
-  
+
   .columns-4 .sendgrid-container .widget.others {
     display: block;
     padding: 0px;
@@ -300,13 +300,13 @@
   .columns-4 .sendgrid-container .widget.others {
     width: 46%;
   }
-  
+
   .wordpress-dashboard-new.sendgrid-container .widget.others {
     width: 46.55%;
   }
-  
+
   .columns-2 .sendgrid-container .widget.others:last-of-type,
-  .columns-4 .sendgrid-container .widget.others:last-of-type, 
+  .columns-4 .sendgrid-container .widget.others:last-of-type,
   .wordpress-dashboard-new.sendgrid-container .widget.others:last-of-type {
     display: block;
     padding: 0px;
@@ -318,16 +318,16 @@
 }
 
 @media (min-width: 800px) and (max-width: 1000px) {
-  .columns-2 .sendgrid-container .widget.others:first-of-type, 
-  .columns-3 .sendgrid-container .widget.others:first-of-type, 
-  .columns-4 .sendgrid-container .widget.others:first-of-type, 
+  .columns-2 .sendgrid-container .widget.others:first-of-type,
+  .columns-3 .sendgrid-container .widget.others:first-of-type,
+  .columns-4 .sendgrid-container .widget.others:first-of-type,
   .wordpress-dashboard-new.sendgrid-container .widget.others:first-of-type {
     margin-top: 10px;
   }
-  
-  .columns-2 .sendgrid-container .widget.others, 
-  .columns-3 .sendgrid-container .widget.others, 
-  .columns-4 .sendgrid-container .widget.others, 
+
+  .columns-2 .sendgrid-container .widget.others,
+  .columns-3 .sendgrid-container .widget.others,
+  .columns-4 .sendgrid-container .widget.others,
   .wordpress-dashboard-new.sendgrid-container .widget.others {
     display: block;
     padding: 0px;
@@ -339,19 +339,19 @@
 }
 
 @media (min-width: 560px) and (max-width: 782px) {
-  .sendgrid-filters #sendgrid-start-date, 
+  .sendgrid-filters #sendgrid-start-date,
   .sendgrid-filters #sendgrid-end-date {
     width: 110px;
   }
-  
+
   .sendgrid-container .widget.others {
     width: 46%;
   }
-  
+
   .wordpress-new.sendgrid-container .widget.others {
     width: 46.5%;
   }
-  
+
   .sendgrid-container .widget.others:last-of-type {
     display: block;
     padding: 0px;
@@ -363,7 +363,7 @@
 }
 
 @media (max-width: 559px) {
-  .sendgrid-filters #sendgrid-start-date, 
+  .sendgrid-filters #sendgrid-start-date,
   .sendgrid-filters #sendgrid-end-date {
     width: 110px;
   }
@@ -371,7 +371,7 @@
   .sendgrid-container .widget.others:first-of-type {
     margin-top: 10px;
   }
-  
+
   .sendgrid-container .widget.others {
     display: block;
     padding: 0px;
@@ -410,4 +410,30 @@
   font-size: 0.9em;
   padding-bottom: 0px;
   margin-bottom: 20px!important;
+}
+
+.sendgrid-multisite-pagination {
+  width: auto;
+  position: relative;
+  float: right;
+  margin: 0px;
+  padding: 5px;
+}
+
+.sendgrid-multisite-button {
+  width: 6em;
+  text-align: center;
+}
+
+.sendgrid-multisite-submit {
+  margin-top: 0px;
+  padding-top: 5px;
+}
+
+.sendgrid-page-numbers {
+  position: relative;
+  float: left;
+  margin: 0px;
+  padding: 5px;
+  text-align: center;
 }

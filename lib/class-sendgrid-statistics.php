@@ -31,7 +31,7 @@ class Sendgrid_Statistics
     } elseif ( is_multisite() and is_main_site() ) {
       // Add SendGrid stats page in menu
       add_action( 'network_admin_menu', array( __CLASS__, 'add_network_statistics_menu' ) );
-      
+
       // Add SendGrid javascripts in header
       add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_headers' ) );
 
@@ -93,7 +93,7 @@ class Sendgrid_Statistics
     {
       case "apikey":
         $apikey = Sendgrid_Tools::get_api_key();
-        if ( ! Sendgrid_Tools::check_api_key( $apikey ) ) {
+        if ( ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
           return;
         }
       break;
@@ -119,7 +119,7 @@ class Sendgrid_Statistics
     {
       case "apikey":
         $apikey = Sendgrid_Tools::get_api_key();
-        if ( ! Sendgrid_Tools::check_api_key( $apikey ) ) {
+        if ( ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
           return;
         }
       break;
@@ -211,7 +211,7 @@ class Sendgrid_Statistics
     }
 
     $endpoint = 'v3/stats';
-    
+
     if ( isset( $_POST['type'] ) && 'general' != $_POST['type'] ) {
       if( 'wordpress' == $_POST['type'] ) {
         $parameters['categories'] = 'wp_sendgrid_plugin';

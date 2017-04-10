@@ -129,7 +129,7 @@ class Sendgrid_Settings {
    * @return void
    */
   public static function show_settings_page()
-  { 
+  {
     $response = null;
     $error_from_update = false;
 
@@ -257,7 +257,7 @@ class Sendgrid_Settings {
           $status  = 'error';
         } elseif ( 'true' == $mc_opt_use_transactional and ! $is_mc_api_key_valid ) {
           $message = 'The configured API Key for subscription widget is invalid, empty or without permissions.';
-          $status  = 'error';  
+          $status  = 'error';
         } elseif ( 'error' != $status ) {
           $status  = 'valid_auth';
         }
@@ -311,7 +311,7 @@ class Sendgrid_Settings {
     $unsubscribe_groups = Sendgrid_Tools::get_all_unsubscribe_groups();
     $no_permission_on_unsubscribe_groups = false;
     if ( ( 'apikey' == $auth_method ) and ( 'true' != Sendgrid_Tools::get_asm_permission() ) ) {
-      $no_permission_on_unsubscribe_groups = true;  
+      $no_permission_on_unsubscribe_groups = true;
     }
 
     // get form configuration
@@ -369,6 +369,11 @@ class Sendgrid_Settings {
       }
     }
 
+    if ( $auth_method == 'apikey' and $api_key != '' and ! Sendgrid_Tools::check_api_key_stats( $api_key ) ) {
+      $warning_message = 'The configured API key does not have statistics permissions. You will not be able to see the statistics page.';
+      $warning_status  = 'notice notice-warning';
+    }
+
     require_once dirname( __FILE__ ) . '/../view/sendgrid_settings.php';
   }
 
@@ -390,11 +395,11 @@ class Sendgrid_Settings {
 
     if ( isset( $params['contact_upload_test'] ) and $params['contact_upload_test'] ) {
       return self::send_contact_upload_test( $params );
-    } 
+    }
 
     if ( isset( $params['subsite_settings'] ) and $params['subsite_settings'] ) {
       return self::save_subsite_settings( $params );
-    } 
+    }
 
     return self::save_general_settings( $params );
   }
@@ -407,9 +412,20 @@ class Sendgrid_Settings {
    * @return mixed              response array with message and status
    */
   private static function save_subsite_settings( $params ) {
-    $sites = get_sites();
+    $limit = 50;
+    $offset = 0;
+
+    if ( isset( $_GET['limit'] ) ) {
+        $limit = intval( $_GET['limit'] );
+    }
+
+    if ( isset( $_GET['offset'] ) ) {
+        $offset = intval( $_GET['offset'] );
+    }
+
+    $sites = get_sites( array( 'number' => $limit, 'offset' => $offset ) );
     foreach( $sites as $site ) {
-      if ( isset( $params['checked_sites'][$site->blog_id] ) and 
+      if ( isset( $params['checked_sites'][$site->blog_id] ) and
         'on' == $params['checked_sites'][$site->blog_id] ) {
         update_blog_option( $site->blog_id, 'sendgrid_can_manage_subsite', 1 );
       } else {
@@ -426,7 +442,7 @@ class Sendgrid_Settings {
    * @return mixed              response array with message and status
    */
   private static function save_mc_settings( $params ) {
-    // Use Transactional Option 
+    // Use Transactional Option
     $use_transactional_key = false;
 
     if ( ! defined( 'SENDGRID_MC_OPT_USE_TRANSACTIONAL' ) ) {
@@ -443,7 +459,7 @@ class Sendgrid_Settings {
     // If Use Transactional Is Set and auth is not through credentials, check the API key for MC scopes.
     if ( $use_transactional_key and 'apikey' == Sendgrid_Tools::get_auth_method() ) {
       $apikey = Sendgrid_Tools::get_api_key();
-      if( false == $apikey or empty( $apikey ) ) {
+      if ( false == $apikey or empty( $apikey ) ) {
         $response = array(
           'message' => 'API Key is empty.',
           'status' => 'error'

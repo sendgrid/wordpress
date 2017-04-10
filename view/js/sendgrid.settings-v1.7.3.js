@@ -87,7 +87,7 @@ jQuery(document).ready(function($) {
     $('#signup_select_page').select2( {
       placeholder: select_page_placeholder
     } );
-    
+
     $('#signup_select_page').prop( 'disabled', false );
   }
 
@@ -98,12 +98,12 @@ jQuery(document).ready(function($) {
       var selected_value_text = $('#select_contact_list option[selected="selected"]').text();
       $('#select2-select_contact_list-container').prop('title', selected_value_text);
       $('#select2-select_contact_list-container').html(selected_value_text);
-    }    
+    }
   }
 
   if( $('#mc_signup_page_defined_in_env').length != 0 ) {
     $('#signup_select_page').prop( 'disabled', true );
-    
+
     if ( $('select#signup_select_page option').length != 0 ) {
       var selected_value_text = $('#signup_select_page option[selected="selected"]').text();
       $('#select2-signup_select_page-container').prop('title', selected_value_text);
@@ -132,7 +132,7 @@ jQuery(document).ready(function($) {
       $("#sendgrid_general_settings_form").submit();
     }
   });
-  
+
 
   $('#select_unsubscribe_group').select2({
     minimumResultsForSearch: 20

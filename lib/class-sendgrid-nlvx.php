@@ -126,7 +126,7 @@ class Sendgrid_NLVX
     if ( ! isset( $recipient_response['persisted_recipients'] ) or ! isset( $recipient_response['persisted_recipients'][0] ) ) {
       return false;
     }
-    
+
     return $recipient_response['persisted_recipients'][0];
   }
 

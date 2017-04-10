@@ -1,5 +1,5 @@
 <?php if ( $active_tab == 'general' ): ?>
-  <?php if ( ! isset($status) or ( 'updated' == $status ) or ( 'valid_auth' == $status) or ( 'error' == $status and isset( $error_type ) and 'sending' == $error_type ) ): ?>
+  <?php if ( ! isset( $status ) or ( 'error' != $status ) or ( 'error' == $status and isset( $error_type ) and 'sending' == $error_type ) ): ?>
     <form name="sendgrid_test" method="POST" action="<?php echo Sendgrid_Tools::get_form_action(); ?>">
       <table class="form-table">
         <tbody>

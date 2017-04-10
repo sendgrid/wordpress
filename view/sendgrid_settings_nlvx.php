@@ -38,7 +38,7 @@
                     echo '<option value="' . $list['id'] . '" selected="selected">' . $list['name'] . '</option>';
                   } else {
                     echo '<option value="' . $list['id'] . '">' . $list['name'] . '</option>';
-                  }           
+                  }
                 }
               }
             ?>
@@ -104,7 +104,7 @@
                     echo '<option value="' . $page->ID . '" selected="selected">' . $page->post_title . '</option>';
                   } else {
                     echo '<option value="' . $page->ID . '">' . $page->post_title . '</option>';
-                  }           
+                  }
                 }
               }
             ?>

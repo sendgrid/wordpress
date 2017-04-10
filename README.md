@@ -2,9 +2,9 @@
 * Contributors: team-rs
 * Donate link: http://sendgrid.com/
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
-* Requires at least: 4.2
+* Requires at least: 4.6
 * Tested up to: 4.7
-* Stable tag: 1.10.8
+* Stable tag: 1.10.9
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,7 @@ SendGrid’s WordPress Subscription Widget makes it easy for people visiting you
 
 For more details, consult the official documentation for the Subscription Widget here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/subscription_widget.html
 
-### Multisite (Beta) 
+### Multisite
 
 If you are using the SendGrid plugin in a Multisite environment, you need to Network Activate it. You can then access the settings page on the network dashboard and the configure settings will be used for all sites.
 
@@ -41,7 +41,7 @@ If you already had the plugin installed in a Multisite environment and you updat
 
 Requirements:
 
-1. PHP version >= 5.3.0
+1. PHP version >= 5.3.0. PHP 7 is not yet supported.
 2. To send emails through SMTP you need to install also the 'Swift Mailer' plugin.
 3. If wp_mail() function has been declared by another plugin that you have installed, you won't be able to use the SendGrid plugin
 
@@ -186,7 +186,7 @@ Using the default templates from WP Better Emails will cause all emails to be se
 
 ### Why are my emails sent as HTML instead of plain text ?
 
-For a detailed explanation see this page: https://support.sendgrid.com/hc/en-us/articles/200181418-Plain-text-emails-converted-to-HTML
+For a detailed explanation see this page: https://sendgrid.com/docs/Classroom/Build/Format_Content/plain_text_emails_converted_to_html.html
 
 ### Will contacts from the widget be uploaded to Marketing Campaigns or Legacy Newsletter ?
 
@@ -194,8 +194,14 @@ The contacts will only be uploaded to Marketing Campaigns.
 
 ### What permissions should my API keys have ?
 
-For the API Key used for sending emails, that is entered on the General tab, the key needs to have Full Access to Mail Send and Read Access to Stats.
-For the API Key used for contact upload, that is entered on the Subscription Widget tab, the key needs to have Full Access to Marketings Campaigns.
+For the API Key used for sending emails (the General tab):
+ - Full Access to Mail Send.
+ - Read Access to Stats.
+ - Read Access to Supressions > Unsubscribe Groups.
+ - Read Access to Template Engine.
+For the API Key used for contact upload (the Subscription Widget tab):
+ - Full Access to Marketing Campaigns.
+
 
 ### Can I disable the opt-in email?
 
@@ -225,6 +231,9 @@ Yes. This plugin has basic Multisite support. You need to Network Activate this 
 
 The settings for all sites in the network can be configured only by the Network Admin in the Network Admin Dashboard.
 
+Since 1.10.5 the Network Admin can delegate the configuration for each subsite to their respective owners. This will allow any subsite to use it's own SendGrid Plugin configuration.
+
+
 ## Screenshots
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
@@ -253,6 +262,14 @@ The settings for all sites in the network can be configured only by the Network 
 ![screenshot-12](/assets/screenshot-12.png) 
 
 ## Changelog
+
+**1.10.9**
+* Added pagination on multisite settings page
+* Fixed an FAQ link
+* Changed a class method to protected for extensibility (user contribution)
+* Added some CSS classes for subscription widget (user contribution)
+* Added warning when API Key doesn't have statistics permissions
+* The statistics page will not show up in menu or dashboard when API key does not have stats permissions
 
 **1.10.8**
 * Fixed an XSS vulnerability in the settings forms that would allow other admins to inject scripts
@@ -455,6 +472,14 @@ The settings for all sites in the network can be configured only by the Network 
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.10.9**
+* Added pagination on multisite settings page
+* Fixed an FAQ link
+* Changed a class method to protected for extensibility (user contribution)
+* Added some CSS classes for subscription widget (user contribution)
+* Added warning when API Key doesn't have statistics permissions
+* The statistics page will not show up in menu or dashboard when API key does not have stats permissions
 
 **1.10.8**
 * Fixed an XSS vulnerability in the settings forms that would allow other admins to inject scripts
