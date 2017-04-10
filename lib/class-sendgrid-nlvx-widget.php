@@ -164,12 +164,12 @@ class SendGrid_NLVX_Widget extends WP_Widget {
       if ( isset( $_POST['sendgrid_mc_email'] ) ) {
         $process_form_reponse = $this->process_subscription();
         if ( self::SUCCESS_EMAIL_SEND == $process_form_reponse ) {
-          echo '<p class="sendgrid_widget_text"> ' . $success_text . ' </p>';
+          echo '<p class="sendgrid_widget_text sendgrid_widget_success"> ' . $success_text . ' </p>';
         } elseif ( self::INVALID_EMAIL_ERROR == $process_form_reponse ) {
-          echo '<p class="sendgrid_widget_text"> ' . $error_email_text . ' </p>';
+          echo '<p class="sendgrid_widget_text sendgrid_widget_error"> ' . $error_email_text . ' </p>';
           $this->display_form();
         } else {
-          echo '<p class="sendgrid_widget_text"> ' . $error_text . ' </p>';
+          echo '<p class="sendgrid_widget_text sendgrid_widget_error"> ' . $error_text . ' </p>';
           $this->display_form();
         }
       } else {
