@@ -1,3 +1,4 @@
+<?php ?>
 <p>
   Email Delivery. Simplified.
 </p>
