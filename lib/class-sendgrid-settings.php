@@ -143,11 +143,8 @@ class Sendgrid_Settings {
     $status = '';
     $message = '';
 
-    $user                 = stripslashes( Sendgrid_Tools::get_username() );
-    $password             = stripslashes( Sendgrid_Tools::get_password() );
     $api_key              = stripslashes( Sendgrid_Tools::get_api_key() );
     $send_method          = stripslashes( Sendgrid_Tools::get_send_method() );
-    $auth_method          = stripslashes( Sendgrid_Tools::get_auth_method() );
     $name                 = stripslashes( Sendgrid_Tools::get_from_name() );
     $email                = stripslashes( Sendgrid_Tools::get_from_email() );
     $reply_to             = stripslashes( Sendgrid_Tools::get_reply_to() );
@@ -229,7 +226,7 @@ class Sendgrid_Settings {
     }
 
     $is_mc_api_key_valid = true;
-    if ( 'true' == $mc_opt_use_transactional and 'apikey' == $auth_method and ! empty( $api_key ) ) {
+    if ( 'true' == $mc_opt_use_transactional and ! empty( $api_key ) ) {
       if ( ! Sendgrid_Tools::check_api_key_mc( $api_key ) ) {
         $is_mc_api_key_valid = false;
       }
@@ -251,19 +248,12 @@ class Sendgrid_Settings {
         $status = 'error';
       }
 
-      if ( 'apikey' == $auth_method and ! empty( $api_key ) ) {
+      if ( ! empty( $api_key ) ) {
         if ( ! Sendgrid_Tools::check_api_key( $api_key, true ) ) {
           $message = 'API Key is invalid or without permissions.';
           $status  = 'error';
         } elseif ( 'true' == $mc_opt_use_transactional and ! $is_mc_api_key_valid ) {
           $message = 'The configured API Key for subscription widget is invalid, empty or without permissions.';
-          $status  = 'error';
-        } elseif ( 'error' != $status ) {
-          $status  = 'valid_auth';
-        }
-      } elseif ( 'credentials' == $auth_method and ! empty( $user ) and ! empty( $password ) ) {
-        if ( ! Sendgrid_Tools::check_username_password( $user, $password, true ) ) {
-          $message = 'Username and password are invalid.';
           $status  = 'error';
         } elseif ( 'error' != $status ) {
           $status  = 'valid_auth';
@@ -277,11 +267,6 @@ class Sendgrid_Settings {
 
       if ( ! in_array( $port, Sendgrid_Tools::$allowed_ports ) ) {
         $message = 'Invalid port configured in the config file, available ports are: ' . join( ",", Sendgrid_Tools::$allowed_ports );
-        $status = 'error';
-      }
-
-      if ( ! in_array( $auth_method, Sendgrid_Tools::$allowed_auth_methods ) ) {
-        $message = 'Invalid authentication method configured in the config file, available options are: ' . join( ", ", Sendgrid_Tools::$allowed_auth_methods );
         $status = 'error';
       }
 
@@ -310,7 +295,8 @@ class Sendgrid_Settings {
     // get unsubscribe groups
     $unsubscribe_groups = Sendgrid_Tools::get_all_unsubscribe_groups();
     $no_permission_on_unsubscribe_groups = false;
-    if ( ( 'apikey' == $auth_method ) and ( 'true' != Sendgrid_Tools::get_asm_permission() ) ) {
+
+    if ( 'true' != Sendgrid_Tools::get_asm_permission() ) {
       $no_permission_on_unsubscribe_groups = true;
     }
 
@@ -339,10 +325,7 @@ class Sendgrid_Settings {
     }
     $mc_signup_subscribe_label = stripslashes( $mc_signup_subscribe_label );
 
-    $is_env_auth_method                  = defined( 'SENDGRID_AUTH_METHOD' );
     $is_env_send_method                  = defined( 'SENDGRID_SEND_METHOD' );
-    $is_env_username                     = defined( 'SENDGRID_USERNAME' );
-    $is_env_password                     = defined( 'SENDGRID_PASSWORD' );
     $is_env_api_key                      = defined( 'SENDGRID_API_KEY' );
     $is_env_port                         = defined( 'SENDGRID_PORT' );
     $is_env_content_type                 = defined( 'SENDGRID_CONTENT_TYPE' );
@@ -369,7 +352,7 @@ class Sendgrid_Settings {
       }
     }
 
-    if ( $auth_method == 'apikey' and $api_key != '' and ! Sendgrid_Tools::check_api_key_stats( $api_key ) ) {
+    if ( $api_key != '' and ! Sendgrid_Tools::check_api_key_stats( $api_key ) ) {
       $warning_message = 'The configured API key does not have statistics permissions. You will not be able to see the statistics page.';
       $warning_status  = 'notice notice-warning';
     }
@@ -456,8 +439,8 @@ class Sendgrid_Settings {
       $use_transactional_key = ( 'true' == SENDGRID_MC_OPT_USE_TRANSACTIONAL ? true : false );
     }
 
-    // If Use Transactional Is Set and auth is not through credentials, check the API key for MC scopes.
-    if ( $use_transactional_key and 'apikey' == Sendgrid_Tools::get_auth_method() ) {
+    // If Use Transactional Is Set check the API key for MC scopes.
+    if ( $use_transactional_key ) {
       $apikey = Sendgrid_Tools::get_api_key();
       if ( false == $apikey or empty( $apikey ) ) {
         $response = array(
@@ -637,91 +620,37 @@ class Sendgrid_Settings {
    * @return mixed              response array with message and status
    */
   private static function save_general_settings( $params ) {
-    if ( ! isset( $params['auth_method'] ) ) {
-      $params['auth_method'] = Sendgrid_Tools::get_auth_method();
-    }
+    if ( ! defined( 'SENDGRID_API_KEY' ) ) {
+      if ( ! isset( $params['sendgrid_apikey'] ) or empty( $params['sendgrid_apikey'] ) ) {
+        $response = array(
+          'message' => 'API Key is empty.',
+          'status' => 'error'
+        );
 
-    switch ( $params['auth_method'] ) {
-      case 'apikey':
-        if ( ! defined( 'SENDGRID_API_KEY' ) ) {
-          if ( ! isset( $params['sendgrid_apikey'] ) or empty( $params['sendgrid_apikey'] ) ) {
-            $response = array(
-              'message' => 'API Key is empty.',
-              'status' => 'error'
-            );
+        Sendgrid_Tools::set_api_key( '' );
 
-            Sendgrid_Tools::set_api_key( '' );
+        return $response;
+      }
 
-            break;
-          }
+      if ( ! Sendgrid_Tools::check_api_key( $params['sendgrid_apikey'], true ) ) {
+        $response = array(
+          'message' => 'API Key is invalid or without permissions.',
+          'status' => 'error'
+        );
 
-          $apikey = htmlspecialchars( $params['sendgrid_apikey'], ENT_QUOTES, 'UTF-8' );
+        return $response;
+      }
 
-          if ( ! Sendgrid_Tools::check_api_key( $apikey, true ) ) {
-            $response = array(
-              'message' => 'API Key is invalid or without permissions.',
-              'status' => 'error'
-            );
+      if ( 'true' == Sendgrid_Tools::get_mc_opt_use_transactional() and ! Sendgrid_Tools::check_api_key_mc( $params['sendgrid_apikey'] ) ) {
+        $response = array(
+          'message' => 'This API key is also used for the Subscription Widget but does not have Marketing Campaigns permissions.',
+          'status' => 'error'
+        );
 
-            break;
-          }
+        return $response;
+      }
 
-          if ( 'true' == Sendgrid_Tools::get_mc_opt_use_transactional() and ! Sendgrid_Tools::check_api_key_mc( $apikey ) ) {
-            $response = array(
-              'message' => 'This API key is also used for the Subscription Widget but does not have Marketing Campaigns permissions.',
-              'status' => 'error'
-            );
-          }
-
-          Sendgrid_Tools::set_api_key( $apikey );
-        }
-       
-        break;
-      
-      case 'credentials':
-        if ( ! isset( $params['sendgrid_username'] ) and ! isset( $params['sendgrid_password'] ) ) {
-          break;
-        }  
-
-        $save_username = true;
-        $save_password = true;
-
-        if ( ! isset ( $params['sendgrid_username'] ) ) {
-          $save_username = false;
-          $params['sendgrid_username'] = Sendgrid_Tools::get_username();
-        }
-
-        if ( ! isset ( $params['sendgrid_password'] ) ) {
-          $save_password = false;
-          $params['sendgrid_password'] = Sendgrid_Tools::get_username();
-        }
-
-        $username = htmlspecialchars( $params['sendgrid_username'], ENT_QUOTES, 'UTF-8' );
-        $password = htmlspecialchars( $params['sendgrid_password'], ENT_QUOTES, 'UTF-8' );
-
-        if ( ( isset( $params['sendgrid_username'] ) and ! $params['sendgrid_username'] ) or ( isset( $params['sendgrid_password'] ) and ! $params['sendgrid_password'] ) ) {
-          $response = array(
-            'message' => 'Username or password is empty.',
-            'status' => 'error'
-          );
-        } elseif ( ! Sendgrid_Tools::check_username_password( $username, $password, true ) ) {
-          $response = array(
-            'message' => 'Username and password are invalid.',
-            'status' => 'error'
-          );
-
-          break;
-        }
-
-        if ( $save_username ) {
-          Sendgrid_Tools::set_username( $username );
-        }
-        
-        if ( $save_password ) {
-          Sendgrid_Tools::set_password( $password );
-        }
-
-        break;
+      Sendgrid_Tools::set_api_key( $params['sendgrid_apikey'] );
     }
 
     if ( isset( $params['sendgrid_name'] ) ) {
@@ -780,12 +709,6 @@ class Sendgrid_Settings {
     if ( isset( $params['send_method'] ) ) {
       $send_method = htmlspecialchars( $params['send_method'], ENT_QUOTES, 'UTF-8' );
       Sendgrid_Tools::set_send_method( $send_method );
-    }
-
-    if ( isset( $params['auth_method'] ) and in_array( $params['auth_method'], Sendgrid_Tools::$allowed_auth_methods ) ) {
-      // Should be rejected by allowed auth method check, but just to be extra safe
-      $auth_method = htmlspecialchars( $params['auth_method'], ENT_QUOTES, 'UTF-8' );
-      Sendgrid_Tools::set_auth_method( $auth_method );
     }
 
     if ( isset( $params['sendgrid_port'] ) ) {
@@ -878,35 +801,14 @@ class Sendgrid_Settings {
         'error_type' => 'upload'
       );
     }
-    
-    switch ( Sendgrid_Tools::get_auth_method() ) {
-      case 'apikey':
-        $apikey = Sendgrid_Tools::get_api_key();
-        if ( ! Sendgrid_Tools::check_api_key( $apikey, true ) ) {
-          return array(
-            'message' => 'API Key used for mail send is invalid or without permissions.',
-            'status' => 'error',
-            'error_type' => 'upload'
-          );
-        }
-        break;
-      case 'credentials':
-        $username = Sendgrid_Tools::get_username();
-        $password = Sendgrid_Tools::get_password();
-        if ( ! Sendgrid_Tools::check_username_password( $params['sendgrid_username'], $params['sendgrid_password'], true ) ) {
-          return array(
-            'message' => 'Credentials used for mail send are invalid.',
-            'status' => 'error',
-            'error_type' => 'upload'
-          );
-        }
-        break;
-      default:
-        return array(
-          'message' => 'An error occured when trying to check your transactional credentials. Please check that they are correct on the General Settings tab.',
-          'status' => 'error',
-          'error_type' => 'upload'
-        );
+
+    $apikey = Sendgrid_Tools::get_api_key();
+    if ( ! Sendgrid_Tools::check_api_key( $apikey, true ) ) {
+      return array(
+        'message' => 'API Key used for mail send is invalid or without permissions.',
+        'status' => 'error',
+        'error_type' => 'upload'
+      );
     }
 
     if ( false == Sendgrid_OptIn_API_Endpoint::send_confirmation_email( $email, '', '', true ) ) {

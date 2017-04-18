@@ -11,36 +11,25 @@ class Sendgrid_WP {
 
   public static function get_instance() {
     $send_method = Sendgrid_Tools::get_send_method();
-    $auth_method = Sendgrid_Tools::get_auth_method();
 
     switch ( $send_method ) {
       case 'api':
-        return self::api_instance( $auth_method );
+        return self::api_instance();
         break;
 
       case 'smtp':
-        return self::smtp_instance( $auth_method );
+        return self::smtp_instance();
         break;
     }
 
-    return self::api_instance( $auth_method );
+    return self::api_instance();
   }
 
-  private static function api_instance( $auth_method ) {
-    switch ( $auth_method ) {
-      case 'apikey':
-        return new Sendgrid_API( "apikey", Sendgrid_Tools::get_api_key() );
-        break;
-      
-      case 'credentials':
-        return new Sendgrid_API( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
-        break;
-    }
-
-    return null;
+  private static function api_instance() {
+    return new Sendgrid_API( 'apikey', Sendgrid_Tools::get_api_key() );
   }
 
-  private static function smtp_instance( $auth_method ) 
+  private static function smtp_instance( ) 
   {
     if ( ! class_exists('Swift') ) {
       self::$error = array(
@@ -51,19 +40,7 @@ class Sendgrid_WP {
       return null;
     } 
 
-    switch ( $auth_method ) {
-      case 'apikey':
-        $smtp = new Sendgrid_SMTP( "apikey", Sendgrid_Tools::get_api_key() );
-        break;
-
-      case 'credentials':
-        $smtp = new Sendgrid_SMTP( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() );
-        break;
-
-      default:
-        return null;
-        break;
-    }
+    $smtp = new Sendgrid_SMTP( "apikey", Sendgrid_Tools::get_api_key() );
 
     if ( Sendgrid_Tools::get_port() ) {
       if ( in_array( Sendgrid_Tools::get_port(), Sendgrid_Tools::$allowed_ports ) ) {

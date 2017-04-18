@@ -13,7 +13,7 @@ class Sendgrid_NLVX
    */
   protected static function get_auth_header_value()
   {
-    if ( "false" == Sendgrid_Tools::get_mc_opt_use_transactional() ) {
+    if ( 'false' == Sendgrid_Tools::get_mc_opt_use_transactional() ) {
       $mc_api_key = Sendgrid_Tools::get_mc_api_key();
 
       if ( false != $mc_api_key ) {
@@ -21,20 +21,12 @@ class Sendgrid_NLVX
       }
     }
 
-    $auth_method = Sendgrid_Tools::get_auth_method();
-
-    if ( 'credentials' == $auth_method ) {
-      $creds = base64_encode( Sendgrid_Tools::get_username() . ':' . Sendgrid_Tools::get_password() );
-
-      return 'Basic ' . $creds;
-    } else {
-      $api_key = Sendgrid_Tools::get_api_key();
-      if ( false == $api_key ) {
-        return false;
-      }
-
-      return 'Bearer ' . $api_key;
+    $api_key = Sendgrid_Tools::get_api_key();
+    if ( false == $api_key ) {
+      return false;
     }
+
+    return 'Bearer ' . $api_key;
   }
 
   /**

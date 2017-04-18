@@ -41,7 +41,7 @@ class Sendgrid_Statistics
   }
 
   /**
-   * Verify if SendGrid username and password provided are correct and
+   * Verify if provided SendGrid API Key is correct and
    * initialize function for add widget in dashboard
    *
    * @return void
@@ -52,20 +52,9 @@ class Sendgrid_Statistics
       return;
     }
 
-    switch ( Sendgrid_Tools::get_auth_method() )
-    {
-      case "apikey":
-        $apikey = Sendgrid_Tools::get_api_key();
-        if ( ! Sendgrid_Tools::check_api_key( $apikey ) or ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
-          return;
-        }
-      break;
-
-      case "credentials":
-        if ( ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) ) {
-          return;
-        }
-      break;
+    $apikey = Sendgrid_Tools::get_api_key();
+    if ( ! Sendgrid_Tools::check_api_key( $apikey ) or ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
+      return;
     }
 
     add_meta_box( 'sendgrid_statistics_widget', 'SendGrid Wordpress Statistics', array( __CLASS__, 'show_dashboard_widget' ),
@@ -89,20 +78,9 @@ class Sendgrid_Statistics
    */
   public static function add_statistics_menu()
   {
-    switch ( Sendgrid_Tools::get_auth_method() )
-    {
-      case "apikey":
-        $apikey = Sendgrid_Tools::get_api_key();
-        if ( ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
-          return;
-        }
-      break;
-
-      case "credentials":
-        if ( ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) ) {
-          return;
-        }
-      break;
+    $apikey = Sendgrid_Tools::get_api_key();
+    if ( ! Sendgrid_Tools::check_api_key( $apikey ) ) {
+      return;
     }
 
     add_dashboard_page( "SendGrid Statistics", "SendGrid Statistics", "manage_options", "sendgrid-statistics",
@@ -115,20 +93,9 @@ class Sendgrid_Statistics
    * @return void
    */
   public static function add_network_statistics_menu() {
-    switch ( Sendgrid_Tools::get_auth_method() )
-    {
-      case "apikey":
-        $apikey = Sendgrid_Tools::get_api_key();
-        if ( ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
-          return;
-        }
-      break;
-
-      case "credentials":
-        if ( ! Sendgrid_Tools::check_username_password( Sendgrid_Tools::get_username(), Sendgrid_Tools::get_password() ) ) {
-          return;
-        }
-      break;
+    $apikey = Sendgrid_Tools::get_api_key();
+    if ( ! Sendgrid_Tools::check_api_key( $apikey ) ) {
+      return;
     }
 
     add_menu_page( __( 'SendGrid Stats' ), __( 'SendGrid Stats' ), 'manage_options', 'sendgrid-statistics',
@@ -143,7 +110,7 @@ class Sendgrid_Statistics
   public static function show_statistics_page()
   {
     $apikey = Sendgrid_Tools::get_api_key();
-    if ( ( "apikey" == Sendgrid_Tools::get_auth_method() ) and isset( $apikey ) and ( $apikey != '' ) and ! Sendgrid_Tools::check_api_key_stats( $apikey, true ) )
+    if ( isset( $apikey ) and ( $apikey != '' ) and ! Sendgrid_Tools::check_api_key_stats( $apikey, true ) )
     {
       $message = 'Your Api key does not have statistics permissions';
       $status  = 'error';
@@ -195,12 +162,7 @@ class Sendgrid_Statistics
     }
 
     $parameters = array();
-
-    $parameters['auth_method'] = Sendgrid_Tools::get_auth_method();
-    $parameters['api_username'] = Sendgrid_Tools::get_username();
-    $parameters['api_password']  = Sendgrid_Tools::get_password();
     $parameters['apikey']   = Sendgrid_Tools::get_api_key();
-
     $parameters['data_type'] = 'global';
 
     if ( array_key_exists( 'days', $_POST ) ) {

@@ -4,7 +4,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.6
 * Tested up to: 4.7
-* Stable tag: 1.10.9
+* Stable tag: 1.11.0
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,10 +74,7 @@ For Multisite:
 
 SendGrid settings can optionally be defined as global variables (wp-config.php):
 
-1. Set credentials (You can use credentials or API key. If using credentials, both need to be set in order to get credentials from variables and not from the database. If using API key you need to make sure you set the Mail Send permissions to FULL ACCESS, Stats to READ ACCESS and Template Engine to READ or FULL ACCESS when you created the api key on SendGrid side, so you can send emails and see statistics on wordpress):
-    * Auth method ('apikey' or 'credentials'): define('SENDGRID_AUTH_METHOD', 'apikey');
-    * Username: define('SENDGRID_USERNAME', 'sendgrid_username');
-    * Password: define('SENDGRID_PASSWORD', 'sendgrid_password');
+1. Set the API key. You need to make sure you set the Mail Send permissions to FULL ACCESS, Stats to READ ACCESS and Template Engine to READ or FULL ACCESS when you created the api key on SendGrid side, so you can send emails and see statistics on wordpress):
     * API key:  define('SENDGRID_API_KEY', 'sendgrid_api_key');
 
 2. Set email related settings:
@@ -225,9 +222,9 @@ You'll hear from us soon!
 
 You need to enable the use of the First Name and Last Name fields from the settings page in order to use the shortcodes for them.
 
-### Does this plugin support Multisite? 
+### Does this plugin support Multisite?
 
-Yes. This plugin has basic Multisite support. You need to Network Activate this plugin. 
+Yes. This plugin has basic Multisite support. You need to Network Activate this plugin.
 
 The settings for all sites in the network can be configured only by the Network Admin in the Network Admin Dashboard.
 
@@ -236,32 +233,37 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 ## Screenshots
 
-1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin. 
+1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin.
 ![screenshot-1](/assets/screenshot-1.png)
-2. After activation "Settings" link will appear. 
+2. After activation "Settings" link will appear.
 ![screenshot-2](/assets/screenshot-2.png)
-3. Go to settings page and provide your SendGrid credentials by choosing the authentication method which default is Api Key. On this page you can set also the default "Name", "Sending Address" and "Reply Address". 
+3. Go to settings page and provide your SendGrid API Key. On this page you can set also the default "Name", "Sending Address" and "Reply Address".
 ![screenshot-3](/assets/screenshot-3.png)
-4. If you want to use your username and password for authentication, switch to Username&Password authentication method.
-![screenshot-4](/assets/screenshot-4.png)
-5. If you provide valid credentials, a form which can be used to send test emails will appear. Here you can test the plugin sending some emails. 
-![screenshot-5](/assets/screenshot-5.png)
-6. Header provided in the send test email form. 
-![screenshot-6](/assets/screenshot-6.png)
-7. If you click in the right corner from the top of the page on the "Help" button, a popup window with more information will appear. 
-![screenshot-7](/assets/screenshot-7.png)
-8. Select the time interval for which you want to see SendGrid statistics and charts.
-![screenshot-8](/assets/screenshot-8.png)
-9. Now you are able to configure port number when using SMTP method.
-![screenshot-9](/assets/screenshot-9.png)
-10. You can configure categories for which you would like to see your stats. 
-![screenshot-10](/assets/screenshot-10.png)
-11. You can use substitutions for emails using X-SMTPAPI headers.
-![screenshot-11](/assets/screenshot-11.png)
-12. You can configure the subscription widget.
-![screenshot-12](/assets/screenshot-12.png) 
+4. If you provide valid credentials, a form which can be used to send test emails will appear. Here you can test the plugin sending some emails.
+![screenshot-4](/assets/screenshot-5.png)
+5. Header provided in the send test email form.
+![screenshot-5](/assets/screenshot-6.png)
+6. If you click in the right corner from the top of the page on the "Help" button, a popup window with more information will appear.
+![screenshot-6](/assets/screenshot-7.png)
+7. Select the time interval for which you want to see SendGrid statistics and charts.
+![screenshot-7](/assets/screenshot-8.png)
+8. Now you are able to configure port number when using SMTP method.
+![screenshot-8](/assets/screenshot-9.png)
+9. You can configure categories for which you would like to see your stats.
+![screenshot-9](/assets/screenshot-10.png)
+10. You can use substitutions for emails using X-SMTPAPI headers.
+![screenshot-10](/assets/screenshot-11.png)
+11. You can configure the subscription widget.
+![screenshot-11](/assets/screenshot-12.png)
 
 ## Changelog
+
+**1.11.0**
+* BREAKING CHANGE: Username & Password is no longer supported. Change your settings to use an API Key before updating
+* API Mail Send was changed to use the V3 SendGrid API
+* Emails sent with the V2 Email Object will now be translated to V3
+* BREAKING CHANGE: The date parameter on the V2 object is no longer supported
+* BREAKING CHANGE: When using the V2 object with SMTPAPI Tos, the BCC and CCs will only be applied to the first address
 
 **1.10.9**
 * Added pagination on multisite settings page
@@ -444,7 +446,7 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 **1.3.2**
 * Fix URL for loading image
 
-**1.3.1** 
+**1.3.1**
 * Fixed reply-to to accept: "name <email@example.com>"
 
 **1.3**
@@ -472,6 +474,13 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.11.0**
+* BREAKING CHANGE: Username & Password is no longer supported. Change your settings to use an API Key before updating
+* API Mail Send was changed to use the V3 SendGrid API
+* Emails sent with the V2 Email Object will now be translated to V3
+* BREAKING CHANGE: The date parameter on the V2 object is no longer supported
+* BREAKING CHANGE: When using the V2 object with SMTPAPI Tos, the BCC and CCs will only be applied to the first address
 
 **1.10.9**
 * Added pagination on multisite settings page
@@ -507,7 +516,7 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 **1.10.1**
 * Fixed a javascript error and a PHP warning
 
-**1.10.0** 
+**1.10.0**
 * Added basic Multisite functionality
 * WARNING: Multisite users need to network activate this plugin and reconfigure it.
 * Fixed an issue where other users would see the SendGrid statistics widget on the dashboard.
@@ -610,7 +619,7 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 * Add Api Keys for authentication, use the last version of Sendgrid library: https://github.com/sendgrid/sendgrid-php/releases/tag/v3.2.0
 
 **1.6.1**
-* Add unique arguments 
+* Add unique arguments
 
 **1.6**
 * Fix setTo method in SMTP option, update documentation, add link to SendGrid portal

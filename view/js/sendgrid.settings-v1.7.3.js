@@ -6,16 +6,6 @@ jQuery(document).ready(function($) {
   var select_page_placeholder = 'Select a page';
   var no_pages_placeholder = 'Please create a page to select';
 
-  if ( $('#auth_method').find( 'option:selected' ).val() == 'apikey' ) {
-    $('.apikey').show();
-    $('.credentials').hide();
-    $('.send_method').show();
-  } else if ( $('#auth_method').find( 'option:selected' ).val() == 'credentials' ) {
-    $('.apikey').hide();
-    $('.credentials').show();
-    $('.send_method').show();
-  }
-
   if ( $('#send_method').find( 'option:selected' ).val() == 'api' ) {
     $('.port').hide();
   } else if ( $('#send_method').find( 'option:selected' ).val() == 'smtp' ) {

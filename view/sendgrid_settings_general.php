@@ -7,37 +7,13 @@
             <h3 class="sendgrid-settings-top-header"><?php echo _e('SendGrid Credentials') ?></h3>
           </td>
         </tr>
-        <tr valign="top">
-          <th scope="row"><?php _e("Authentication method: "); ?></th>
-          <td>
-            <select name="auth_method" class="sendgrid-settings-select" id="auth_method" <?php disabled( $is_env_auth_method ); ?> >
-              <option value="apikey" id="apikey" <?php echo ( 'apikey' == $auth_method ) ? 'selected' : '' ?>><?php _e('Api Key') ?></option>
-              <option value="credentials" id="credentials" <?php echo ( 'credentials' == $auth_method ) ? 'selected' : '' ?>><?php _e('Username&Password') ?></option>
-              <?php if ( ! in_array( $auth_method, Sendgrid_Tools::$allowed_auth_methods ) ) { ?>
-                <option value="<?php echo $auth_method; ?>" id="<?php echo $auth_method; ?>" selected><?php echo $auth_method; ?></option>
-              <?php } ?>
-            </select>
-          </td>
-        </tr>
-        <tr valign="top" class="apikey" style="display: none;">
+        <tr valign="top" class="apikey">
           <th scope="row"><?php _e("API Key: "); ?></th>
           <td>
             <input type="password" id="sendgrid_general_apikey" name="sendgrid_apikey" class="sendgrid-settings-key" value="<?php echo ( $is_env_api_key ? "************" : $api_key );  ?>" <?php disabled( $is_env_api_key ); ?>>
           </td>
         </tr>
-        <tr valign="top" class="credentials" style="display: none;">
-          <th scope="row"><?php _e("Username: "); ?></th>
-          <td>
-            <input type="text" name="sendgrid_username" value="<?php echo $user; ?>" size="20" class="regular-text" <?php disabled( $is_env_username ); ?>>
-          </td>
-        </tr>
-        <tr valign="top" class="credentials" style="display: none;">
-          <th scope="row"><?php _e("Password: "); ?></th>
-          <td>
-            <input type="password" name="sendgrid_password" value="<?php echo ( $is_env_password ? "******" : $password );  ?>" size="20" class="regular-text" <?php disabled( $is_env_password ); ?>>
-          </td>
-        </tr>
-        <tr valign="top" class="send_method" style="display: none;">
+        <tr valign="top" class="send_method">
           <th scope="row"><?php _e("Send Mail with: "); ?></th>
           <td>
             <select name="send_method" class="sendgrid-settings-select" id="send_method" <?php disabled( defined('SENDGRID_SEND_METHOD') ); ?>>
@@ -63,7 +39,7 @@
             </select>
           </td>
         </tr>
-        <?php if ( $is_env_auth_method or $is_env_send_method or $is_env_api_key or $is_env_username or $is_env_password or $is_env_port ) : ?>
+        <?php if ( $is_env_send_method or $is_env_api_key or $is_env_port ) : ?>
           <tr valign="top">
             <td colspan="2">
               <p>
