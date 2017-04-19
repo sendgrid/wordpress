@@ -79,10 +79,11 @@ class Sendgrid_NLVX
    * @param   string $email          The email of the recipient
    * @param   string $first_name     The first name of the recipient
    * @param   string $last_name      The last name of the recipient
+   * @param   array  $custom_fields  Custom field data
    *
    * @return  mixed   The recipient ID if successful, false otherwise.
    */
-  public static function add_recipient($email, $first_name = '', $last_name = '')
+  public static function add_recipient($email, $first_name = '', $last_name = '', array $custom_fields = array())
   {
     $auth = Sendgrid_NLVX::get_auth_header_value();
 
@@ -107,6 +108,10 @@ class Sendgrid_NLVX
 
     if ( '' != $last_name ) {
       $contact['last_name'] = $last_name;
+    }
+    
+    foreach ( $custom_fields as $field => $value ) {
+      $contact[$field] = $value;
     }
 
     $req_body = json_encode(array($contact));
