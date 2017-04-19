@@ -248,15 +248,7 @@ class Sendgrid_Tools
     if ( defined( 'SENDGRID_API_KEY' ) ) {
       return SENDGRID_API_KEY;
     } else {
-      $apikey     = Sendgrid_Tools::get_sendgrid_option( 'api_key' );
-      $new_apikey = Sendgrid_Tools::get_sendgrid_option( 'apikey' );
-      if ( $new_apikey and ! $apikey ) {
-        Sendgrid_Tools::update_sendgrid_option( 'api_key', self::decrypt( $new_apikey, AUTH_KEY ) );
-        Sendgrid_Tools::delete_sendgrid_option( 'apikey' );
-      }
-
-      $apikey = Sendgrid_Tools::get_sendgrid_option( 'api_key' );
-      return $apikey;
+      return Sendgrid_Tools::get_sendgrid_option( 'api_key' );
     }
   }
 
@@ -1132,40 +1124,6 @@ class Sendgrid_Tools
     }
 
     return $padding[$position];
-  }
-
-  /**
-   * Returns decrypted string using the key or empty string in case of error
-   *
-   * @return  string
-   */
-  private static function decrypt( $encrypted_input_string, $key ) {
-    if ( ! extension_loaded( 'mcrypt' ) ) {
-      return '';
-    }
-
-    $iv_size = mcrypt_get_iv_size( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB );
-    if( false === $iv_size ) {
-      return '';
-    }
-
-    $iv = mcrypt_create_iv( $iv_size, MCRYPT_RAND );
-    if( false === $iv ) {
-      return '';
-    }
-
-    $h_key = hash( 'sha256', $key, TRUE );
-    $decoded = base64_decode( $encrypted_input_string );
-    if( false === $decoded ) {
-      return '';
-    }
-
-    $decrypted = mcrypt_decrypt( MCRYPT_RIJNDAEL_256, $h_key, $decoded, MCRYPT_MODE_ECB, $iv );
-    if( false === $decrypted ) {
-      return '';
-    }
-
-    return trim( $decrypted );
   }
 
   /**

@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.11.0
+Stable tag: 1.11.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,7 +42,7 @@ If you already had the plugin installed in a Multisite environment and you updat
 
 Requirements:
 
-1. PHP version >= 5.3.0. PHP 7 is not yet supported.
+1. PHP version >= 5.6 and <= 7.1
 2. To send emails through SMTP you need to also install the 'Swift Mailer' plugin. ( https://wordpress.org/plugins/swift-mailer/ )
 3. If wp_mail() function has been declared by another plugin that you have installed, you won't be able to use the SendGrid plugin
 
@@ -50,7 +50,7 @@ To upload the SendGrid Plugin .ZIP file:
 
 1. Upload the WordPress SendGrid Plugin to the /wp-contents/plugins/ folder.
 2. Activate the plugin from the "Plugins" menu in WordPress.
-3. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>  
+3. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
 4. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
 
 To auto install the SendGrid Plugin from the WordPress admin:
@@ -239,7 +239,7 @@ You need to enable the use of the First Name and Last Name fields from the setti
 
 Yes. This plugin has basic Multisite support. You need to Network Activate this plugin.
 
-The settings for all sites in the network can be configured only by the Network Admin in the Network Admin Dashboard. 
+The settings for all sites in the network can be configured only by the Network Admin in the Network Admin Dashboard.
 
 Since 1.10.5 the Network Admin can delegate the configuration for each subsite to their respective owners. This will allow any subsite to use it's own SendGrid Plugin configuration.
 
@@ -259,7 +259,12 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 == Changelog ==
 
+= 1.11.1 =
+* Confirmed compatibility with PHP 7 and 7.1
+* Removed some legacy code that caused warnings in PHP 7
+* Fixed issue where the statistics page would show up in menu even if the API key did not have stats permissions
 = 1.11.0 =
+* BREAKING CHANGE: DO NOT UPGRADE IF YOU USE PHP <= 5.5. Only PHP 5.6 and later versions are supported.
 * BREAKING CHANGE: Username & Password is no longer supported. Change your settings to use an API Key before updating
 * API Mail Send was changed to use the V3 SendGrid API
 * Emails sent with the V2 Email Object will now be translated to V3
@@ -418,7 +423,12 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 == Upgrade notice ==
 
+= 1.11.1 =
+* Confirmed compatibility with PHP 7 and 7.1
+* Removed some legacy code that caused warnings in PHP 7
+* Fixed issue where the statistics page would show up in menu even if the API key did not have stats permissions
 = 1.11.0 =
+* BREAKING CHANGE: DO NOT UPGRADE IF YOU USE PHP <= 5.5. Only PHP 5.6 and later versions are supported.
 * BREAKING CHANGE: Username & Password is no longer supported. Change your settings to use an API Key before updating
 * API Mail Send was changed to use the V3 SendGrid API
 * Emails sent with the V2 Email Object will now be translated to V3

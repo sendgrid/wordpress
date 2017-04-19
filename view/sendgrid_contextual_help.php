@@ -100,29 +100,29 @@
     <br />
     $to = array('address1@sendgrid.com', 'Address2 <address2@sendgrid.com>', 'address3@sendgrid.com');
     <br />
-    <br /> 
+    <br />
     $headers = new SendGrid\Email();
     <br />
     $headers<br />
       ->setFromName("Me Myself")
     <br />
       ->setFrom("me@example.net")
-    <br />        
+    <br />
       ->setCc("address4@sendgrid.com")
-    <br />        
+    <br />
       ->setBcc("address5@sendgrid.com")
-    <br />        
+    <br />
       ->setUniqueArgs(array('customer' => 'mycustomer', 'location' => 'mylocation'))
-    <br />        
+    <br />
       ->addCategory('category1')
-    <br />        
+    <br />
       ->addCategory('category2')
-    <br />        
+    <br />
       ->setTemplateId('templateID');
-    <br />        
-    <br /> 
+    <br />
+    <br />
     $attachments = array('/tmp/img1.jpg', '/tmp/img2.jpg');
-    <br /> 
+    <br />
     add_filter('wp_mail_content_type', 'set_html_content_type');
     <br />
     $mail = wp_mail($to, $subject, $message, $headers, $attachments);
@@ -145,24 +145,24 @@
     $headers
     <br />
       ->addSmtpapiTo("john@somewhere.com")
-    <br />    
+    <br />
       ->addSmtpapiTo("harry@somewhere.com")
-    <br />    
+    <br />
       ->addSmtpapiTo("Bob@somewhere.com")
-    <br />    
+    <br />
       ->addSubstitution("%name%", array("John", "Harry", "Bob"))
-    <br />    
+    <br />
       ->addSubstitution("%place%", array("%office%", "%office%", "%home%"))
-    <br />    
+    <br />
       ->addSection("%office%", "an office")
-    <br />    
+    <br />
       ->addSection("%home%", "your house");
     <br />
     <br />
     $mail = wp_mail($to, $subject, $message, $headers);`
   </div>
   <br />
-  More examples for using SendGrid SMTPAPI header: <a href="https://github.com/sendgrid/sendgrid-php#smtpapi" target="_blank">https://github.com/sendgrid/sendgrid-php#smtpapi</a>
+  More examples for using SendGrid SMTPAPI header: <a href="https://github.com/sendgrid/smtpapi-php/" target="_blank">https://github.com/sendgrid/smtpapi-php/</a>
   <br />
   <br />
   <b>Categories used for emails can be set:</b>
@@ -176,10 +176,9 @@
   <p><b>Define SendGrid settings as global variables (wp-config.php):</b></p>
   <p>
     <ol>
-      <li>Set credentials (both need to be set in order to get credentials from variables and not from the database):
+      <li>Set the API Key:
         <ul>
-          <li>Username: <span class="code">define('SENDGRID_USERNAME', 'sendgrid_username');</span></li>
-          <li>Password: <span class="code">define('SENDGRID_PASSWORD', 'sendgrid_password');</span></li>
+          <li>API Key: <span class="code">define('SENDGRID_API_KEY', 'sendgrid_api_key');</span></li>
         </ul>
       </li>
       <li>Set email related settings:

@@ -79,7 +79,7 @@ class Sendgrid_Statistics
   public static function add_statistics_menu()
   {
     $apikey = Sendgrid_Tools::get_api_key();
-    if ( ! Sendgrid_Tools::check_api_key( $apikey ) ) {
+    if ( ! Sendgrid_Tools::check_api_key( $apikey ) or ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
       return;
     }
 
@@ -94,7 +94,7 @@ class Sendgrid_Statistics
    */
   public static function add_network_statistics_menu() {
     $apikey = Sendgrid_Tools::get_api_key();
-    if ( ! Sendgrid_Tools::check_api_key( $apikey ) ) {
+    if ( ! Sendgrid_Tools::check_api_key( $apikey ) or ! Sendgrid_Tools::check_api_key_stats( $apikey ) ) {
       return;
     }
 
