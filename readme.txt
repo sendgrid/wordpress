@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 1.11.1
+Stable tag: 1.11.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,7 +42,8 @@ If you already had the plugin installed in a Multisite environment and you updat
 
 Requirements:
 
-1. PHP version >= 5.6 and <= 7.1
+1. PHP version >= 5.6 and <= 7.1. Installing this plugin on PHP versions 5.3 and earlier will cause your website to break.
+Installation on PHP versions 5.4 and 5.5 will work but it is not recommended.
 2. To send emails through SMTP you need to also install the 'Swift Mailer' plugin. ( https://wordpress.org/plugins/swift-mailer/ )
 3. If wp_mail() function has been declared by another plugin that you have installed, you won't be able to use the SendGrid plugin
 
@@ -146,6 +147,12 @@ Note that all HTML emails sent through our plugin also contain the HTML body in 
 = Is there any official documentation for this plugin ? =
 
 Yes. You can find it here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html
+
+= What PHP versions are supported ? =
+
+Plugin versions 1.11.x were tested and confirmed to work on PHP 5.4, 5.5, 5.6, 7.0, 7.1. It DOES NOT work on PHP 5.3 and earlier.
+
+Plugin versions 1.10.x were tested and confirmed to work on PHP 5.3, 5.4, 5.5 and 5.6. It DOES NOT work on PHP 7.0 and later.
 
 = What credentials do I need to add on settings page ? =
 
@@ -259,12 +266,14 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 == Changelog ==
 
+= 1.11.2 =
+* Relaxed PHP requirement to at least version 5.4.
 = 1.11.1 =
 * Confirmed compatibility with PHP 7 and 7.1
 * Removed some legacy code that caused warnings in PHP 7
 * Fixed issue where the statistics page would show up in menu even if the API key did not have stats permissions
 = 1.11.0 =
-* BREAKING CHANGE: DO NOT UPGRADE IF YOU USE PHP <= 5.5. Only PHP 5.6 and later versions are supported.
+* BREAKING CHANGE: DO NOT UPGRADE IF YOU USE PHP <= 5.3. Only PHP 5.4 and later versions are supported.
 * BREAKING CHANGE: Username & Password is no longer supported. Change your settings to use an API Key before updating
 * API Mail Send was changed to use the V3 SendGrid API
 * Emails sent with the V2 Email Object will now be translated to V3
@@ -423,12 +432,14 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 == Upgrade notice ==
 
+= 1.11.2 =
+* Relaxed PHP requirement to at least version 5.4.
 = 1.11.1 =
 * Confirmed compatibility with PHP 7 and 7.1
 * Removed some legacy code that caused warnings in PHP 7
 * Fixed issue where the statistics page would show up in menu even if the API key did not have stats permissions
 = 1.11.0 =
-* BREAKING CHANGE: DO NOT UPGRADE IF YOU USE PHP <= 5.5. Only PHP 5.6 and later versions are supported.
+* BREAKING CHANGE: DO NOT UPGRADE IF YOU USE PHP <= 5.3. Only PHP 5.4 and later versions are supported.
 * BREAKING CHANGE: Username & Password is no longer supported. Change your settings to use an API Key before updating
 * API Mail Send was changed to use the V3 SendGrid API
 * Emails sent with the V2 Email Object will now be translated to V3
