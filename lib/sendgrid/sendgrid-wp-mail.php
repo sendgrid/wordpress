@@ -404,6 +404,9 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     $mail->setAsmGroupId( $unsubscribe_group_id );
   }
 
+  // set the headers
+  $mail->headers = $headers;
+
   $sendgrid = Sendgrid_WP::get_instance();
 
   if ( ! $sendgrid ) {
