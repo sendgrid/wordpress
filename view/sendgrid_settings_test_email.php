@@ -1,5 +1,13 @@
 <?php if ( $active_tab == 'general' ): ?>
-  <?php if ( ! isset( $status ) or ( 'error' != $status ) or ( 'error' == $status and isset( $error_type ) and 'sending' == $error_type ) ): ?>
+  <?php if (
+              // No status is set
+              ! isset( $status ) or
+              // There is no error status
+              ( 'error' != $status and ! empty( $api_key ) ) or
+              // There is an error, but the error was from sending with the test form
+              ( 'error' == $status and isset( $error_type ) and 'sending' == $error_type )
+           ) :
+  ?>
     <form name="sendgrid_test" method="POST" action="<?php echo Sendgrid_Tools::get_form_action(); ?>">
       <table class="form-table">
         <tbody>

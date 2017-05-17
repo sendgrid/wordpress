@@ -1,5 +1,11 @@
 <?php if ( $active_tab == 'marketing' ): ?>
-  <?php if ( ( $is_mc_api_key_valid and $contact_list_id_is_valid ) or ( 'error' == $status and isset( $error_type ) and 'upload' == $error_type ) ): ?>
+  <?php if (
+            // Both api keys are set and the contact list id is set
+            ( $is_mc_api_key_valid and $is_api_key_valid and $contact_list_id_is_valid ) or
+            // There was an error sending the subscription email for contact upload
+            ( 'error' == $status and isset( $error_type ) and 'upload' == $error_type )
+           ) :
+  ?>
     <form class="form-table" name="sendgrid_form" method="POST" action="<?php echo Sendgrid_Tools::get_form_action(); ?>">
       <table class="form-table">
         <tbody>

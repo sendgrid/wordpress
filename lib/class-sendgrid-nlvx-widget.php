@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once plugin_dir_path( __FILE__ ) . 'class-sendgrid-tools.php';
 require_once plugin_dir_path( __FILE__ ) . 'class-sendgrid-nlvx.php';
@@ -77,29 +77,29 @@ class SendGrid_NLVX_Widget extends WP_Widget {
 
       // Widget text input
       echo '<p>';
-      echo '<label for="' . $this->get_field_id( 'text' ) . '">' . _e( 'Message to display before subscription form:' ) . '</label>'; 
+      echo '<label for="' . $this->get_field_id( 'text' ) . '">' . _e( 'Message to display before subscription form:' ) . '</label>';
       echo '<input class="widefat" id="' . $this->get_field_id( 'text' ) . '" name="' . $this->get_field_name( 'text' ). '" type="text" value="' . esc_attr( $text ) . '" />';
       echo '</p>';
 
       // Widget error text input
       echo '<p>';
-      echo '<label for="' . $this->get_field_id( 'error_text' ) . '">' . _e( 'Message to display for errors:' ) . '</label>'; 
+      echo '<label for="' . $this->get_field_id( 'error_text' ) . '">' . _e( 'Message to display for errors:' ) . '</label>';
       echo '<input class="widefat" id="' . $this->get_field_id( 'error_text' ) . '" name="' . $this->get_field_name( 'error_text' ). '" type="text" value="' . esc_attr( $error_text ) . '" />';
       echo '</p>';
 
       // Widget email error text input
       echo '<p>';
-      echo '<label for="' . $this->get_field_id( 'error_email_text' ) . '">' . _e( 'Message to display for invalid email address:' ) . '</label>'; 
+      echo '<label for="' . $this->get_field_id( 'error_email_text' ) . '">' . _e( 'Message to display for invalid email address:' ) . '</label>';
       echo '<input class="widefat" id="' . $this->get_field_id( 'error_email_text' ) . '" name="' . $this->get_field_name( 'error_email_text' ). '" type="text" value="' . esc_attr( $error_email_text ) . '" />';
       echo '</p>';
 
       // Widget success text input
       echo '<p>';
-      echo '<label for="' . $this->get_field_id( 'success_text' ) . '">' . _e( 'Message to display for success:' ) . '</label>'; 
+      echo '<label for="' . $this->get_field_id( 'success_text' ) . '">' . _e( 'Message to display for success:' ) . '</label>';
       echo '<input class="widefat" id="' . $this->get_field_id( 'success_text' ) . '" name="' . $this->get_field_name( 'success_text' ). '" type="text" value="' . esc_attr( $success_text ) . '" />';
       echo '</p>';
     }
-    
+
     /**
      * Method called to update the widget parameters in the back-end
      *

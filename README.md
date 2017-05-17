@@ -6,7 +6,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.6
 * Tested up to: 4.7
-* Stable tag: 1.11.2
+* Stable tag: 1.11.3
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -266,6 +266,13 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 ## Changelog
 
+**1.11.3**
+* Fixed an issue where the send test form was displayed when no API key was set
+* Fixed an issue where the subscription test form was not displayed for the default contact list
+* Fixed an issue where the virtual pages for Subscription errors was not displayed
+* Fixed an issue where there was no notification for option update on the Multisite settings page
+* Fixed an issue where there was no notification when an API key was not set on the General tab when there was one on the Subscription Widget tab
+
 **1.11.2**
 * Relaxed PHP requirement to at least version 5.4.
 
@@ -491,6 +498,13 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.11.3**
+* Fixed an issue where the send test form was displayed when no API key was set
+* Fixed an issue where the subscription test form was not displayed for the default contact list
+* Fixed an issue where the virtual pages for Subscription errors was not displayed
+* Fixed an issue where there was no notification for option update on the Multisite settings page
+* Fixed an issue where there was no notification when an API key was not set on the General tab when there was one on the Subscription Widget tab
 
 **1.11.2**
 * Relaxed PHP requirement to at least version 5.4.

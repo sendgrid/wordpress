@@ -37,47 +37,45 @@ if ( ! class_exists( 'SGVirtualPage' ) )
     {
       global $wp, $wp_query;
 
-      if ( count( $posts ) == 0 and
-        ( strcasecmp( $wp->request, $this->slug ) == 0 or $wp->query_vars['page_id'] == $this->slug ) )
-      {
-        $post = new stdClass;
+      $post = new stdClass;
 
-        $post->ID                     = -1;
-        $post->post_author            = $this->author;
-        $post->post_date              = $this->date;
-        $post->post_date_gmt          = $this->dategmt;
-        $post->post_content           = $this->content;
-        $post->post_title             = $this->title;
-        $post->post_excerpt           = '';
-        $post->post_status            = 'publish';
-        $post->comment_status         = 'closed';
-        $post->ping_status            = 'closed';
-        $post->post_password          = '';
-        $post->post_name              = $this->slug;
-        $post->to_ping                = '';
-        $post->pinged                 = '';
-        $post->modified               = $post->post_date;
-        $post->modified_gmt           = $post->post_date_gmt;
-        $post->post_content_filtered  = '';
-        $post->post_parent            = 0;
-        $post->guid                   = get_home_url('/' . $this->slug);
-        $post->menu_order             = 0;
-        $post->post_tyle              = $this->type;
-        $post->post_mime_type         = '';
-        $post->comment_count          = 0;
+      $post->ID                     = -1;
+      $post->post_author            = $this->author;
+      $post->post_date              = $this->date;
+      $post->post_date_gmt          = $this->dategmt;
+      $post->post_content           = $this->content;
+      $post->post_title             = $this->title;
+      $post->post_excerpt           = '';
+      $post->post_status            = 'publish';
+      $post->comment_status         = 'closed';
+      $post->ping_status            = 'closed';
+      $post->post_password          = '';
+      $post->post_name              = $this->slug;
+      $post->to_ping                = '';
+      $post->pinged                 = '';
+      $post->modified               = $post->post_date;
+      $post->modified_gmt           = $post->post_date_gmt;
+      $post->post_content_filtered  = '';
+      $post->post_parent            = 0;
+      $post->guid                   = get_home_url('/' . $this->slug);
+      $post->menu_order             = 0;
+      $post->post_tyle              = $this->type;
+      $post->post_mime_type         = '';
+      $post->comment_count          = 0;
 
-        $posts = array( $post );
+      $posts = array( $post );
 
-        $wp_query->is_page      = TRUE;
-        $wp_query->is_singular  = TRUE;
-        $wp_query->is_home      = FALSE;
-        $wp_query->is_archive   = FALSE;
-        $wp_query->is_category  = FALSE;
+      $wp_query->is_page      = TRUE;
+      $wp_query->is_singular  = TRUE;
+      $wp_query->is_home      = FALSE;
+      $wp_query->is_archive   = FALSE;
+      $wp_query->is_category  = FALSE;
 
-        unset( $wp_query->query['error'] );
-        $wp_query->query_vars['error']  = '';
-        $wp_query->is_404               = FALSE;
-      }
+      unset( $wp_query->query['error'] );
+      $wp_query->query_vars['error']  = '';
+      $wp_query->is_404               = FALSE;
+
+      remove_filter( 'the_posts', array( &$this, 'virtualPage' ) );
 
       return $posts;
     }

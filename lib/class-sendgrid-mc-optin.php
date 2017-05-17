@@ -43,12 +43,12 @@ class Sendgrid_OptIn_API_Endpoint{
       exit;
     }
   }
-  
-  /** 
+
+  /**
    * Handle Requests
    * This is where compute the email from the token and subscribe the user_error()
    *
-   * @return void 
+   * @return void
    */
   protected function handle_request() {
     global $wp;
@@ -59,7 +59,7 @@ class Sendgrid_OptIn_API_Endpoint{
       wp_redirect( 'sg-subscription-missing-token' );
       exit();
     }
-    
+
     $transient = Sendgrid_Tools::get_transient_sendgrid( $token );
 
     if ( ! $transient or
