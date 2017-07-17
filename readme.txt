@@ -3,8 +3,8 @@ Contributors: team-rs
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.6
-Tested up to: 4.7
-Stable tag: 1.11.3
+Tested up to: 4.8
+Stable tag: 1.11.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -250,6 +250,24 @@ The settings for all sites in the network can be configured only by the Network 
 
 Since 1.10.5 the Network Admin can delegate the configuration for each subsite to their respective owners. This will allow any subsite to use it's own SendGrid Plugin configuration.
 
+= How can I further customize my emails? =
+
+When calling the wp_mail() function you can send a SendGrid PHP email object in the headers argument.
+
+Here is an example:
+
+`$email = new SendGrid\Email();
+$email
+    ->setFrom('me@bar.com')
+    ->setHtml('<strong>Hello World!</strong>')
+    ->addCategory('customCategory')
+;
+
+wp_mail('foo@bar.com', 'Subject goes here', 'Message goes here', $email);
+`
+
+You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v4.0.2/README.md
+
 == Screenshots ==
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin.
@@ -266,6 +284,8 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 == Changelog ==
 
+= 1.11.4 =
+* Fixed an issue where TO field recipients could not see each other in the email header
 = 1.11.3 =
 * Fixed an issue where the send test form was displayed when no API key was set
 * Fixed an issue where the subscription test form was not displayed for the default contact list
@@ -438,6 +458,8 @@ Since 1.10.5 the Network Admin can delegate the configuration for each subsite t
 
 == Upgrade notice ==
 
+= 1.11.4 =
+* Fixed an issue where TO field recipients could not see each other in the email header
 = 1.11.3 =
 * Fixed an issue where the send test form was displayed when no API key was set
 * Fixed an issue where the subscription test form was not displayed for the default contact list

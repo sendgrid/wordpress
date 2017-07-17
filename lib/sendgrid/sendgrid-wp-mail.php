@@ -193,7 +193,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
             case 'x-smtpapi-to':
               $xsmtpapi_tos = explode( ',', trim( $content ) );
               foreach ( $xsmtpapi_tos as $xsmtpapi_to ) {
-                $mail->addSmtpapiTo( $xsmtpapi_to );
+                $mail->addSmtpapiTo( trim( $xsmtpapi_to ) );
               }
               break;
             case 'substitutions':

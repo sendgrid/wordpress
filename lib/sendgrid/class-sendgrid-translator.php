@@ -181,6 +181,9 @@ class Sendgrid_Translator {
       return;
     }
 
+    // Create a new personalization for this To
+    $personalization  = new SendGridV3\Personalization();
+
     foreach ( $email_v2->to as $index => $address ) {
       if ( ! self::is_valid_string( $address ) ) {
         continue;
@@ -189,25 +192,22 @@ class Sendgrid_Translator {
       $to_name      = null;
       $to_address   = trim( $address );
 
-     if ( isset( $email_v2->toName[ $index ] ) and
+      if ( isset( $email_v2->toName[ $index ] ) and
         self::is_valid_string( $email_v2->toName[ $index ] ) ) {
         $to_name = trim( $email_v2->toName[ $index ] );
       }
 
       $recipient = new SendGridV3\Email( $to_name, $to_address );
 
-      // Create a new personalization for this To
-      $personalization  = new SendGridV3\Personalization();
-
       // Add the values
       $personalization->addTo( $recipient );
       self::set_substitutions_v3( $index, $personalization, $email_v2 );
       self::set_custom_args_v3( $index, $personalization, $email_v2 );
       self::set_send_each_at_v3( $index, $personalization, $email_v2 );
-
-      // Append the personalization to the email
-      $email_v3->addPersonalization( $personalization );
     }
+
+    // Append the personalization to the email
+    $email_v3->addPersonalization( $personalization );
   }
 
   /**

@@ -1262,7 +1262,7 @@ class Sendgrid_Tools
           case 'x-smtpapi-to':
             $xsmtpapi_tos = explode( ',', trim( $content ) );
             foreach ( $xsmtpapi_tos as $xsmtpapi_to ) {
-              if( ! Sendgrid_Tools::is_valid_email( $xsmtpapi_to ) ) {
+              if( ! Sendgrid_Tools::is_valid_email( trim( $xsmtpapi_to ) ) ) {
                 return false;
               }
             }
