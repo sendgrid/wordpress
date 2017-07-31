@@ -13,6 +13,10 @@ class SendGrid_BuddyPress_Mailer implements BP_Email_Delivery {
     $subject = $email->get_subject( 'replace-tokens' );
     $message = normalize_whitespace( $email->get_content_plaintext( 'replace-tokens' ) );
 
+    if ( defined( 'SENDGRID_DISABLE_BP_NORMALIZE_WHITESPACE' ) ) {
+      $message = $email->get_content_plaintext( 'replace-tokens' );
+    }
+
     $filter_set = false;
 
     if ( 'plaintext' != Sendgrid_Tools::get_content_type() ) {
@@ -29,7 +33,7 @@ class SendGrid_BuddyPress_Mailer implements BP_Email_Delivery {
 
     return $result;
   }
-  
+
   function set_html_content_type( $content_type ) {
     return 'text/html';
   }

@@ -39,7 +39,7 @@ require_once plugin_dir_path( __FILE__ ) . 'class-sendgrid-php.php';
 function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() )
 {
   $header_is_object = false;
-    
+
   if ( $headers instanceof SendGrid\Email ) {
     $header_is_object = true;
 
@@ -54,7 +54,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     // Compact the input, apply the filters, and extract them back out
     extract( apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) ) );
   }
- 
+
   $method = Sendgrid_Tools::get_send_method();
 
   // prepare attachments
@@ -173,7 +173,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
                 if ( false !== strpos( $content, '=' ) ) {
                   list( $key, $val ) = explode( '=', $unique_arg );
                   $mail->addUniqueArg( trim( $key ), trim( $val ) );
-                } 
+                }
               }
               break;
             case 'template':
@@ -207,7 +207,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
                 if ( false !== strpos( $content, '=' ) ) {
                   list( $key, $val ) = explode( '=', $substitution );
                   $mail->addSubstitution( '%' . trim( $key ) . '%', explode( ',', trim( $val ) ) );
-                } 
+                }
               }
               break;
             case 'sections':
@@ -221,7 +221,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
                 if ( false !== strpos( $content, '=' ) ) {
                   list( $key, $val ) = explode( '=', $section );
                   $mail->addSection( '%' . trim( $key ) . '%', trim( $val ) );
-                } 
+                }
               }
               break;
             default:
@@ -236,8 +236,9 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 
   // From email and name
   // If we don't have a name from the input headers
-  if ( ! isset( $from_name ) or ! $from_name )
-    $from_name = stripslashes( Sendgrid_Tools::get_from_name() );
+  if ( ! isset( $from_name ) or ! $from_name ) {
+    $from_name = htmlspecialchars_decode( Sendgrid_Tools::get_from_name() );
+  }
 
   /* If we don't have an email from the input headers default to wordpress@$sitename
    * Some hosts will block outgoing mail from this address if it doesn't exist but
@@ -312,7 +313,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
     if ( ! ( $global_content_type ) or ( 'plaintext' == $global_content_type ) ) {
       $content_type = 'text/plain';
     } elseif ( 'html' == $global_content_type ) {
-      $content_type = 'text/html';  
+      $content_type = 'text/html';
     } else {
       $content_type = 'text/plain';
     }
@@ -392,7 +393,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
   }
 
   $mail->setReplyTo( $replyto );
-  
+
   // add attachemnts
   if ( count( $attached_files ) ) {
     $mail->setAttachments( $attached_files );
@@ -412,7 +413,7 @@ function wp_mail( $to, $subject, $message, $headers = '', $attachments = array()
 
   return $sendgrid->send( $mail );
 }
-  
+
 
 if ( ! function_exists( 'set_html_content_type' ) )
 {

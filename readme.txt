@@ -4,7 +4,7 @@ Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.6
 Tested up to: 4.8
-Stable tag: 1.11.5
+Stable tag: 1.11.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -232,6 +232,14 @@ Yes. Our plugin required special integration with BuddyPress and it's regularly 
 
 `define('SENDGRID_DISABLE_BUDDYPRESS', '1');`
 
+If you're trying to send plaintext emails using BuddyPress, keep in mind that by default the whitespace content of those emails is normalized.
+
+That means that some newlines might be missing if you expect them to be there.
+
+To disable this functionality, you need to add the following line in your wp-config.php file:
+
+`define('SENDGRID_DISABLE_BP_NORMALIZE_WHITESPACE', '1');`
+
 = Can I use shortcodes to customize the subscription confirmation page ? =
 
 Yes. You need to create custom page and select it from the settings page. You can place any of these shortcodes in the body of that page. Here's an example :
@@ -284,6 +292,9 @@ You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v
 
 == Changelog ==
 
+= 1.11.6 =
+* Added a feature flag to disable whitespace normalization in BuddyPress plaintext emails
+* Fixed an issue where the from name and email subjects would incorrectly display the ampersand symbol
 = 1.11.5 =
 * Fixed a potential stored XSS issue on the backend settings form
 * Fixed a potential CSRF issue on the backend settings form
@@ -461,6 +472,9 @@ You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v
 
 == Upgrade notice ==
 
+= 1.11.6 =
+* Added a feature flag to disable whitespace normalization in BuddyPress plaintext emails
+* Fixed an issue where the from name and email subjects would incorrectly display the ampersand symbol
 = 1.11.5 =
 * Fixed a potential stored XSS issue on the backend settings form
 * Fixed a potential CSRF issue on the backend settings form
