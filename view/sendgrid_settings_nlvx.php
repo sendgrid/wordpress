@@ -203,6 +203,7 @@
       <input class="button button-primary" type="submit" name="Submit" value="<?php _e('Update Settings') ?>" />
     </p>
     <input type="hidden" name="mc_settings" value="true"/>
+    <input type="hidden" name="sgnonce" value="<?php echo wp_create_nonce('sgnonce'); ?>"/>
     <?php
       if ( $is_env_mc_api_key ) {
         echo '<input type="hidden" name="mc_api_key_defined_in_env" id="mc_api_key_defined_in_env" value="true"/>';

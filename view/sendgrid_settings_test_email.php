@@ -43,6 +43,7 @@
         </table>
       </tbody>
       <input type="hidden" name="email_test" value="true"/>
+      <input type="hidden" name="sgnonce" value="<?php echo wp_create_nonce('sgnonce'); ?>"/>
       <p class="submit">
         <input class="button button-primary" type="submit" name="Submit" value="<?php _e('Send') ?>" />
       </p>

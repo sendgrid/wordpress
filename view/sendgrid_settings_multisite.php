@@ -78,5 +78,6 @@
     <input type="submit" id="doaction" class="button button-primary" value="<?php _e( 'Save Settings' ); ?>">
 </p>
 <input type="hidden" name="subsite_settings" value="true"/>
+<input type="hidden" name="sgnonce" value="<?php echo wp_create_nonce('sgnonce'); ?>"/>
 </form>
 <?php endif; ?>

@@ -15,6 +15,8 @@ class Sendgrid_Settings {
   const DEFAULT_LAST_NAME_LABEL = 'Last Name';
   const DEFAULT_SUBSCRIBE_LABEL = 'SUBSCRIBE';
 
+  const NONCE_ERROR = '<br/><br/> Invalid nonce. Refresh the page and try again.';
+
   public static $plugin_directory;
 
   /**
@@ -389,6 +391,15 @@ class Sendgrid_Settings {
    * @return mixed              response array from the save or send functions
    */
   private static function do_post( $params ) {
+
+    if ( ! isset( $params['sgnonce'] ) ) {
+      die( self::NONCE_ERROR );
+    }
+
+    if ( ! wp_verify_nonce( $params['sgnonce'], 'sgnonce' ) ) {
+      die( self::NONCE_ERROR );
+    }
+
     if ( isset( $params['mc_settings'] ) and $params['mc_settings'] ) {
       return self::save_mc_settings( $params );
     }
@@ -551,9 +562,8 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        // Textarea values are automatically escaping HTML characters.
-        // The user needs to be able to enter any content.
-        Sendgrid_Tools::set_mc_signup_email_content( $params['sendgrid_mc_email_content'] );
+        $html_content = htmlspecialchars( $params['sendgrid_mc_email_content'], ENT_QUOTES, 'UTF-8' );
+        Sendgrid_Tools::set_mc_signup_email_content( $html_content );
       }
     }
 
@@ -564,9 +574,8 @@ class Sendgrid_Settings {
           'status' => 'error'
         );
       } else {
-        // Textarea values are automatically escaping HTML characters.
-        // The user needs to be able to enter any content.
-        Sendgrid_Tools::set_mc_signup_email_content_text( $params['sendgrid_mc_email_content_text'] );
+        $plaintext_content = htmlspecialchars( $params['sendgrid_mc_email_content_text'], ENT_QUOTES, 'UTF-8' );
+        Sendgrid_Tools::set_mc_signup_email_content_text( $plaintext_content );
       }
     }
 

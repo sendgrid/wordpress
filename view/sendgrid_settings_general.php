@@ -159,6 +159,7 @@
     <input class="button button-primary" type="submit" name="Submit" value="<?php _e('Update Settings') ?>" />
   </p>
   <input type="hidden" name="general_settings" value="true"/>
+  <input type="hidden" name="sgnonce" value="<?php echo wp_create_nonce('sgnonce'); ?>"/>
 </form>
 <br />
 <?php endif; ?>

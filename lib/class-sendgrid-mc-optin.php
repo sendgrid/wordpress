@@ -104,18 +104,18 @@ class Sendgrid_OptIn_API_Endpoint{
     }
   }
 
-  /** 
+  /**
    * Send OptIn email
-   *  
+   *
    * @param  string $email      Email of subscribed user
    * @param  string $first_name First Name of subscribed user
    * @param  string $last_name  Last Name of subscribed user
    * @return bool
    */
   public static function send_confirmation_email( $email, $first_name = '', $last_name = '', $from_settings = false ) {
-    $subject = Sendgrid_Tools::get_mc_signup_email_subject();
-    $content = Sendgrid_Tools::get_mc_signup_email_content();
-    $content_text = Sendgrid_Tools::get_mc_signup_email_content_text();
+    $subject = htmlspecialchars_decode( Sendgrid_Tools::get_mc_signup_email_subject() );
+    $content = htmlspecialchars_decode( Sendgrid_Tools::get_mc_signup_email_content() );
+    $content_text = htmlspecialchars_decode( Sendgrid_Tools::get_mc_signup_email_content_text() );
 
     if ( false == $subject or false == $content or false == $content_text ) {
       return false;
@@ -149,7 +149,7 @@ class Sendgrid_OptIn_API_Endpoint{
             ->addCategory( 'wp_sendgrid_subscription_widget' );
 
     add_filter( 'sendgrid_mail_text', function() use ( &$content_text ) { return $content_text; } );
-        
+
     $result = wp_mail( $to, $subject, $content, $headers );
 
     return $result;

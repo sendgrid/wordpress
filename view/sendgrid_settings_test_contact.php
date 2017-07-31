@@ -22,6 +22,7 @@
             </td>
           </tr>
           <input type="hidden" name="contact_upload_test" value="true"/>
+          <input type="hidden" name="sgnonce" value="<?php echo wp_create_nonce('sgnonce'); ?>"/>
           <tr valign="top" class="mc_test_email">
             <th scope="row" colspan="2">
               <input class="button button-primary" type="submit" name="Submit" value="<?php _e('Test') ?>" />

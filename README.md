@@ -6,7 +6,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.6
 * Tested up to: 4.8
-* Stable tag: 1.11.4
+* Stable tag: 1.11.5
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -284,6 +284,10 @@ You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v
 
 ## Changelog
 
+**1.11.5**
+* Fixed a potential stored XSS issue on the backend settings form
+* Fixed a potential CSRF issue on the backend settings form
+
 **1.11.4**
 * Fixed an issue where TO field recipients could not see each other in the email header
 
@@ -519,6 +523,10 @@ You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.11.5**
+* Fixed a potential stored XSS issue on the backend settings form
+* Fixed a potential CSRF issue on the backend settings form
 
 **1.11.4**
 * Fixed an issue where TO field recipients could not see each other in the email header
