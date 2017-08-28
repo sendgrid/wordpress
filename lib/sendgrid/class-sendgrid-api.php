@@ -25,25 +25,26 @@ class Sendgrid_API implements Sendgrid_Send {
 
   public function send(SendGrid\Email $email) {
     $data = array(
-      'headers' => array( 
+      'headers' => array(
         'Content-Type' => 'application/json',
         'User-Agent' => 'sendgrid/wordpress;php',
         'Authorization' => 'Bearer ' . $this->apikey
       ),
       'body' => Sendgrid_Translator::to_api_v3( $email ),
-      'decompress' => false
+      'decompress' => false,
+      'timeout' => Sendgrid_Tools::get_request_timeout()
     );
 
     // Send the request
     $response = wp_remote_post( self::URL, $data );
 
     // Check that the response fields are set
-    if ( !is_array( $response ) or 
-      !isset( $response['response'] ) or 
+    if ( !is_array( $response ) or
+      !isset( $response['response'] ) or
       !isset( $response['response']['code'] ) ) {
       return false;
     }
-    
+
     // Check for success code range (200-299)
     $response_code = (int) $response['response']['code'];
     if ( $response_code >= 200 and

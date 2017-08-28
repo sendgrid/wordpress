@@ -121,9 +121,9 @@ class Sendgrid_OptIn_API_Endpoint{
       return false;
     }
 
-    $subject = htmlspecialchars_decode( $subject );
-    $content = htmlspecialchars_decode( $content );
-    $content_text = htmlspecialchars_decode( $content_text );
+    $subject = stripslashes( $subject );
+    $content = stripslashes( $content );
+    $content_text = stripslashes( $content_text );
     $to = array( $email );
 
     $token = Sendgrid_OptIn_API_Endpoint::generate_email_token( $email, $first_name, $last_name );

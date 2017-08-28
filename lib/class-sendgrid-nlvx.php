@@ -46,7 +46,8 @@ class Sendgrid_NLVX
         'headers' => array(
           'Authorization' => $auth
         ),
-        'decompress' => false
+        'decompress' => false,
+        'timeout' => Sendgrid_Tools::get_request_timeout()
     );
 
     $url = Sendgrid_NLVX::NLVX_API_URL . '/lists';
@@ -86,7 +87,8 @@ class Sendgrid_NLVX
         'headers' => array(
           'Authorization' => $auth
         ),
-        'decompress' => false
+        'decompress' => false,
+        'timeout' => Sendgrid_Tools::get_request_timeout()
     );
 
     $url = Sendgrid_NLVX::NLVX_API_URL . '/recipients';
@@ -142,7 +144,8 @@ class Sendgrid_NLVX
         'headers' => array(
           'Authorization' => $auth
         ),
-        'decompress' => false
+        'decompress' => false,
+        'timeout' => Sendgrid_Tools::get_request_timeout()
     );
 
     $url = Sendgrid_NLVX::NLVX_API_URL . '/lists/'. $list_id . '/recipients/' . $recipient_id;

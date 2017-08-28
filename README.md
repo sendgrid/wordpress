@@ -6,7 +6,7 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.6
 * Tested up to: 4.8
-* Stable tag: 1.11.6
+* Stable tag: 1.11.7
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,10 @@ SendGrid settings can optionally be defined as global variables (wp-config.php):
     * Signup confirmation email subject: define('SENDGRID_MC_SIGNUP_EMAIL_SUBJECT', 'Confirm subscription');
     * Signup confirmation email content: define('SENDGRID_MC_SIGNUP_EMAIL_CONTENT', '&lt;a href="%confirmation_link%"&gt;click here&lt;/a&gt;');
     * Signup confirmation page ID: define('SENDGRID_MC_SIGNUP_CONFIRMATION_PAGE', 'page_id');
+
+4. Other configuration options:
+    * Set a custom timeout for API requests to SendGrid in seconds: define('SENDGRID_REQUEST_TIMEOUT', 10);
+
 
 ### Filters
 
@@ -265,6 +269,14 @@ wp_mail('foo@bar.com', 'Subject goes here', 'Message goes here', $email);
 
 You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v4.0.2/README.md
 
+### My server is slow. Can I increase the timeout for API requests?
+
+Yes. You can define a constant in your wp-config.php file like this:
+
+`define('SENDGRID_REQUEST_TIMEOUT', 10);`
+
+The value is in seconds, this means that API requests will wait 10 seconds for a reponse from the SendGrid API server until timing out.
+
 ## Screenshots
 
 1. Go to Admin Panel, section Plugins and activate the SendGrid plugin. If you want to send emails through SMTP you need to install also the 'Swift Mailer' plugin.
@@ -291,6 +303,10 @@ You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v
 ![screenshot-11](/assets/screenshot-12.png)
 
 ## Changelog
+
+**1.11.7**
+* Added a configuration parameter of API request timeout in seconds
+* Fixed an issue that made the HTML subscription emails break links
 
 **1.11.6**
 * Added a feature flag to disable whitespace normalization in BuddyPress plaintext emails
@@ -535,6 +551,10 @@ You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v
 * Fixed issue: Add error message when PHP-curl extension is not enabled.
 
 ## Upgrade notice
+
+**1.11.7**
+* Added a configuration parameter of API request timeout in seconds
+* Fixed an issue that made the HTML subscription emails break links
 
 **1.11.6**
 * Added a feature flag to disable whitespace normalization in BuddyPress plaintext emails

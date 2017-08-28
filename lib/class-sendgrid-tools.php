@@ -7,6 +7,7 @@ class Sendgrid_Tools
   const CHECK_API_KEY_CACHE_KEY = "sendgrid_api_key_check";
   const CHECK_API_KEY_STATS_CACHE_KEY = "sendgrid_api_key_stats_check";
   const VALID_CREDENTIALS_STATUS = "valid";
+  const DEFAULT_TIMEOUT = 5;
 
   // used static variable because php 5.3 doesn't support array as constant
   public static $allowed_ports = array( Sendgrid_SMTP::TLS, Sendgrid_SMTP::TLS_ALTERNATIVE, Sendgrid_SMTP::SSL, Sendgrid_SMTP::TLS_ALTERNATIVE_2 );
@@ -78,7 +79,13 @@ class Sendgrid_Tools
     $url = 'https://api.sendgrid.com/api/profile.get.json?';
     $url .= "api_user=" . urlencode( $username ) . "&api_key=" . urlencode( $password );
 
-    $response = wp_remote_get( $url, array( 'decompress' => false ) );
+    $response = wp_remote_get(
+      $url,
+      array(
+        'decompress' => false,
+        'timeout' => Sendgrid_Tools::get_request_timeout()
+      )
+    );
 
     if ( ! is_array( $response ) or ! isset( $response['body'] ) ) {
       return false;
@@ -113,7 +120,8 @@ class Sendgrid_Tools
     $args = array(
       'headers' => array(
         'Authorization' => 'Bearer ' . $apikey ),
-      'decompress' => false
+      'decompress' => false,
+      'timeout' => Sendgrid_Tools::get_request_timeout()
     );
 
     $response = wp_remote_get( $url, $args );
@@ -223,7 +231,8 @@ class Sendgrid_Tools
       'headers' => array(
         'Authorization' => 'Bearer ' . self::get_api_key()
       ),
-      'decompress' => false
+      'decompress' => false,
+      'timeout' => Sendgrid_Tools::get_request_timeout()
     );
 
     $data = urldecode( http_build_query( $parameters ) );
@@ -1423,6 +1432,20 @@ class Sendgrid_Tools
     $pagination['next_button']      = $next_button;
 
     return $pagination;
+  }
+
+  /**
+   * Returns configured timeout for API requests
+   *
+   * @return  integer   timeout in seconds
+   */
+  public static function get_request_timeout()
+  {
+    if ( defined( 'SENDGRID_REQUEST_TIMEOUT' ) ) {
+      return SENDGRID_REQUEST_TIMEOUT;
+    } else {
+      return self::DEFAULT_TIMEOUT;
+    }
   }
 }
 
