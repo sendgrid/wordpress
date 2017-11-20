@@ -1162,10 +1162,8 @@ class Sendgrid_Tools
     $check_scopes = Sendgrid_Tools::check_api_key_scopes( $apikey, $required_scopes );
 
     // set cache
-    if ( $check_scopes ) {
-      self::set_transient_sendgrid( self::CHECK_API_KEY_STATS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * 60 * 60 );
-    }
-
+    self::set_transient_sendgrid( self::CHECK_API_KEY_STATS_CACHE_KEY, self::VALID_CREDENTIALS_STATUS, 2 * HOUR_IN_SECONDS );
+    
     return $check_scopes;
   }
 
