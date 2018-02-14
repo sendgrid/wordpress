@@ -1,10 +1,10 @@
 === SendGrid ===
-Contributors: team-rs
+Contributors: SendGrid
 Donate link: http://sendgrid.com/
 Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 Requires at least: 4.6
-Tested up to: 4.8
-Stable tag: 1.11.7
+Tested up to: 4.9
+Stable tag: 1.11.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,13 +20,21 @@ SendGrid’s WordPress plugin replaces WordPress’s default wp_mail() function 
 
 By using the SendGrid plugin, you will be able to take advantage of improved deliverability and an expanded feature set, including tracking and analytics, to enhance user engagement on your WordPress installation. SendGrid also provides world class customer support, should you run into any issues.
 
-For more details, consult our official documentation here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html
+For more details, [consult our official documentation](https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html).
+
+For assistance you can contact SendGrid Support from the [SendGrid Support Portal](https://support.sendgrid.com/). Click **Login & Contact Support**, and then **Contact Support** to see your support contact options. Paying SendGrid customers have the option to contact support via phone, chat, or by submitting a ticket using our web form. All SendGrid customers have the option to submit a ticket using our web form.
+
+= Agency Program =
+
+Are you sending emails on behalf of your clients? SendGrid's Agency Program offers exclusive pricing and support for agencies looking to improve their email program.
+
+Want to learn more? Visit the [SendGrid Agency Page](https://sendgrid.com/partners/agencies/)
 
 = The Subscription Widget =
 
 SendGrid’s WordPress Subscription Widget makes it easy for people visiting your WordPress site to subscribe to your marketing emails, such as any newsletters, announcements, or promotional offers you may send. Upon signup, they’ll automatically receive an opt-in email allowing them to confirm their desire to begin receiving your emails. This confirmation constitutes “double opt-in,” a deliverability best practice.
 
-For more details, consult the official documentation for the Subscription Widget here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/subscription_widget.html
+For more details, consult the official documentation for the [Subscription Widget](https://sendgrid.com/docs/Integrate/Tutorials/WordPress/subscription_widget.html)
 
 = Multisite =
 
@@ -147,9 +155,13 @@ Note that all HTML emails sent through our plugin also contain the HTML body in 
 
 == Frequently asked questions ==
 
+= Does SendGrid have an Agency program?
+
+Yes. If you are sending email on behalf of clients, you can find more information on [SendGrid's Agency Page](https://www.sendgrid.com/partners/agencies/)
+
 = Is there any official documentation for this plugin ? =
 
-Yes. You can find it here : https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html
+Yes. [You can find it here](https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html)
 
 = What PHP versions are supported ? =
 
@@ -303,6 +315,9 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 
 == Changelog ==
 
+= 1.11.8 =
+* Updated the plugin description to direct users to support.sendgrid.com for questions.
+* Updated the "tested up to" field to confirm the latest version of the plugin wordes with the latest version of wordpress.
 = 1.11.7 =
 * Added a configuration parameter of API request timeout in seconds
 * Fixed an issue that made the HTML subscription emails break links
@@ -486,6 +501,9 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 
 == Upgrade notice ==
 
+= 1.11.8 =
+* Updated the plugin description to direct users to support.sendgrid.com for questions.
+* Updated the "tested up to" field to confirm the latest version of the plugin wordes with the latest version of wordpress.
 = 1.11.7 =
 * Added a configuration parameter of API request timeout in seconds
 * Fixed an issue that made the HTML subscription emails break links

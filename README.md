@@ -5,8 +5,8 @@
 * Donate link: http://sendgrid.com/
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.6
-* Tested up to: 4.8
-* Stable tag: 1.11.7
+* Tested up to: 4.9
+* Stable tag: 1.11.8
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,7 +24,9 @@ By using the SendGrid plugin, you will be able to take advantage of improved del
 
 For more details, <a href="https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html">consult our official documentation </a>
 
-## Agency Program
+For assistance you can contact SendGrid Support from the <a href="https://support.sendgrid.com/">SendGrid Support Portal</a>. Click **Login & Contact Support**, and then **Contact Support** to see your support contact options. Paying SendGrid customers have the option to contact support via phone, chat, or by submitting a ticket using our web form. All SendGrid customers have the option to submit a ticket using our web form.
+
+### Agency Program
 
 Are you sending emails on behalf of your clients? SendGrid's Agency Program offers exclusive pricing and support for agencies looking to improve their email program. 
 
