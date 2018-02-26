@@ -307,7 +307,7 @@ class SendGrid_NLVX_Widget extends WP_Widget {
       echo '    <label for="sendgrid_mc_email" class="sendgrid_mc_label sendgrid_mc_label_email">' . $email_label . '<sup>*</sup> :</label>';
       echo '  </div>';
       echo '  <div class="sendgrid_mc_input_div">';
-      echo '    <input class="sendgrid_mc_input sendgrid_mc_input_email" id="sendgrid_mc_email" name="sendgrid_mc_email" type="text" value="" required/>';
+      echo '    <input class="sendgrid_mc_input sendgrid_mc_input_email" placeholder="Your email here" id="sendgrid_mc_email" name="sendgrid_mc_email" type="text" value="" required/>';
       echo '  </div>';
       echo '</div>';
 
