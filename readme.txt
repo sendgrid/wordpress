@@ -408,7 +408,7 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 * Updated validation for email addresses in the headers field of the send test email form
 * Add ability to have and individual email sent to each recipient by setting x-smtpapi-to in headers
 = 1.7.5 =
-* Fixed an issue with the reset password email from Wordpress
+* Fixed an issue with the reset password email from WordPress
 * Updated validation for email addresses
 * Fixed an issue where some errors were not displayed on the settings page
 * Add substitutions functionality
@@ -430,7 +430,7 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 * BREAKING CHANGE: Don't make update if you don't have mcrypt php library enabled
 * Added the possibility of setting the api key or username/password empty
 * Added the possibility of selecting the authentication method
-* Removed dependency on cURL, now all API requests are made through Wordpress
+* Removed dependency on cURL, now all API requests are made through WordPress
 * Sending mail via SMTP now supports API keys
 * Security improvements
 * Refactored old code
@@ -594,7 +594,7 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 * Updated validation for email addresses in the headers field of the send test email form
 * Add ability to have and individual email sent to each recipient by setting x-smtpapi-to in headers
 = 1.7.5 =
-* Fixed an issue with the reset password email from Wordpress
+* Fixed an issue with the reset password email from WordPress
 * Updated validation for email addresses
 * Fixed an issue where some errors were not displayed on the settings page
 * Add substitutions functionality
@@ -616,7 +616,7 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 * BREAKING CHANGE: Don't make update if you don't have mcrypt php library enabled
 * Added the possibility of setting the api key or username/password empty
 * Added the possibility of selecting the authentication method
-* Removed dependency on cURL, now all API requests are made through Wordpress
+* Removed dependency on cURL, now all API requests are made through WordPress
 * Sending mail via SMTP now supports API keys
 * Security improvements
 * Refactored old code

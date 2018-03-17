@@ -5,7 +5,7 @@
         <img src="<?php echo plugins_url( '/images/logo.png', __FILE__ ) ?>" width="100" alt="" />
       </a>
     </div>
-    <h2 id="sendgrid-wordpress-statistics-header" class="sendgrid-statistics-header-toggle">SendGrid Wordpress Statistics</h2>
+    <h2 id="sendgrid-wordpress-statistics-header" class="sendgrid-statistics-header-toggle">SendGrid WordPress Statistics</h2>
     <h2 id="sendgrid-general-statistics-header" class="sendgrid-statistics-header-toggle" style="display: none;">SendGrid General Statistics</h2>
     <h2 id="sendgrid-category-statistics-header" class="sendgrid-statistics-header-toggle" style="display: none;">SendGrid Categories Statistics</h2>
     <?php if ( isset( $status ) and ( 'error' == $status ) ): ?>
@@ -20,7 +20,7 @@
   <div class="pull-right sendgrid-statistics-change-type">
     <select id="sendgrid-statistics-change-type">
       <option value="general">General statistics</option>
-      <option value="wordpress" selected="selected">Wordpress statistics</option>
+      <option value="wordpress" selected="selected">WordPress statistics</option>
       <?php $categories = Sendgrid_Tools::get_categories_array(); ?>
       <?php if ( is_array( $categories ) and count( $categories ) > 0 ): ?>
       <optgroup label="Categories:">
