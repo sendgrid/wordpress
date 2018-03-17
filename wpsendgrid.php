@@ -73,17 +73,20 @@ if ( isset( $_POST['sg_dismiss_widget_notice'] ) ) {
   Sendgrid_Tools::set_mc_widget_notice_dismissed( 'true' );
 }
 
-// Display widget notice
-if ( 'true' != Sendgrid_Tools::get_mc_widget_notice_dismissed() and
-  ( !is_multisite() or ( is_multisite() and ( get_option( 'sendgrid_can_manage_subsite' ) or is_main_site() ) ) ) ) {
-  add_action( 'admin_notices', 'sg_subscription_widget_admin_notice' );
+if ( is_admin() ) {
+
+  // Display widget notice
+  if ( 'true' != Sendgrid_Tools::get_mc_widget_notice_dismissed() and
+       ( !is_multisite() or ( is_multisite() and ( get_option( 'sendgrid_can_manage_subsite' ) or is_main_site() ) ) ) ) {
+    add_action( 'admin_notices', 'sg_subscription_widget_admin_notice' );
+  }
+
+  // Initialize SendGrid Settings
+  new Sendgrid_Settings( plugin_basename( __FILE__ ) );
+
+  // Initialize SendGrid Statistics
+  new Sendgrid_Statistics();
 }
-
-// Initialize SendGrid Settings
-new Sendgrid_Settings( plugin_basename( __FILE__ ) );
-
-// Initialize SendGrid Statistics
-new Sendgrid_Statistics();
 
 // Initialize SendGrid Filters
 new Sendgrid_Filters();
