@@ -1,0 +1,15 @@
+{
+  "name": "sendgrid/sendgrid-email-delivery-simplified",
+  "description": "",
+  "type": "wordpress-plugin",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Leigh Bicknell",
+      "email": "leigh@orangeleaf.com"
+    }
+  ],
+  "require": {
+    "composer/installers": "^1.4"
+  }
+}
