@@ -12,6 +12,7 @@ class Sendgrid_SMTP implements Sendgrid_Send {
 
   //the list of port instances, to be recycled
   private $swift_instances = array();
+  protected $logger;
   private $port;
   private $username;
   private $password;
@@ -51,14 +52,23 @@ class Sendgrid_SMTP implements Sendgrid_Send {
     $swift = $this->get_swift_instance($this->port);
 
     $message = $this->map_to_swift( $mail );
+    $count = 0;
+    $sent = 0;
 
-    try
-    {
-      $sent = $swift->send( $message, $failures );
-    }
-    catch(Exception $e)
-    {
-      return false;
+    while ( !$sent && $count < 3 ) {
+      $count++;
+      try
+      {
+        $sent = $swift->send( $message, $failures );
+      }
+      catch( Exception $e )
+      {
+        file_put_contents(
+          '/var/log/sendgrid.log',
+          date( 'Y-m-d H:i:s' ).' '.$e->getMessage().': '.$mail->getSubject().PHP_EOL.$this->logger->dump().PHP_EOL,
+          FILE_APPEND | LOCK_EX
+        );
+      }
     }
 
     return ( $sent === 0 ) ? false : true;
@@ -75,6 +85,8 @@ class Sendgrid_SMTP implements Sendgrid_Send {
       $transport->setPassword( $this->password );
 
       $swift = \Swift_Mailer::newInstance( $transport );
+      $this->logger = new \Swift_Plugins_Loggers_ArrayLogger();
+      $swift->registerPlugin(new \Swift_Plugins_LoggerPlugin($this->logger));
 
       $this->swift_instances[$port] = $swift;
     }
@@ -93,7 +105,7 @@ class Sendgrid_SMTP implements Sendgrid_Send {
     /*
      * Since we're sending transactional email, we want the message to go to one person at a time, rather
      * than a bulk send on one message. In order to do this, we'll have to send the list of recipients through the headers
-     * but Swift still requires a 'to' address. So we'll falsify it with the from address, as it will be 
+     * but Swift still requires a 'to' address. So we'll falsify it with the from address, as it will be
      * ignored anyway.
      */
     $message->setTo( $mail->to );
@@ -111,7 +123,7 @@ class Sendgrid_SMTP implements Sendgrid_Send {
     if ( ( $replyto = $mail->getReplyTo() ) ) {
       $message->setReplyTo( $replyto );
     }
-    
+
     $attachments = $mail->getAttachments();
 
     //add any attachments that were added
@@ -123,7 +135,7 @@ class Sendgrid_SMTP implements Sendgrid_Send {
 
     $message_headers  = $message->getHeaders();
     $message_headers->addTextHeader( "x-smtpapi", $mail->smtpapi->jsonString() );
-    
+
     return $message;
   }
 }
