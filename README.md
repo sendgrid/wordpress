@@ -281,6 +281,15 @@ wp_mail('foo@bar.com', 'Subject goes here', 'Message goes here', $email);
 
 You can find more examples here: https://github.com/sendgrid/sendgrid-php/blob/v4.0.2/README.md
 
+### How do I see a log of emails that have been sent?
+
+You can see recently sent emails in your [Activity Feed](https://app.sendgrid.com/email_activity) within Sendgrid.
+
+To view the emails in Wordpress you can use one of these email logging plugins:
+
+ - [WP Mail Logging](https://wordpress.org/plugins/wp-mail-logging/)
+ - [Email Log](https://wordpress.org/plugins/email-log/)
+
 ### My server is slow. Can I increase the timeout for API requests?
 
 Yes. You can define a constant in your wp-config.php file like this:
