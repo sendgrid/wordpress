@@ -186,4 +186,46 @@ class Sendgrid_NLVX
 
     return Sendgrid_NLVX::add_recipient_to_list($recipient_id, $list_id);
   }
+  
+  /**
+   * Removes a recipient from the specified list
+   *
+   * @param   string $recipient_id      the ID of the recipient.
+   * @param   string $list_id           the ID of the list, defaults to the default list
+   *
+   * @return  bool   True if successful, false otherwise.
+   */
+  public static function delete_recipient_from_list($recipient_id, $list_id = null)
+  {
+    $auth = self::get_auth_header_value();
+    
+    if ( false == $auth ) {
+      return false;
+    }
+    
+    if ( ! $list_id ) {
+      $list_id = Sendgrid_Tools::get_mc_list_id();
+    }
+    if ( false == $list_id ) {
+      return false;
+    }
+    
+    $args = array(
+      'method' => 'DELETE',
+      'headers' => array(
+        'Authorization' => $auth
+      ),
+      'decompress' => false
+    );
+    
+    $url = Sendgrid_NLVX::NLVX_API_URL . '/lists/'. $list_id . '/recipients/' . $recipient_id;
+    
+    $response = wp_remote_post( $url, $args );
+    
+    if ( isset( $response['response']['code'] ) && 204 == $response['response']['code'] ) {
+      return true;
+    }
+    
+    return false;
+  }
 }
