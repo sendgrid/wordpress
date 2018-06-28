@@ -186,4 +186,38 @@ class Sendgrid_NLVX
 
     return Sendgrid_NLVX::add_recipient_to_list($recipient_id, $list_id);
   }
+  
+  /**
+   * Removes a recipient from the SendGrid MC contact DB
+   *
+   * @param   string $recipient_id      the ID of the recipient.
+   *
+   * @return  bool   True if successful, false otherwise.
+   */
+  public static function delete_recipient($recipient_id)
+  {
+    $auth = self::get_auth_header_value();
+    
+    if ( false == $auth ) {
+      return false;
+    }
+    
+    $args = array(
+      'method' => 'DELETE',
+      'headers' => array(
+        'Authorization' => $auth
+      ),
+      'decompress' => false
+    );
+    
+    $url = Sendgrid_NLVX::NLVX_API_URL . '/recipients/' . $recipient_id;
+    
+    $response = wp_remote_post( $url, $args );
+    
+    if ( isset( $response['response']['code'] ) && 204 == $response['response']['code'] ) {
+      return true;
+    }
+    
+    return false;
+  }
 }
