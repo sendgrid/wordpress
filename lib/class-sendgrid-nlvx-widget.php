@@ -205,7 +205,7 @@ class SendGrid_NLVX_Widget extends WP_Widget {
 
         $email = $email_split[0] . '@' . $email_domain;
       } else {
-        $email = htmlspecialchars( $_POST['sendgrid_mc_email'], ENT_QUOTES, 'UTF-8 ');
+        $email = htmlspecialchars( $_POST['sendgrid_mc_email'], ENT_QUOTES, 'UTF-8');
       }
 
       // Bad call
