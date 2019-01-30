@@ -1263,7 +1263,15 @@ class Sendgrid_Tools
 
             break;
           case 'reply-to':
-            if( ! Sendgrid_Tools::is_valid_email( $content ) ) {
+            if ( false !== strpos( $content, '<' ) ) {
+              $from_email = substr( $content, strpos( $content, '<' ) + 1 );
+              $from_email = str_replace( '>', '', $from_email );
+              $from_email = trim( $from_email );
+            } else {
+              $from_email = trim( $content );
+            }
+
+            if( ! Sendgrid_Tools::is_valid_email( $from_email ) ) {
               return false;
             }
 
