@@ -12,7 +12,7 @@ Send emails and upload contacts through SendGrid from your WordPress installatio
 
 == Description ==
 
-What is the SendGrid WordPress Plugin?
+What is SendGrid's WordPress Plugin?
 
 SendGrid’s cloud-based email infrastructure relieves businesses of the cost and complexity of maintaining custom email systems. SendGrid provides reliable deliverability, scalability, and real-time analytics along with flexible APIs that make custom integration with your application a breeze.
 
@@ -48,21 +48,21 @@ If you already had the plugin installed in a Multisite environment and you updat
 
 == Installation ==
 
-Requirements:
+*Requirements*
 
 1. PHP version >= 5.6 and <= 7.1. Installing this plugin on PHP versions 5.3 and earlier will cause your website to break.
 Installation on PHP versions 5.4 and 5.5 will work but it is not recommended.
 2. To send emails through SMTP you need to also install the 'Swift Mailer' plugin. ( https://wordpress.org/plugins/swift-mailer/ )
 3. If wp_mail() function has been declared by another plugin that you have installed, you won't be able to use the SendGrid plugin
 
-To upload the SendGrid Plugin .ZIP file:
+--To upload the SendGrid Plugin .ZIP file--
 
 1. Upload the WordPress SendGrid Plugin to the /wp-contents/plugins/ folder.
 2. Activate the plugin from the "Plugins" menu in WordPress.
 3. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
 4. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
 
-To auto install the SendGrid Plugin from the WordPress admin:
+--To auto install the SendGrid Plugin from the WordPress admin--
 
 1. Navigate to "Plugins" -> "Add New"
 2. Search for "SendGrid Plugin" and click "Install Now" for the "SendGrid Plugin" listing.
@@ -70,7 +70,7 @@ To auto install the SendGrid Plugin from the WordPress admin:
 4. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
 5. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials.
 
-For Multisite:
+--For Multisite--
 
 1. Navigate to "My Sites" -> "Network Admin" -> "Plugins"
 2. Click on "Add New"
