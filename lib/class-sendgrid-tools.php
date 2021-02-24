@@ -1178,7 +1178,7 @@ class Sendgrid_Tools
    */
   public static function check_api_key_mc( $apikey )
   {
-    $required_scopes = array( 'marketing_campaigns.create', 'marketing_campaigns.read', 'marketing_campaigns.update', 'marketing_campaigns.delete' );
+    $required_scopes = array( 'messages.read', 'sender_verification_eligible', '2fa_required');
 
     return Sendgrid_Tools::check_api_key_scopes( $apikey, $required_scopes );
   }
