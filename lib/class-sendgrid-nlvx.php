@@ -4,7 +4,7 @@ require_once plugin_dir_path( __FILE__ ) . 'class-sendgrid-tools.php';
 
 class Sendgrid_NLVX
 {
-  const NLVX_API_URL = 'https://api.sendgrid.com/v3/contactdb';
+  const NLVX_API_URL = 'https://api.sendgrid.com/v3/marketing';
 
   /**
    * Returns the appropriate header value of authorization depending on the available credentials.
