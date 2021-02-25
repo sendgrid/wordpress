@@ -5,7 +5,7 @@
 * Donate link: http://sendgrid.com/
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.6
-* Tested up to: 4.9
+* Tested up to: 5.6
 * Stable tag: 1.11.8
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
