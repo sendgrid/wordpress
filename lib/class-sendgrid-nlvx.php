@@ -59,8 +59,8 @@ class Sendgrid_NLVX
     }
 
     $lists_response = json_decode($response['body'], true);
-    if ( isset( $lists_response['lists'] ) ) {
-      return $lists_response['lists'];
+    if ( isset( $lists_response['result'] ) ) {
+      return $lists_response['result'];
     }
 
     return false;
