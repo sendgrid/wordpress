@@ -14,7 +14,7 @@
 
 ## Description
 
-**This plugin is no longer supported and will not work with the latest WordPress release. Feel free to fork the code from [GitHub|https://github.com/sendgrid/wordpress/] and revise the plugin to work for your needs. To learn more about Twilio SendGrid services visit SendGrid.com.**
+**This plugin is no longer supported and will not work with the latest WordPress release. Feel free to fork the code from [GitHub](https://github.com/sendgrid/wordpress/) and revise the plugin to work for your needs. To learn more about Twilio SendGrid services visit SendGrid.com.**
 
 What is the SendGrid WordPress Plugin?
 
