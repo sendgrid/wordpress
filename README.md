@@ -6,13 +6,15 @@
 * Tags: email, email reliability, email templates, sendgrid, smtp, transactional email, wp_mail,email infrastructure, email marketing, marketing email, deliverability, email deliverability, email delivery, email server, mail server, email integration, cloud email
 * Requires at least: 4.6
 * Tested up to: 4.9
-* Stable tag: 1.11.8
+* Stable tag: 1.11.9
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Send emails and upload contacts through SendGrid from your WordPress installation using SMTP or API integration.
+**NO LONGER MAINTAINED.** Send emails and upload contacts through SendGrid from your WordPress installation using SMTP or API integration.
 
 ## Description
+
+**This plugin is no longer supported and will not work with the latest WordPress release. Feel free to fork the code from [GitHub](https://github.com/sendgrid/wordpress/) and revise the plugin to work for your needs. To learn more about Twilio SendGrid services visit SendGrid.com.**
 
 What is the SendGrid WordPress Plugin?
 
@@ -25,12 +27,6 @@ By using the SendGrid plugin, you will be able to take advantage of improved del
 For more details, <a href="https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html">consult our official documentation </a>
 
 For assistance you can contact SendGrid Support from the <a href="https://support.sendgrid.com/">SendGrid Support Portal</a>. Click **Login & Contact Support**, and then **Contact Support** to see your support contact options. Paying SendGrid customers have the option to contact support via phone, chat, or by submitting a ticket using our web form. All SendGrid customers have the option to submit a ticket using our web form.
-
-### Agency Program
-
-Are you sending emails on behalf of your clients? SendGrid's Agency Program offers exclusive pricing and support for agencies looking to improve their email program. 
-
-Want to learn more? Visit the <a href="https://www.sendgrid.com/partners/agencies">SendGrid Agency Page </a> 
 
 ### The Subscription Widget
 
@@ -59,7 +55,7 @@ To upload the SendGrid Plugin .ZIP file:
 
 1. Upload the WordPress SendGrid Plugin to the /wp-contents/plugins/ folder.
 2. Activate the plugin from the "Plugins" menu in WordPress.
-3. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
+3. Create a SendGrid account at <a href="http://sendgrid.com/" target="_blank">http://sendgrid.com/</a>
 4. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials.
 
 To auto install the SendGrid Plugin from the WordPress admin:
@@ -67,7 +63,7 @@ To auto install the SendGrid Plugin from the WordPress admin:
 1. Navigate to "Plugins" -> "Add New"
 2. Search for "SendGrid Plugin" and click "Install Now" for the "SendGrid Plugin" listing.
 3. Activate the plugin from the "Plugins" menu in WordPress, or from the plugin installation screen.
-4. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
+4. Create a SendGrid account at <a href="http://sendgrid.com/" target="_blank">http://sendgrid.com/</a>
 5. Navigate to "Settings" -> "SendGrid Settings" and enter your SendGrid credentials
 
 For Multisite:
@@ -76,7 +72,7 @@ For Multisite:
 2. Click on "Add New"
 3. Search for "SendGrid Plugin" and click "Install Now" for the "SendGrid Plugin" listing.
 4. Network Activate the plugin from the "Plugins" menu in WordPress, or from the plugin installation screen.
-5. Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">http://sendgrid.com/partner/wordpress</a>
+5. Create a SendGrid account at <a href="http://sendgrid.com/" target="_blank">http://sendgrid.com/</a>
 6. Navigate to "My Sites" -> "Network Admin" -> "Dashboard"
 7. Click on the "SendGrid Settings" item in the menu on the left and enter your SendGrid credentials.
 
@@ -163,10 +159,6 @@ Note that all HTML emails sent through our plugin also contain the HTML body in 
 
 ## Frequently asked questions
 
-### Does SendGrid have an Agency program?
-
-Yes. If you are sending email on behalf of clients you can find more information on <a href="https://www.sendgrid.com/partners/agencies/">SendGrid's Agency page </a>
-
 ### Is there any official documentation for this plugin ?
 
 Yes. <a href="https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html">You can find it here </a>
@@ -179,7 +171,7 @@ Plugin versions 1.10.x were tested and confirmed to work on PHP 5.3, 5.4, 5.5 an
 
 ### What credentials do I need to add on settings page ?
 
-Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">https://sendgrid.com/partner/wordpress</a> and generate a new API key on <https://app.sendgrid.com/settings/api_keys>.
+Create a SendGrid account at <a href="http://sendgrid.com/" target="_blank">https://sendgrid.com/</a> and generate a new API key on <https://app.sendgrid.com/settings/api_keys>.
 
 ### How can I define a plugin setting to be used for all sites ?
 
@@ -315,6 +307,13 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 ![screenshot-11](/assets/screenshot-12.png)
 
 ## Changelog
+
+**1.11.9**
+* Updated README to indicate that the plugin is no longer supported.
+
+**1.11.8**
+* Updated the plugin description to direct users to support.sendgrid.com for questions.
+* Updated the "tested up to" field to confirm the latest version of the plugin wordes with the latest version of wordpress.
 
 **1.11.7**
 * Added a configuration parameter of API request timeout in seconds
