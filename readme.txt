@@ -26,12 +26,6 @@ For more details, [consult our official documentation](https://sendgrid.com/docs
 
 For assistance you can contact SendGrid Support from the [SendGrid Support Portal](https://support.sendgrid.com/). Click **Login & Contact Support**, and then **Contact Support** to see your support contact options. Paying SendGrid customers have the option to contact support via phone, chat, or by submitting a ticket using our web form. All SendGrid customers have the option to submit a ticket using our web form.
 
-= Agency Program =
-
-Are you sending emails on behalf of your clients? SendGrid's Agency Program offers exclusive pricing and support for agencies looking to improve their email program.
-
-Want to learn more? Visit the [SendGrid Agency Page](https://sendgrid.com/partners/agencies/)
-
 = The Subscription Widget =
 
 SendGrid’s WordPress Subscription Widget makes it easy for people visiting your WordPress site to subscribe to your marketing emails, such as any newsletters, announcements, or promotional offers you may send. Upon signup, they’ll automatically receive an opt-in email allowing them to confirm their desire to begin receiving your emails. This confirmation constitutes “double opt-in,” a deliverability best practice.
@@ -157,10 +151,6 @@ Note that all HTML emails sent through our plugin also contain the HTML body in 
 
 == Frequently asked questions ==
 
-= Does SendGrid have an Agency program?
-
-Yes. If you are sending email on behalf of clients, you can find more information on [SendGrid's Agency Page](https://www.sendgrid.com/partners/agencies/)
-
 = Is there any official documentation for this plugin ? =
 
 Yes. [You can find it here](https://sendgrid.com/docs/Integrate/Tutorials/WordPress/index.html)
@@ -173,7 +163,7 @@ Plugin versions 1.10.x were tested and confirmed to work on PHP 5.3, 5.4, 5.5 an
 
 = What credentials do I need to add on settings page ? =
 
-Create a SendGrid account at <a href="http://sendgrid.com/partner/wordpress" target="_blank">https://sendgrid.com/partner/wordpress</a> and generate a new API key on <https://app.sendgrid.com/settings/api_keys>.
+Create a SendGrid account at <a href="http://sendgrid.com/" target="_blank">https://sendgrid.com/</a> and generate a new API key on <https://app.sendgrid.com/settings/api_keys>.
 
 = How can I define a plugin setting to be used for all sites ? =
 
@@ -317,6 +307,8 @@ The value is in seconds, this means that API requests will wait 10 seconds for a
 
 == Changelog ==
 
+= 1.11.9 =
+* Updated README to indicate that the plugin is no longer supported.
 = 1.11.8 =
 * Updated the plugin description to direct users to support.sendgrid.com for questions.
 * Updated the "tested up to" field to confirm the latest version of the plugin wordes with the latest version of wordpress.
