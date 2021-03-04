@@ -8,9 +8,11 @@ Stable tag: 1.11.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Send emails and upload contacts through SendGrid from your WordPress installation using SMTP or API integration.
+NO LONGER MAINTAINED. Send emails and upload contacts through SendGrid from your WordPress installation using SMTP or API integration.
 
 == Description ==
+
+*This plugin is no longer supported and will not work with the latest WordPress release. Feel free to fork the code from [GitHub|https://github.com/sendgrid/wordpress/] and revise the plugin to work for your needs. To learn more about Twilio SendGrid services visit SendGrid.com.*
 
 What is the SendGrid WordPress Plugin?
 
